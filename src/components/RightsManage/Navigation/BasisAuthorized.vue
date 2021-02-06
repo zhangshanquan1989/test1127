@@ -1,6 +1,13 @@
 <template>
 	<!-- 基础信息 -->
 	<div>
+		<!-- 创建搜索区 -->
+		<el-row :gutter="20">
+			<!-- 创建 -->
+			<el-col :span="2">
+				<el-button type="info" @click="showAddAddDialog">添加</el-button>
+			</el-col>
+		</el-row>
 		<el-card class="box-card">
 			<el-table :data="pagingList" stripe style="width: 100%">
 				<el-table-column  prop="id" label="ID">
@@ -37,6 +44,43 @@
 			 :total="total">
 			</el-pagination>
 			
+			
+			<!-- 添加的对话框 -->
+			<el-dialog title="添加" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+				<!-- 添加的表单 -->
+				<el-form :model="addForm" ref="addFormRef" label-width="100px">
+					<el-form-item label="员工ID/姓名:">
+						<el-input v-model="findWorkerInput.name" style="width: 70%;"></el-input>
+						<el-button @click="handleFindWorker">查看</el-button>
+					</el-form-item>
+				</el-form>
+				<el-form :model="addForm" ref="addFormRef" label-width="100px">
+					<el-form-item  label="员工ID:">
+						<el-input disabled v-model="workerList.Username.id" style="width: 70%;"></el-input>
+					</el-form-item>
+					<el-form-item label="用户:">
+						<el-input disabled v-model="workerList.Records.employeeName" style="width: 70%;"></el-input>
+					</el-form-item>
+					<el-form-item label="账号:">
+						<el-input v-model="workerList.Username.username" style="width: 70%;"></el-input>
+					</el-form-item>
+					<el-form-item label="岗位:">
+						<el-input v-model="workerList.Records.employeePost" style="width: 70%;"></el-input>
+					</el-form-item>
+					<el-form-item label="公司:">
+						<el-input v-model="workerList.Records.employeeCompany" style="width: 70%;"></el-input>
+					</el-form-item>
+					<el-form-item label="角色:">
+						<el-input v-model="workerList.Records.employeeAuthority" style="width: 70%;"></el-input>
+					</el-form-item>
+					<el-form-item label="变更时间:">
+						<el-input v-model="workerList.Records.employeeUpdateTime" style="width: 70%;"></el-input>
+					</el-form-item>
+				</el-form>
+				<el-button type="primary" style="margin:auto;" @click="addInfo(workerList.Username.id)">添加</el-button>
+			</el-dialog>
+			
+			
 			<!-- 修改权限的对话框 -->
 			<el-dialog title="修改权限" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
 				<!-- 修改权限的表单 -->
@@ -69,7 +113,7 @@
 			return {
 				// 查询参数对象
 				queryInfo: {
-					permissions:'0',
+					basis:'0',
 					pageNo: 1,
 					pageSize: 10
 				},
@@ -91,7 +135,31 @@
 				           value: 'C',
 				           label: '查看'
 				         }],
-				         value: ''
+				         value: '',
+								 // 添加
+								 addDialogVisible: false,
+								 findWorkerInput: {
+								 	name: ''
+								 },
+								 addForm: {},
+								 workerList: {
+								 	Records: {
+								 		employeeName: '',
+								 		employeeAuthority: '',
+								 		employeeCompany: '',
+								 		employeeDepartment: '',
+								 		employeeName: '',
+								 		employeeNo: '',
+								 		employeePost: '',
+								 		employeeStatus: '',
+								 		employeeTel: '',
+								 		employeeUpdateTime: '',
+								 	},
+								 	Username: {
+								 		id: '',
+								 		username: ''
+								 	}
+								 },
 		}
 		},
 		created() {
@@ -99,6 +167,58 @@
 			this.getPagingList()
 		},
 		methods:{
+			
+			
+			showAddAddDialog(){
+							this.addDialogVisible = true
+						},
+						async handleFindWorker(){
+							// console.log(this.findWorkerInput)
+							const {
+								data: res
+							} = await this.$http.get('tPmAuthority/performancequery',{
+								params: this.findWorkerInput
+							}
+							)
+							console.log(res)
+							if (res.code !== 200) {
+								return
+							}
+							this.workerList = res.result
+						},
+						
+						// 创建对话框
+						async addInfo(id) {
+							console.log(id)
+							let Id = {id:id}
+						const {
+							data: res
+						} = await this.$http.get('tPmAuthority/performanceadd',{
+							params: Id
+						}
+						)
+						// console.log(res)
+						if (res.code !== 200) {
+							return
+						}
+						this.addDialogVisible = false
+						this.getPagingList()
+						this.$message.success('添加成功')
+						},
+						
+						// 监听创建对话框关闭
+						addDialogClosed() {
+							this.$refs.addFormRef.resetFields()
+							this.workerList.Username.id=''
+							this.workerList.Records.employeeName=''
+							this.workerList.Username.username=''
+							this.workerList.Records.employeePost=''
+							this.workerList.Records.employeeCompany=''
+							this.workerList.Records.employeeAuthority=''
+							this.workerList.Records.employeeUpdateTime=''
+			this.findWorkerInput.name = ''
+						},
+						
 			// 根据分页查询列表
 			async getPagingList() {
 				const {

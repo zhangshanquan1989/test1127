@@ -5,10 +5,7 @@
 		<!-- 创建搜索区 -->
 		<el-row :gutter="20">
 
-			<!-- 创建按钮 -->
-			<el-col :span="2">
-				<el-button type="info" size="mini" @click="showAddDialog">创建</el-button>
-			</el-col>
+
 			
 			<!-- 地区查询 -->
 			<el-col :span="1"><span>地区</span></el-col>

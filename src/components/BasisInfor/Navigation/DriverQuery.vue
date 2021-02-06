@@ -297,10 +297,17 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="证件:">
-					<el-input v-model="editForm.driverCertificateDriving"></el-input>
+				<el-form-item label="驾驶证:">
+					 <el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriver"></el-image>
+				</el-form-item>
+				<el-form-item label="行驶证:">
+					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriving"></el-image>
+				</el-form-item>
+				<el-form-item label="上岗证:">
+					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificatePostCard"></el-image>
 				</el-form-item>
 			</el-form>
+			
 
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="editDialogVisible = false">取 消</el-button>
