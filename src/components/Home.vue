@@ -22,37 +22,6 @@
 					<!-- </el-submenu> -->
 				</el-menu>
 			
-			
-			
-			
-			
-			
-			
-			 <!-- <el-menu background-color="#333744" text-color="#fff" active-text-color="#409eff" 
-			 :unique-opened="true" :collapse="isClooapse" :collapse-transition="false"
-			 :router="true" :default-active="activePath"> -->
-				 <!-- 一级菜单 -->
-				  <!-- index赋的值必须为字符串，item.id为数字，加一个空字符串可以转变为字符串 -->
-			      <!-- <el-submenu  v-for="item in menulist" :index="'/'+item.path" :key="item.id" @click="saveNavState('/'+subItem.path)"> --> 
-					  <!-- 一级菜单模板区 -->
-			        <!-- <template slot="title"> -->
-						<!-- 图标 -->
-			          <!-- <i :class="iconsObj[item.id]"></i>i -->
-					  <!-- 文本 -->
-			          <!-- <span>{{item.authName}}</span> -->
-			        <!-- </template> -->
-					
-					<!-- 二级菜单 -->
-					<!-- <el-menu-item  v-for="subItem in item.children"  :index="'/'+subItem.path"  
-					:key="subItem.id" @click="saveNavState('/'+subItem.path)" > -->
-						<!-- 图标 -->
-						<!-- <i class="el-icon-caret-right"></i> -->
-						<!-- 文本 -->
-						<!-- <span>{{subItem.authName}}</span> -->
-					 <!-- </el-menu-item> -->
-			      </el-submenu>
-			    </el-menu>
-		</el-aside>
 		<!-- 右侧内容主体 -->
 	    <el-main>
 			<!-- 路由占位符 -->
@@ -70,23 +39,27 @@
 				menulist: [
 					{id:1,
 					authName:'基础信息管理',
-					path:'users'
+					path:'basis'
 					},
 					{id:2,
 					authName:'权限管理',
-					path:'categories'
+					path:'rights'
 					},
 					{id:3,
 					authName:'履约信息管理',
-					path:'roles'
+					path:'performance'
 					},
 					{id:4,
 					authName:'装配分布信息',
-					path:'welcome'
+					path:'assembly'
 					},
 					{id:5,
 					authName:'其他',
-					path:'rights'
+					path:'dataFactory'
+					},
+					{id:6,
+					authName:'测试',
+					path:'text'
 					}
 					
 				],

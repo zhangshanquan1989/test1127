@@ -55,7 +55,11 @@
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.areaId)">编辑</el-button>
 						<!-- 删除按钮 -->
-						<el-button type="danger" size="mini" @click="removeById(scope.row.areaId)">刪除</el-button>
+						
+						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.areaId)" style="margin-left: 10px;">
+							<el-button type="danger" size="mini" slot="reference" >删除</el-button>
+						</el-popconfirm>
+
 					</template>
 				</el-table-column>
 			</el-table>
@@ -69,9 +73,9 @@
 			</el-pagination>
 		</el-col>
 
-		<!-- 创建地区的对话框 -->
+		<!-- 创建的对话框 -->
 		<el-dialog title="新增地区信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
-			<!-- 创建地区的表单 -->
+			<!-- 创建的表单 -->
 			<el-form :model="addForm" ref="addFormRef" label-width="100px">
 				<el-form-item v-if="false" label="地区编号:"></el-form-item>
 				<el-form-item label="省/直辖区:">
@@ -103,9 +107,9 @@
 		</el-dialog>
 
 
-		<!-- 编辑地区的对话框 -->
+		<!-- 编辑的对话框 -->
 		<el-dialog title="编辑地区信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
-			<!-- 编辑地区的表单 -->
+			<!-- 编辑的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<el-form-item label="地区编号:">{{editForm.areaNo}}</el-form-item>
 				<el-form-item label="省/直辖区:">{{editForm.areaProvince}}</el-form-item>
@@ -145,11 +149,11 @@
 					pageNo: 1,
 					pageSize: 10
 				},
-				// 地区列表
+				// 列表
 				regionlist: [],
-				// 地区总条数
+				// 总条数
 				total: 0,
-				// 添加公司表单的状态选项
+				// 添加表单的状态选项
 				status: [{
 					value: 'A',
 					label: 'A'
@@ -166,11 +170,11 @@
 					value: 'E',
 					label: 'E'
 				}],
-				// 创建公司对话框数据
+				// 创建对话框数据
 				addDialogVisible: false,
 				addForm: {},
-				// 编辑公司对话框数据
-				// 编辑公司对话框显示与隐藏
+				// 编辑对话框数据
+				// 编辑对话框显示与隐藏
 				editDialogVisible: false,
 				editForm: {},
 			}
@@ -192,10 +196,9 @@
 				})
 
 				if (res.code !== 200) {
-					return this.$message.error('获取地区信息失败')
+					return this.$message.error('获取信息失败')
 				}
-				console.log(res)
-				this.$message.success('获取地区信息成功')
+
 				this.regionlist = res.result.records
 				this.total = res.result.total
 			},
@@ -217,7 +220,7 @@
 				this.getRegionList()
 			},
 
-			// 创建公司对话框
+			// 创建对话框
 			addInfo() {
 				this.$refs.addFormRef.validate(async valid => {
 					if (!valid) return
@@ -241,7 +244,7 @@
 			},
 
 			// 编辑对话框操作	
-			// 展示编辑公司的对话框
+			// 展示编辑的对话框
 			async showEditDialog(areaId) {
 				console.log(areaId)
 				const {
@@ -249,14 +252,14 @@
 				} = await this.$http.get('base/tBaArea/selectOne?areaId=' + areaId)
 				console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('查询用户信息失败')
+					return this.$message.error('查询信息失败')
 				}
 				this.editForm = res.result
 				// 显示对话框
 				this.editDialogVisible = true
 			},
 
-			// 监听修改用户对话框关闭事件
+			// 监听修改对话框关闭事件
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
 			},
@@ -300,6 +303,7 @@
 				let clipboard = new this.Clipboard(".el-icon-document-copy");
 				      clipboard.on("success", e => {
 				        // 释放内存
+								this.$message.success('已成功复制')
 				        clipboard.destroy();
 				      });
 			}

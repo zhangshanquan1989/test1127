@@ -9,31 +9,49 @@ import DataFactory from '../components/DataFactory/DataFactory.vue'
 import PerformanceInfor from '../components/PerformanceInfor/PerformanceInfor.vue'
 import RightsManage from '../components/RightsManage/RightsManage.vue'
 
+// Home子组件
 import CompanyInfor from '../components/BasisInfor/Navigation/CompanyInfor.vue'
 import WorkerInfor from '../components/BasisInfor/Navigation/WorkerInfor.vue'
 import DriverQuery from '../components/BasisInfor/Navigation/DriverQuery.vue'
 import CustomerInfor from '../components/BasisInfor/Navigation/CustomerInfor.vue'
 import RegionInfor from '../components/BasisInfor/Navigation/RegionInfor.vue'
 
+// 权限子组件
+import AssemblyAuthorized from '../components/RightsManage/Navigation/AssemblyAuthorized.vue'
+import BasisAuthorized from '../components/RightsManage/Navigation/BasisAuthorized.vue'
+import ManageLimit from '../components/RightsManage/Navigation/ManageLimit.vue'
+import PerformanceAuthorized from '../components/RightsManage/Navigation/PerformanceAuthorized.vue'
+
+
+
+import Text from '../components/text/text.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
 	{path:'/',redirect:'/login'},
   {path: '/login',component: Login},
-  {path: '/home',component: Home,redirect:'/users',
+  {path: '/home',component: Home,redirect:'/basis',
 	children:[
-	  {path:'/users', component:BasisInfor,redirect:'/1',
+	  {path:'/basis', component:BasisInfor,redirect:'/company',
 			children:[
-				{path: '/1',component: CompanyInfor},
-				{path: '/2',component: WorkerInfor},
-				{path: '/3',component: DriverQuery},
-				{path: '/4',component: CustomerInfor},
-				{path: '/5',component: RegionInfor},
+				{path: '/company',component: CompanyInfor},
+				{path: '/worker',component: WorkerInfor},
+				{path: '/driver',component: DriverQuery},
+				{path: '/customer',component: CustomerInfor},
+				{path: '/region',component: RegionInfor},
 				]},
-		{path:'/welcome', component:Assembly},
-		{path:'/rights', component:DataFactory},
-		{path:'/roles', component:PerformanceInfor},
-		{path:'/categories', component:RightsManage}
+		{path:'/assembly', component:Assembly},
+		{path:'/dataFactory', component:DataFactory},
+		{path:'/performance', component:PerformanceInfor},
+		{path:'/rights', component:RightsManage,redirect:'/manageLimit',
+		children:[
+			{path: '/assemblyAuthorized',component: AssemblyAuthorized},
+			{path: '/basisAuthorized',component: BasisAuthorized},
+			{path: '/manageLimit',component: ManageLimit},
+			{path: '/performanceAuthorized',component: PerformanceAuthorized},
+			]},
+		{path:'/text', component:Text}
 		]
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

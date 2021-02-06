@@ -15,6 +15,8 @@
 				<el-form-item prop="password">
 					<el-input type="password" v-model="loginForm.password" prefix-icon="el-icon-goods"></el-input>
 				</el-form-item>
+				<span>账号：zhangsan </span>
+				<span>密码：zhangsan </span>
 				<!-- 按钮 -->
 				<el-form-item class="btns">
 					<el-button type="primary" @click="login">登录</el-button>
@@ -31,8 +33,8 @@
 			return {
 				// 登录表单的数据绑定对象
 				loginForm: {
-					username: 'admin',
-					password: '123456'
+					username: 'zhangsan',
+					password: 'zhangsan'
 				},
 				//表单验证规则
 				loginFormRules: {
@@ -57,8 +59,8 @@
 						},
 						{
 							min: 6,
-							max: 8,
-							message: '长度在 6 到 8 个字符',
+							max: 10,
+							message: '长度在 6 到 10 个字符',
 							trigger: 'blur'
 						}
 					]
@@ -73,17 +75,18 @@
 			},
 			// 点击登录按钮
 			login() {
-				// this.$refs.loginFormRef.validate(async valid=>{
-				// 	if(!valid) return;
-				// 	const {data:res} = await this.$http.post('login',this.loginForm);
-				// 	if(res.meta.status !==200) return this.$message.error('登录失败')
-				// 	this.$message.success("登录成功")
-				// 	// 1.登录成功后，将返回的token值，保存到客户端的 sessionStorage 中
-				// 	window.sessionStorage.setItem("token", res.data.token)
-				// 	// 2.登录成功后，跳转到主页
-				// 	this.$router.push("home")
-				// })	
-				this.$router.push("home")
+				this.$refs.loginFormRef.validate(async valid=>{
+					if(!valid) return;
+					const {data:res} = await this.$http.post('tPmAuthority/login',this.loginForm);
+					if(res.code !==200) return this.$message.error('登录失败')
+					console.log(res.result.satoken)
+					this.$message.success("登录成功")
+					// 1.登录成功后，将返回的token值，保存到客户端的 sessionStorage 中
+					window.sessionStorage.setItem("satoken", res.result.satoken)
+					// 2.登录成功后，跳转到主页
+					this.$router.push("home")
+				})	
+
 			}
 		}
 	}
