@@ -5,7 +5,7 @@
 		  <el-header>
 				<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true"
 				>
-				  <el-menu-item  v-for="item in navigationList" :index="'/'+item.id" :key="item.id" @click="saveNavState('/'+item.id)">
+				  <el-menu-item  v-for="item in navigationList" :index="'/'+item.path" :key="item.id" @click="saveNavState('/'+item.path)">
 						<span>{{item.authName}}</span>
 					</el-menu-item>
 				</el-menu>
@@ -27,19 +27,22 @@
 			return{
 				// 导航菜单
 				navigationList:[
-					{id:'company',authName:'公司信息'},
-					{id:'worker',authName:'员工信息'},
-					{id:'driver',authName:'车辆&司机查询'},
-					{id:'customer',authName:'客户信息'},
-					{id:'region',authName:'地区信息'},
+					{id:'1',authName:'公司信息',	path:'basis/company'},
+					{id:'2',authName:'员工信息',	path:'basis/worker'},
+					{id:'3',authName:'车辆&司机查询',	path:'basis/driver'},
+					{id:'4',authName:'客户信息',	path:'basis/customer'},
+					{id:'5',authName:'地区信息',	path:'basis/region'},
 				],
 				// 激活菜单的index
 				activeIndex:''
 			}
 		},
-		created(){
-			this.activeIndex = window.sessionStorage.getItem('activeIndex')
+		beforeCreate() {
+			this.activeIndex = 'basis/company'
 		},
+		// created(){
+		// 	this.activeIndex = window.sessionStorage.getItem('activeIndex')
+		// },
 		methods:{
 			handleSelect(index,indexPath){
 

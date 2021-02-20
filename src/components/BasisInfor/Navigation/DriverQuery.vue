@@ -212,25 +212,49 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+				
+				<el-form-item label="驾驶证:">
+					<el-image v-if="addForm.driverCertificateDriver"  style="width: 100px; height: 50px;" :src="addForm.driverCertificateDriver"></el-image>
+					<el-upload name="imgFile" :before-upload="beforeAvatarUpload" :action="updateDriverUrl" :auto-upload="true" :on-success="handleDriverUrlSuccess" :show-file-list="false" >
+						<el-button size="small" type="primary" plain>点击上传</el-button>
+					</el-upload>
+				</el-form-item>
+				<el-form-item label="行驶证:">
+					<el-image v-if="addForm.driverCertificateDriving"  style="width: 100px; height: 50px;" :src="addForm.driverCertificateDriving"></el-image>
+					<el-upload name="imgFile" :action="updateDrivingUrl" :auto-upload="true" :on-success="handleDrivingUrlSuccess"
+					  :show-file-list="false" >
+						<el-button size="small" type="primary" plain>点击上传</el-button>
+					</el-upload>
+				</el-form-item>
+				<el-form-item label="上岗证:">
+					<el-image v-if="addForm.driverCertificatePostCard" style="width: 100px; height: 50px;" :src="addForm.driverCertificatePostCard"></el-image>
+					<el-upload name="imgFile" :action="updatePostCardUrl" :auto-upload="true" :on-success="handlePostCardUrlSuccess"
+					  :show-file-list="false" >
+						<el-button size="small" type="primary" plain>点击上传</el-button>
+					</el-upload>
+				</el-form-item>
 
-				<el-form-item label="证件:">
-					
-					<el-upload name="imgFile" class="avatar-uploader" :action="updateDriverUrl" :auto-upload="true"    list-type="picture-card"  :before-upload="beforeAvatarUpload"  :on-success="handleDriverUrlSuccess" ref="newupload" limit="1" :on-exceed="handleWarning">
-						　　<i  class="el-icon-plus" ></i>
+<!-- 				<el-form-item label="证件:">
+
+					<el-upload name="imgFile" :action="updateDriverUrl" :auto-upload="true" list-type="picture-card"
+					 :before-upload="beforeAvatarUpload" :on-success="handleDriverUrlSuccess" :show-file-list="false">
+						　　<i class="el-icon-plus"></i>
 						　　<div slot="tip" class="el-upload__tip">驾驶证</div>
 					</el-upload>
 
-						<el-upload name="imgFile" class="avatar-uploader" :action="updateDrivingUrl" :auto-upload="true"   list-type="picture-card"  :before-upload="beforeAvatarUpload"  :on-success="handleDrivingUrlSuccess" ref="newupload" limit="1" :on-exceed="handleWarning">
-							　　<i  class="el-icon-plus"></i>
-							　　<div slot="tip" class="el-upload__tip">行驶证</div>
-						</el-upload>
+					<el-upload name="imgFile"  :action="updateDrivingUrl" :auto-upload="true" list-type="picture-card"
+					 :before-upload="beforeAvatarUpload" :on-success="handleDrivingUrlSuccess" :show-file-list="false">
+						　　<i class="el-icon-plus"></i>
+						　　<div slot="tip" class="el-upload__tip">行驶证</div>
+					</el-upload>
 
-							<el-upload name="imgFile" class="avatar-uploader" :action="updatePostCardUrl" :auto-upload="true"   list-type="picture-card"  :before-upload="beforeAvatarUpload" :on-success="handlePostCardUrlSuccess" ref="newupload" limit="1" :on-exceed="handleWarning">
-								　　<i  class="el-icon-plus"></i>
-								　　<div slot="tip" class="el-upload__tip">上岗证</div>
-							</el-upload>
-					
-				</el-form-item>
+					<el-upload name="imgFile"  :action="updatePostCardUrl" :auto-upload="true" list-type="picture-card"
+					 :before-upload="beforeAvatarUpload" :on-success="handlePostCardUrlSuccess"  >
+						　　<i class="el-icon-plus"></i>
+						　　<div slot="tip" class="el-upload__tip">上岗证</div>
+					</el-upload>
+
+				</el-form-item> -->
 			</el-form>
 
 			<span slot="footer" class="dialog-footer">
@@ -282,7 +306,9 @@
 					<el-input v-model="editForm.driverLoad"></el-input>
 				</el-form-item>
 				<el-form-item label="合同周期" placeholder="yyyy-MM-dd">
-					<el-input v-model="editForm.driverStartContractPeriod"></el-input>
+					<el-date-picker v-model="editContractData" type="daterange" range-separator="至" start-placeholder="开始日期"
+					 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleditDataChange">
+					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="所属公司">
 					<el-input v-model="editForm.driverCompany"></el-input>
@@ -298,16 +324,28 @@
 				</el-form-item>
 
 				<el-form-item label="驾驶证:">
-					 <el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriver"></el-image>
+					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriver"></el-image>
+					<el-upload name="imgFile" :action="updateDriverUrl" :auto-upload="true" :on-success="handleEditDriverUrlSuccess"
+					 :show-file-list="false" >
+						<el-button size="small" type="primary" plain>重新上传</el-button>
+					</el-upload>
 				</el-form-item>
 				<el-form-item label="行驶证:">
 					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriving"></el-image>
+					<el-upload name="imgFile" :action="updateDrivingUrl" :auto-upload="true" :on-success="handleEditDrivingUrlUrlSuccess"
+					  :show-file-list="false" >
+						<el-button size="small" type="primary" plain>重新上传</el-button>
+					</el-upload>
 				</el-form-item>
 				<el-form-item label="上岗证:">
 					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificatePostCard"></el-image>
+					<el-upload name="imgFile" :action="updatePostCardUrl" :auto-upload="true" :on-success="handleEditPostCardUrlSuccess"
+					  :show-file-list="false" >
+						<el-button size="small" type="primary" plain>重新上传</el-button>
+					</el-upload>
 				</el-form-item>
 			</el-form>
-			
+
 
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="editDialogVisible = false">取 消</el-button>
@@ -371,7 +409,11 @@
 				}],
 				// 创建对话框数据
 				addDialogVisible: false,
-				addForm: {},
+				addForm: {
+					driverCertificateDriver:'',
+					driverCertificateDriving:'',
+					driverCertificatePostCard:''
+				},
 				// 紧急联系人关系选择
 				relationSelect: [{
 					value: '亲属',
@@ -402,12 +444,14 @@
 					value: '13M',
 					label: '13M'
 				}],
-				// 时间选择器
-				chooseContractData: '',
+				// 创建时间选择器
+				chooseContractData: [],
 				// 编辑对话框数据
 				// 编辑对话框显示与隐藏
 				editDialogVisible: false,
 				editForm: {},
+				// 编辑时间选择器
+				editContractData: [],
 
 				// 创建页面选择框数据
 				options: [],
@@ -422,10 +466,12 @@
 				dialogImageUrl: '',
 				dialogVisible: false,
 				disabled: false,
-				
-				updateDriverUrl:"http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriver",
-				updateDrivingUrl:"http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriving",
-				updatePostCardUrl:"http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImagePostCard"
+				// 照片数量限制
+				uploadLimit: 1,
+
+				updateDriverUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriver",
+				updateDrivingUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriving",
+				updatePostCardUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImagePostCard"
 			}
 		},
 
@@ -436,7 +482,7 @@
 		},
 
 		methods: {
-	
+
 
 			// 获取所有公司名称
 			async getAllCompanyList() {
@@ -491,7 +537,7 @@
 				} = await this.$http.get('base/tBaDriver/list', {
 					params: this.queryInfo
 				})
-console.log(res)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -517,45 +563,46 @@ console.log(res)
 				this.getDriverList()
 			},
 
-//上传时，判断文件的类型及大小是否符合规则
-	beforeAvatarUpload(file) {	
-		const isJPG = file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'
-		const isLt2M = file.size / 1024 / 1024 < 2
-		if (!isJPG) {
-			this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
-			return isJPG
-		}
-		if (!isLt2M) {
-			this.$message.warning('上传头像图片大小不能超过 2MB!')
-			return isLt2M
-		}
-		this.multfileImg = file
-		return isJPG && isLt2M
-	},
-	// 上传成功的回调
-	handleDriverUrlSuccess(response, file, fileList){
-		this.addForm.driverCertificateDriver = response.result.DriverFileName
-	},
-	handleDrivingUrlSuccess(response, file, fileList){
-		this.addForm.driverCertificateDriving = response.result.DrivingFileName
-	},
-	handlePostCardUrlSuccess(response, file, fileList){
-		this.addForm.driverCertificatePostCard = response.result.PostCardFileName
-	},
-	handleWarning(){
-		this.$message.error('请先删除后再添加')
-	},
-	
+			//上传时，判断文件的类型及大小是否符合规则
+			beforeAvatarUpload(file) {
+				const isJPG = file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'
+				const isLt2M = file.size / 1024 / 1024 < 2
+				if (!isJPG) {
+					this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
+					return isJPG
+				}
+				if (!isLt2M) {
+					this.$message.warning('上传头像图片大小不能超过 2MB!')
+					return isLt2M
+				}
+				this.multfileImg = file
+				return isJPG && isLt2M
+			},
+			// 创建图片上传成功的回调
+			handleDriverUrlSuccess(response, file, fileList) {
+				console.log(response)
+				this.addForm.driverCertificateDriver = response.result.DriverFileName
+			},
+			handleDrivingUrlSuccess(response, file, fileList) {
+				this.addForm.driverCertificateDriving = response.result.DrivingFileName
+			},
+			handlePostCardUrlSuccess(response, file, fileList) {
+				this.addForm.driverCertificatePostCard = response.result.PostCardFileName
+			},
+			handleWarning() {
+				this.$message.error('请先删除后再添加')
+			},
+
 			// 创建对话框
 			addInfo() {
-				console.log(this.addForm)
+				// console.log(this.addForm)
 				this.$refs.addFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起添加信息的数据请求
 					const {
 						data: res
 					} = await this.$http.post('base/tBaDriver/add', this.addForm)
-					// console.log(res)
+					console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('添加信息失败')
 					}
@@ -574,18 +621,38 @@ console.log(res)
 				this.options = this.companyList
 			},
 
+
 			// 编辑对话框操作	
+
+			// 编辑上传图片的回调
+			handleEditDriverUrlSuccess(response, file, fileList) {
+				this.editForm.driverCertificateDriver = response.result.DriverFileName
+			},
+			
+			// 编辑上传图片的回调
+			handleEditDrivingUrlUrlSuccess(response, file, fileList) {
+				this.editForm.driverCertificateDriving = response.result.DrivingFileName
+			},
+			
+			// 编辑上传图片的回调
+			handleEditPostCardUrlSuccess(response, file, fileList) {
+				this.editForm.driverCertificatePostCard = response.result.PostCardFileName
+			},
 			// 展示编辑公司的对话框
 			async showEditDialog(driverNo) {
 				// console.log(driverNo)
 				const {
 					data: res
 				} = await this.$http.get('base/tBaDriver/findDriver?driverNo=' + driverNo)
-				// console.log(res)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
 				this.editForm = res.result
+				this.editContractData.push(res.result.driverStartContractPeriod)
+				this.editContractData.push(res.result.driverEndContractPeriod)
+				this.editContractData.join(',')
+				console.log(this.editContractData)
 				// 显示对话框
 				this.editDialogVisible = true
 			},
@@ -593,6 +660,7 @@ console.log(res)
 			// 监听修改用户对话框关闭事件
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
+				this.editContractData = []
 			},
 
 
@@ -631,10 +699,17 @@ console.log(res)
 				this.$message.success('删除成功')
 			},
 
-			// 日期时间选择
+			// 创建日期时间选择
 			handleDataChange() {
+				console.log(this.chooseContractData)
 				this.addForm.driverStartContractPeriod = this.chooseContractData[0]
 				this.addForm.driverEndContractPeriod = this.chooseContractData[1]
+			},
+			// 编辑日期时间选择
+			handleditDataChange() {
+				console.log(this.editContractData)
+				this.editForm.driverStartContractPeriod = this.editContractData[0]
+				this.editForm.driverEndContractPeriod = this.editContractData[1]
 			},
 
 			// 根据员工编号/姓名查询

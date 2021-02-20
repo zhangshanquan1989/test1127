@@ -134,6 +134,9 @@
 				}, {
 					value: 'C',
 					label: '查看'
+				}, {
+					value: 'D',
+					label: '暂无权限'
 				}],
 				value: '',
 				// 添加
@@ -256,8 +259,10 @@
 						this.pagingList[i].allPermissions = "创建、编辑、查看"
 					} else if (this.pagingList[i].assemblyeditor) {
 						this.pagingList[i].allPermissions = "编辑、查看"
-					} else {
+					} else if(this.pagingList[i].assemblyquery){
 						this.pagingList[i].allPermissions = "查看"
+					}else{
+						this.pagingList[i].allPermissions = "暂无权限"
 					}
 				}
 
@@ -304,6 +309,11 @@
 					this.editForm.assemblyadd = ""
 					this.editForm.assemblyeditor = ""
 					this.editForm.assemblyquery = "查看"
+					console.log(this.editForm)
+				}else if (this.value == 'D') {
+					this.editForm.assemblyadd = ""
+					this.editForm.assemblyeditor = ""
+					this.editForm.assemblyquery = ""
 					console.log(this.editForm)
 				} else {
 					console.log("错误")

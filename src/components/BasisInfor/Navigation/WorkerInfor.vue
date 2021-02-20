@@ -128,7 +128,7 @@
 
 
 		<!-- 编辑对话框 -->
-		<el-dialog title="编辑地区信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+		<el-dialog title="编辑员工信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
 			<!-- 编辑表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<el-form-item label="ID:">{{editForm.employeeId}}</el-form-item>
@@ -232,6 +232,7 @@
 					if (res.code !== 200) {
 						return 
 					}
+					console.log(res)
 					this.states = res.result
 					this.companyList = this.states.map(item => {
 						return {

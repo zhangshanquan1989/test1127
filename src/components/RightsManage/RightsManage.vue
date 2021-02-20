@@ -37,7 +37,7 @@
 			}
 		},
 		created(){
-			this.activeIndex = window.sessionStorage.getItem('activeIndex')
+			// this.activeIndex = window.sessionStorage.getItem('activeIndex')
 		},
 		methods:{
 			handleSelect(index,indexPath){

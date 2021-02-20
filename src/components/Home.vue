@@ -52,14 +52,6 @@
 					{id:4,
 					authName:'装配分布信息',
 					path:'assembly'
-					},
-					{id:5,
-					authName:'其他',
-					path:'dataFactory'
-					},
-					{id:6,
-					authName:'测试',
-					path:'text'
 					}
 					
 				],

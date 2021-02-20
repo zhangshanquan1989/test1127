@@ -5,7 +5,7 @@
 		
 		<!-- 创建 -->
 		<el-col :span="2">
-			<el-button type="info" @click="showAddAddDialog">添加</el-button>
+			<el-button type="info" @click="showAddDialog">添加</el-button>
 		</el-col>
 				
 		</el-row>
@@ -30,7 +30,7 @@
 				<el-table-column label="操作" width="200">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
-						<!-- <el-button type="primary" size="mini" @click="showEditDialog(scope.row.companyNo)">编辑</el-button> -->
+						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">修改角色</el-button>
 						<!-- 删除按钮 -->
 
 							<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
@@ -81,6 +81,28 @@
 					<el-button type="primary" style="margin:auto;"  @click="addInfo(workerList.Username.id)">添加</el-button>
 			</el-dialog>
 			
+			<!-- 修改权限的对话框 -->
+			<el-dialog title="修改权限" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+				<!-- 修改权限的表单 -->
+				<el-form :model="editForm"  ref="editFormRef" label-width="100px">
+					<el-form-item label="权限:">
+						 <el-select v-model="value" placeholder="请选择" @change="handleValueChange">
+						    <el-option
+						      v-for="item in options"
+						      :key="item.value"
+						      :label="item.label"
+						      :value="item.value">
+						    </el-option>
+						  </el-select>
+					</el-form-item>
+				</el-form>
+			
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="editDialogVisible = false">取 消</el-button>
+					<el-button type="primary" @click="editInfo">确 定</el-button>
+				</span>
+			</el-dialog>
+			
 </el-card>
 	</div>
 </template>
@@ -92,6 +114,7 @@
 				// 查询参数对象
 				queryInfo: {
 					permissions:'0',
+					employeeAuthority:'!普通用户',
 					pageNo: 1,
 					pageSize: 10
 				},
@@ -99,6 +122,27 @@
 				pagingList: [],
 				// 商品总条数
 				total: 0,
+				
+				// 编辑对话框
+				 editDialogVisible:false,
+				 editForm:{},
+				 // 修改权限
+				  options: [{
+				           value: 'A',
+				           label: '创建、编辑、查看'
+				         }, {
+				           value: 'B',
+				           label: '编辑、查看'
+				         }, {
+				           value: 'C',
+				           label: '查看'
+				         }, {
+				           value: 'D',
+				           label: '暂无权限'
+				         }
+								 ],
+				         value: '',
+								 
 				// 添加
 				addDialogVisible:false,
 				findWorkerInput:{
@@ -130,7 +174,7 @@
 			this.getPagingList()
 		},
 		methods:{
-			showAddAddDialog(){
+			showAddDialog(){
 				this.addDialogVisible = true
 			},
 			async handleFindWorker(){
@@ -215,7 +259,63 @@ this.findWorkerInput.name = ''
 				this.queryInfo.pageNo = newPage
 				this.getPagingList()
 			},
+			showEditDialog(){
+				this.editForm.id = id
+				// 显示对话框
+				this.editDialogVisible = true
+			},
+			handleValueChange(e){
+				console.log(e)
+				console.log(this.value)
+				if(this.value == 'A'){
+					this.editForm.performanceadd = "创建"
+					this.editForm.performanceeditor = "编辑"
+					this.editForm.performancequery = "查看"
+				}else if(this.value == 'B'){
+					this.editForm.performanceadd = ""
+					this.editForm.performanceeditor = "编辑"
+					this.editForm.performanceeditor = "查看"
+				}else if(this.value == 'C'){
+					this.editForm.performanceadd = ""
+					this.editForm.performancequery = ""
+					this.editForm.performancequery = "查看"
+					console.log(this.editForm)
+				}else if(this.value == 'D'){
+					this.editForm.performanceadd = ""
+					this.editForm.performancequery = ""
+					this.editForm.performancequery = ""
+				}else{
+					console.log('选择权限失败')
+				}
+			},
+			// 监听修改用户对话框关闭事件
+			editDialogClosed() {
+				this.$refs.editFormRef.resetFields()
+				this.editForm = {}
+				this.value = {}
+			},
 			
+			// 修改信息并提交
+			editInfo() {
+				// 验证
+				this.$refs.editFormRef.validate(async valid => {
+					if (!valid) return
+					// 发起修改信息的数据请求
+					const {
+						data: res
+					} = await this.$http.post('tPmAuthority/performanceeditor', this.editForm)
+			console.log(res)
+					if (res.code !== 200) {
+						return this.$message.error('更新信息失败')
+					}
+					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
+					this.editDialogVisible = false
+					this.getPagingList()
+					this.$message.success('更新信息成功')
+					
+					this.editForm = {}
+				})
+			},
 			
 			// 删除按钮
 			async removeById(Id) {

@@ -348,9 +348,9 @@
 
 		</el-dialog>
 
-		<!-- 编辑的对话框 -->
+		<!-- 详情的对话框 -->
 		<el-dialog title="新增信息" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
-			<!-- 创建的表单 -->
+			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<el-form-item label="订单ID:">
 					<el-input v-model="editForm.plistId" ></el-input>
@@ -452,15 +452,15 @@
 									</el-date-picker>
 								</template>
 							</el-table-column>
-							<el-table-column fixed="right" label="操作">
+<!-- 							<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
 									<el-button @click.native.prevent="deleteApointInfo(scope.$index, editForm.apoints)" size="small"> 移除
 									</el-button>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 						</el-table>
 					</template>
-					<el-button @click="addApointInfo(editForm.apoints)">添加</el-button>
+					<!-- <el-button @click="addApointInfo(editForm.apoints)">添加</el-button> -->
 				</el-form-item>
 
 				<!-- 卸货点 -->
@@ -492,33 +492,42 @@
 								
 								</template>
 							</el-table-column>
-							<el-table-column fixed="right" label="操作">
+							<!-- <el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
 									<el-button @click.native.prevent="deleteUpointInfo(scope.$index, editForm.upoints)" size="small"> 移除
 									</el-button>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 						</el-table>
 					</template>
-					<el-button @click="addUpointInfo(editForm.upoints)">添加</el-button>
+					<!-- <el-button @click="addUpointInfo(editForm.upoints)">添加</el-button> -->
 				</el-form-item>
 				
 				<!-- 备注信息 -->
 				<el-form-item label="备注信息">
 					<template>
-						<el-table :data="editForm.notes" style="width: 100%">
-							<el-table-column prop="noteArea" label="备注" style="width:6vw;">
+						<el-table :data="editForm.notes" stripe style="width: 100%">
+							<el-table-column prop="noteDate" label="时间">
+<!-- 								<template scope="scope">
+									<el-input size="mini" v-model="scope.row.noteDate"></el-input>
+								</template> -->
+							</el-table-column>
+							<el-table-column prop="noteName" label="操作人" >
+								
+							</el-table-column>
+							<el-table-column prop="noteArea" label="备注" >
 								<template scope="scope">
 									<el-input size="mini" v-model="scope.row.noteArea"></el-input>
 								</template>
 							</el-table-column>
+							
 
-							<el-table-column fixed="right" label="操作">
+						<!-- 	<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
 									<el-button @click.native.prevent="deleteNotesInfo(scope.$index, editForm.notes)" size="small"> 移除
 									</el-button>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 						</el-table>
 					</template>
 					<el-button @click="addNotesInfo(editForm.notes)">添加</el-button>
@@ -598,6 +607,8 @@
 					plistDriverTele: '',
 					plistDriverModel: '',
 					plistPtime:'',
+					upointDate:'',
+					apointDate:'',
 					apoints: [{
 						"apointId": "",
 						"apointAddress": "",
@@ -807,7 +818,9 @@
 					this.addForm.plistDriverLicense = '',
 					this.addForm.plistDriverName = '',
 					this.addForm.plistDriverTele = '',
-					this.addForm.plistDriverModel = ''
+					this.addForm.plistDriverModel = '',
+					this.addForm.upointDate = '',
+					this.addForm.apointDate = ''
 			},
 
 			// 根据员工编号/姓名查询
@@ -900,7 +913,7 @@
 			},
 			
 			// 编辑对话框操作
-			// 展示编辑员工的对话框
+			// 展示编辑的对话框
 			async showEditDialog(plistNo) {
 				// console.log(Id)
 				const {
@@ -928,7 +941,7 @@
 					// 发起修改信息的数据请求
 					const {
 						data: res
-					} = await this.$http.post('tPfPlist/edit', this.editForm)
+					} = await this.$http.put('tPfPlist/edit', this.editForm)
 			
 					if (res.code !== 200) {
 						return this.$message.error('更新信息失败')

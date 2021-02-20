@@ -134,8 +134,12 @@
 				         }, {
 				           value: 'C',
 				           label: '查看'
+				         }, {
+				           value: 'D',
+				           label: '暂无权限'
 				         }],
 				         value: '',
+								 
 								 // 添加
 								 addDialogVisible: false,
 								 findWorkerInput: {
@@ -253,8 +257,10 @@
 						this.pagingList[i].allPermissions = "创建、编辑、查看"
 					}else if(this.pagingList[i].performanceeditor){
 						this.pagingList[i].allPermissions = "编辑、查看"
-					}else{
+					}else if(this.pagingList[i].performancequery){
 						this.pagingList[i].allPermissions = "查看"
+					}else{
+						this.pagingList[i].allPermissions = "暂无权限"
 					}
 				}
 				this.total = res.result.Records.total
@@ -294,6 +300,10 @@
 					this.editForm.performancequery = ""
 					this.editForm.performancequery = "查看"
 					console.log(this.editForm)
+				}else if(this.value == 'D'){
+					this.editForm.performanceadd = ""
+					this.editForm.performancequery = ""
+					this.editForm.performancequery = ""
 				}else{
 					console.log("错误")
 				}
