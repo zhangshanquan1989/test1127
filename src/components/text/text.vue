@@ -1,136 +1,99 @@
 <template>
-	<div>
-		<!-- 新增表单项 -->
-		<el-form :model="inServForm" ref="inServForm" label-width="130px" size="small">
-			<el-form-item label="输入参数列表" prop="servin">
-				<el-button type="primary" @click="addRow(infiledList)">新增</el-button>
-				<template>
-					<el-table border :data="infiledList" style="width: 100%">
-						<el-table-column prop="fildna" label="名称" style="width:6vw;">
-							<template scope="scope">
-								<el-input size="mini" v-model="scope.row.fildna"></el-input>
-							</template>
-						</el-table-column>
-						<el-table-column prop="fildtp" label="类型">
-							<template scope="scope">
-								<el-select v-model="scope.row.fildtp" clearable>
-									<el-option v-for="item in fildtps" :key="item.value" :label="item.text" :value="item.value">
-									</el-option>
-								</el-select>
-							</template>
-						</el-table-column>
-						<el-table-column prop="remark" label="备注">
-							<template scope="scope">
-								<el-input size="mini" v-model="scope.row.remark"></el-input>
-							</template>
-						</el-table-column>
-						<el-table-column fixed="right" label="操作">
-							<template slot-scope="scope">
-								<el-button @click.native.prevent="deleteRow(scope.$index, infiledList)" size="small"> 移除 </el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-				</template>
-			</el-form-item>
-		</el-form>
-
-
-		<div>
-
-			<el-upload name="imgFile" class="avatar-uploader" :action="updateDriverUrl" :auto-upload="true"    list-type="picture-card" :before-upload="beforeAvatarUpload" :on-success="handleAvatarSuccess" ref="newupload">
-				　　<el-button slot="trigger" size="small" icon="el-icon-upload" style="margin-top: 20px;">选择上传文件</el-button>
-				　　<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-			</el-upload>
-
-
+  <div style="padding:20px">
+    <el-table :data="tableData6" :span-method="objectSpanMethod" border >
+      <el-table-column prop="id" label="ID" width="180"></el-table-column>
+      <el-table-column prop="name" label="姓名"></el-table-column>
+      <el-table-column prop="amount1" label="数值 1（元）"></el-table-column>
+    </el-table>
+		
+		<el-checkbox-group v-model="checkList" @change="checkboxchange">
+		    <el-checkbox label="复选框 A" ></el-checkbox>
+		    <el-checkbox label="复选框 B" ></el-checkbox>
+		    <el-checkbox label="复选框 C"></el-checkbox>
+		    <el-checkbox label="禁用" disabled></el-checkbox>
+		    <el-checkbox label="选中且禁用" disabled></el-checkbox>
+		  </el-checkbox-group>
+			<el-input type="number" v-model="aaa"  placeholder="单位:元"></el-input>
 			
-		</div>
-
-	</div>
+  </div>
+	
 </template>
-
 <script>
-	export default {
-		data() {
-			return {
-				// 新增表单
-				inServForm: {},
-				infiledList: [],
-				fildtps: [{
-					text: '字符',
-					value: '1'
-				}, {
-					text: '数字',
-					value: '2'
-				}],
-
-
-				itemForm: {
-					//编辑时数据
-					token: sessionStorage.getItem('loginToken'),
-					id: 0,
-					user_name: '',
-					user_nike_name: '',
-					user_sex: 1, //默认 1男 0女
-					user_phone: '',
-					user_email: '',
-					head_img: ''
-				},
-				newuploadPicture:{},
-				file: {}, //向服务器进行传递的参数（带有图片formdata）
-				updateDriverUrl: 'http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriver'
-
-			}
+export default {
+  data() {
+    return {
+			aaa:0,
+			checkList: ['选中且禁用','复选框 A'],
+      spanArr: [],//用于存放每一行记录的合并数
+      tableData6: [
+        {
+          id: "1",
+          name: "王小虎",
+          amount1: "234"
+        },
+        {
+          id: "1",
+          name: "王小虎",
+          amount1: "165"
+        },
+        {
+          id: "2",
+          name: "王小虎",
+          amount1: "324"
+        },
+        {
+          id: "2",
+          name: "王小虎",
+          amount1: "621"
+        },
+        {
+          id: "2",
+          name: "王小虎",
+          amount1: "539"
+        }
+      ]
+    };
+  },
+  mounted: function() {
+    this.getSpanArr(this.tableData6);
+  },
+  methods: {
+		checkboxchange(e){
+			console.log(e)
+			console.log(this.checkList)
 		},
-		methods: {
-			//成功时保存一下后台给你返回的图片，可以渲染到页面上
-			handleAvatarSuccess(response, file, fileList) {
-				console.log(response)
-				// console.log(file)
-				// console.log(fileList)
-
-				// this.itemForm.head_img = URL.createObjectURL(file.raw)
-			},
-			change(file){
-				// // console.log(file.url)
-				// this.file = file.url
-			},
-
-			//上传时，判断文件的类型及大小是否符合规则
-			beforeAvatarUpload(file) {
-
-
-				const isJPG = file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'
-				const isLt2M = file.size / 1024 / 1024 < 2
-				if (!isJPG) {
-					this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
-					return isJPG
-				}
-				if (!isLt2M) {
-					this.$message.warning('上传头像图片大小不能超过 2MB!')
-					return isLt2M
-				}
-				this.multfileImg = file
-				return isJPG && isLt2M
-			},
-
-
-			// 表单增加一行
-			deleteRow(index, rows) { //删除改行
-				rows.splice(index, 1);
-			},
-			addRow(tableData, event) {
-				tableData.push({
-					fildna: '',
-					fildtp: '',
-					remark: ''
-				})
-			},
-
-		}
-	}
+		
+    getSpanArr(data) {
+        // data就是我们从后台拿到的数据
+      for (var i = 0; i < data.length; i++) {
+        if (i === 0) {
+          this.spanArr.push(1);
+          this.pos = 0;
+        } else {
+          // 判断当前元素与上一个元素是否相同
+          if (data[i].id === data[i - 1].id) {
+            this.spanArr[this.pos] += 1;
+            this.spanArr.push(0);
+          } else {
+            this.spanArr.push(1);
+            this.pos = i;
+          }
+        }
+        console.log(this.spanArr);
+      }
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0 || columnIndex === 1) {
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        console.log(`rowspan:${_row} colspan:${_col}`);
+        return {
+          // [0,0] 表示这一行不显示， [2,1]表示行的合并数
+          rowspan: _row,
+          colspan: _col
+        };
+      }
+    }
+  }
+};
 </script>
-
-<style scoped>
-
-</style>

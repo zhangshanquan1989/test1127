@@ -52,32 +52,32 @@
 			<el-dialog title="添加" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 				<!-- 添加的表单 -->
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
-					<el-form-item label="员工ID/姓名:">
+					<el-form-item label="员工姓名/账号:">
 						<el-input v-model="findWorkerInput.name" style="width: 70%;"></el-input>
 						<el-button @click="handleFindWorker">查看</el-button>
 					</el-form-item>
 				</el-form>
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
 					<el-form-item label="员工ID:">
-						<el-input disable v-model="workerList.Username.id" style="width: 70%;"></el-input>
+						<el-input disabled disable v-model="workerList.Username.id" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="用户:">
-						<el-input v-model="workerList.Records.employeeName" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeName" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="账号:">
-						<el-input v-model="workerList.Username.username" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Username.username" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="岗位:">
-						<el-input v-model="workerList.Records.employeePost" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeePost" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="公司:">
-						<el-input v-model="workerList.Records.employeeCompany" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeCompany" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="角色:">
-						<el-input v-model="workerList.Records.employeeAuthority" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeAuthority" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="变更时间:">
-						<el-input v-model="workerList.Records.employeeUpdateTime" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeUpdateTime" style="width: 70%;"></el-input>
 					</el-form-item>
 				</el-form>
 				<el-button type="primary" style="margin:auto;" @click="addInfo(workerList.Username.id)">添加</el-button>
@@ -123,7 +123,9 @@
 				total: 0,
 				// 编辑对话框
 				editDialogVisible: false,
-				editForm: {},
+				editForm: {
+					assemblydelete:''
+				},
 				// 修改权限
 				options: [{
 					value: 'A',
@@ -337,7 +339,7 @@
 					} = await this.$http.post('tPmAuthority/assemblyeditor', this.editForm)
 					console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('更新信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false

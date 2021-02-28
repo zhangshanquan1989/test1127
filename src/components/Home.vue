@@ -52,6 +52,10 @@
 					{id:4,
 					authName:'装配分布信息',
 					path:'assembly'
+					},
+					{id:5,
+					authName:'测试',
+					path:'text'
 					}
 					
 				],

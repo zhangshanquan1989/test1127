@@ -90,29 +90,29 @@
 		<!-- 创建的对话框 -->
 		<el-dialog title="新增员工信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 			<!-- 创建表单 -->
-			<el-form :model="addForm" ref="addFormRef" label-width="100px">
-				<el-form-item label="员工ID:">
+			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
+				<el-form-item label="员工ID:" >
 					<el-input disabled style="width: 50%;" placeholder="自动生成"></el-input>
 				</el-form-item>
-				<el-form-item label="员工姓名:" >
+				<el-form-item label="员工姓名:" prop="employeeName" >
 					<el-input v-model="addForm.employeeName" style="width: 50%;"></el-input>
 				</el-form-item>
-				<el-form-item label="部门:" >
+				<el-form-item label="部门:" prop="employeeDepartment">
 					<el-input v-model="addForm.employeeDepartment" style="width: 50%;"></el-input>
 				</el-form-item>
-				<el-form-item label="岗位" >
+				<el-form-item label="岗位" prop="employeePost">
 					<el-input v-model="addForm.employeePost" style="width: 50%;"></el-input>
 				</el-form-item>
-				<el-form-item label="所属公司">
+				<el-form-item label="所属公司" prop="employeeCompany">
 					<el-select v-model="addForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" >
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="联系方式">
+				<el-form-item label="联系方式" prop="employeeTel">
 					<el-input v-model="addForm.employeeTel" style="width: 50%;"></el-input>
 				</el-form-item>
-				<el-form-item label="状态">
+				<el-form-item label="状态" prop="employeeStatus">
 					<el-select v-model="addForm.employeeStatus" placeholder="全部" style="width: 30%;">
 						<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
@@ -130,27 +130,27 @@
 		<!-- 编辑对话框 -->
 		<el-dialog title="编辑员工信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
 			<!-- 编辑表单 -->
-			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+			<el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
 				<el-form-item label="ID:">{{editForm.employeeId}}</el-form-item>
-				<el-form-item label="员工姓名:">
+				<el-form-item label="员工姓名:" prop="employeeName">
 					<el-input v-model="editForm.employeeName"></el-input>
 				</el-form-item>
-				<el-form-item label="部门:">
+				<el-form-item label="部门:" prop="employeeDepartment">
 					<el-input v-model="editForm.employeeDepartment"></el-input>
 				</el-form-item>
-				<el-form-item label="岗位:">
+				<el-form-item label="岗位:" prop="employeePost">
 					<el-input v-model="editForm.employeePost"></el-input>
 				</el-form-item>
-				<el-form-item label="所属公司">
+				<el-form-item label="所属公司" prop="employeeCompany">
 					<el-select v-model="editForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" >
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="联系方式:">
+				<el-form-item label="联系方式:" prop="employeeTel">
 					<el-input v-model="editForm.employeeTel"></el-input>
 				</el-form-item>
-				<el-form-item label="状态">
+				<el-form-item label="状态" prop="employeeStatus">
 					<el-select v-model="editForm.employeeStatus" :placeholder="editForm.employeeStatus">
 						<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
@@ -199,6 +199,47 @@
 				// 创建员工对话框数据
 				addDialogVisible: false,
 				addForm: {},
+				// 创建表单验证规则
+				addFormRules:{
+					employeeName:[
+						{required:true,message:"请输入员工姓名",trigger:'blur'}
+					],
+					employeeDepartment:[
+						{required:true,message:"请输入所属部门",trigger:'blur'}
+					],
+					employeePost:[
+						{required:true,message:"请输入岗位",trigger:'blur'}
+					],
+					employeeCompany:[
+						{required:true,message:"请输入所属公司",trigger:'blur'}
+					],
+					employeeTel:[
+						{required:true,message:"请输入电话",trigger:'blur'}
+					],
+					employeeStatus:[
+						{required:true,message:"请选择状态",trigger:'blur'}
+					],
+				},
+				editFormRules:{
+					employeeName:[
+						{required:true,message:"请输入员工姓名",trigger:'blur'}
+					],
+					employeeDepartment:[
+						{required:true,message:"请输入所属部门",trigger:'blur'}
+					],
+					employeePost:[
+						{required:true,message:"请输入岗位",trigger:'blur'}
+					],
+					employeeCompany:[
+						{required:true,message:"请输入所属公司",trigger:'blur'}
+					],
+					employeeTel:[
+						{required:true,message:"请输入电话",trigger:'blur'}
+					],
+					employeeStatus:[
+						{required:true,message:"请选择状态",trigger:'blur'}
+					],
+				},
 				// 编辑员工对话框数据
 				// 编辑员工对话框显示与隐藏
 				editDialogVisible: false,

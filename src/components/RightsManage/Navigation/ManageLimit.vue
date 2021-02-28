@@ -15,6 +15,8 @@
 			<el-table :data="pagingList" stripe style="width: 100%">
 				<el-table-column  prop="id" label="ID">
 				</el-table-column>
+				<el-table-column  prop="employeeId" label="employeeId">
+				</el-table-column>
 				<el-table-column  prop="employeeName" label="用户">
 				</el-table-column>
 				<el-table-column prop="username" label="账号">
@@ -25,12 +27,14 @@
 				</el-table-column>
 				<el-table-column prop="employeeAuthority" label="角色">
 				</el-table-column>
+				<el-table-column prop="employeeAuthority" label="权限">
+				</el-table-column>
 				<el-table-column prop="employeeUpdateTime" label="变更时间">
 				</el-table-column>
 				<el-table-column label="操作" width="200">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
-						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">修改角色</el-button>
+						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.employeeId)">修改角色</el-button>
 						<!-- 删除按钮 -->
 
 							<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
@@ -47,35 +51,35 @@
 			</el-pagination>
 			
 			<!-- 添加的对话框 -->
-			<el-dialog title="添加" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+			<el-dialog title="添加" :visible.sync="addDialogVisible" width="60%" @close="addDialogClosed">
 				<!-- 添加的表单 -->
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
-					<el-form-item label="员工ID/姓名:">
+					<el-form-item label="员工姓名/账号:">
 						<el-input v-model="findWorkerInput.name"  style="width: 70%;"></el-input>
 						<el-button @click="handleFindWorker">查看</el-button>
 					</el-form-item>
 			</el-form>
 			<el-form :model="addForm" ref="addFormRef" label-width="100px">
 					<el-form-item label="员工ID:">
-						<el-input disable v-model="workerList.Username.id"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Username.id"  style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="用户:">
-						<el-input v-model="workerList.Records.employeeName"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeName"  style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="账号:">
-						<el-input v-model="workerList.Username.username"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Username.username"  style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="岗位:">
-						<el-input v-model="workerList.Records.employeePost"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeePost"  style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="公司:">
-						<el-input v-model="workerList.Records.employeeCompany"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeCompany"  style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="角色:">
-						<el-input v-model="workerList.Records.employeeAuthority"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeAuthority"  style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="变更时间:">
-						<el-input v-model="workerList.Records.employeeUpdateTime"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeUpdateTime"  style="width: 70%;"></el-input>
 					</el-form-item>
 			</el-form>
 					<el-button type="primary" style="margin:auto;"  @click="addInfo(workerList.Username.id)">添加</el-button>
@@ -86,7 +90,7 @@
 				<!-- 修改权限的表单 -->
 				<el-form :model="editForm"  ref="editFormRef" label-width="100px">
 					<el-form-item label="权限:">
-						 <el-select v-model="value" placeholder="请选择" @change="handleValueChange">
+						 <el-select v-model="editForm.employeeAuthority" placeholder="请选择" >
 						    <el-option
 						      v-for="item in options"
 						      :key="item.value"
@@ -128,18 +132,15 @@
 				 editForm:{},
 				 // 修改权限
 				  options: [{
-				           value: 'A',
-				           label: '创建、编辑、查看'
+				           value: '管理员',
+				           label: '管理员'
 				         }, {
-				           value: 'B',
-				           label: '编辑、查看'
+				           value: '全局授权',
+				           label: '全局授权'
 				         }, {
-				           value: 'C',
-				           label: '查看'
-				         }, {
-				           value: 'D',
-				           label: '暂无权限'
-				         }
+				           value: '区域授权',
+				           label: '区域授权'
+				         }	          
 								 ],
 				         value: '',
 								 
@@ -242,7 +243,7 @@ this.findWorkerInput.name = ''
 				var obj = obj1.map((item,index) => {
 				    return {...item, ...obj2[index]};
 				});
-
+console.log(obj)
 				this.pagingList = obj
 				// console.log(obj)
 				this.total = res.result.total
@@ -259,35 +260,35 @@ this.findWorkerInput.name = ''
 				this.queryInfo.pageNo = newPage
 				this.getPagingList()
 			},
-			showEditDialog(){
-				this.editForm.id = id
+			showEditDialog(employeeId){
+				this.editForm.employeeId = employeeId
 				// 显示对话框
 				this.editDialogVisible = true
 			},
-			handleValueChange(e){
-				console.log(e)
-				console.log(this.value)
-				if(this.value == 'A'){
-					this.editForm.performanceadd = "创建"
-					this.editForm.performanceeditor = "编辑"
-					this.editForm.performancequery = "查看"
-				}else if(this.value == 'B'){
-					this.editForm.performanceadd = ""
-					this.editForm.performanceeditor = "编辑"
-					this.editForm.performanceeditor = "查看"
-				}else if(this.value == 'C'){
-					this.editForm.performanceadd = ""
-					this.editForm.performancequery = ""
-					this.editForm.performancequery = "查看"
-					console.log(this.editForm)
-				}else if(this.value == 'D'){
-					this.editForm.performanceadd = ""
-					this.editForm.performancequery = ""
-					this.editForm.performancequery = ""
-				}else{
-					console.log('选择权限失败')
-				}
-			},
+			// handleValueChange(e){
+			// 	console.log(e)
+			// 	console.log(this.value)
+			// 	if(this.value == 'A'){
+			// 		this.editForm.performanceadd = "创建"
+			// 		this.editForm.performanceeditor = "编辑"
+			// 		this.editForm.performancequery = "查看"
+			// 	}else if(this.value == 'B'){
+			// 		this.editForm.performanceadd = ""
+			// 		this.editForm.performanceeditor = "编辑"
+			// 		this.editForm.performanceeditor = "查看"
+			// 	}else if(this.value == 'C'){
+			// 		this.editForm.performanceadd = ""
+			// 		this.editForm.performancequery = ""
+			// 		this.editForm.performancequery = "查看"
+			// 		console.log(this.editForm)
+			// 	}else if(this.value == 'D'){
+			// 		this.editForm.performanceadd = ""
+			// 		this.editForm.performancequery = ""
+			// 		this.editForm.performancequery = ""
+			// 	}else{
+			// 		console.log('选择权限失败')
+			// 	}
+			// },
 			// 监听修改用户对话框关闭事件
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
@@ -303,10 +304,10 @@ this.findWorkerInput.name = ''
 					// 发起修改信息的数据请求
 					const {
 						data: res
-					} = await this.$http.post('tPmAuthority/performanceeditor', this.editForm)
+					} = await this.$http.post('tPmAuthority/edit', this.editForm)
 			console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('更新信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false

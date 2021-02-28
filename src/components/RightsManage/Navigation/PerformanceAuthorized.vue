@@ -50,32 +50,32 @@
 			<el-dialog title="添加" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 				<!-- 添加的表单 -->
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
-					<el-form-item label="员工ID/姓名:">
+					<el-form-item label="员工姓名/账号:">
 						<el-input v-model="findWorkerInput.name" style="width: 70%;"></el-input>
 						<el-button @click="handleFindWorker">查看</el-button>
 					</el-form-item>
 				</el-form>
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
 					<el-form-item label="员工ID:">
-						<el-input disable v-model="workerList.Username.id" style="width: 70%;"></el-input>
+						<el-input disabled disable v-model="workerList.Username.id" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="用户:">
-						<el-input v-model="workerList.Records.employeeName" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeName" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="账号:">
-						<el-input v-model="workerList.Username.username" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Username.username" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="岗位:">
-						<el-input v-model="workerList.Records.employeePost" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeePost" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="公司:">
-						<el-input v-model="workerList.Records.employeeCompany" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeCompany" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="角色:">
-						<el-input v-model="workerList.Records.employeeAuthority" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeAuthority" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="变更时间:">
-						<el-input v-model="workerList.Records.employeeUpdateTime" style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeUpdateTime" style="width: 70%;"></el-input>
 					</el-form-item>
 				</el-form>
 				<el-button type="primary" style="margin:auto;" @click="addInfo(workerList.Username.id)">添加</el-button>
@@ -123,7 +123,9 @@
 				total: 0,
 				// 编辑对话框
 				 editDialogVisible:false,
-				 editForm:{},
+				 editForm:{
+					 performancedelete:''
+				 },
 				 // 修改权限
 				  options: [{
 				           value: 'A',
@@ -253,11 +255,11 @@
 				
 				// 整合权限数据
 				for(let i = 0;i<this.pagingList.length;i++){
-					if(this.pagingList[i].performanceadd){
+					if(this.pagingList[i].performanceadd == "创建"){
 						this.pagingList[i].allPermissions = "创建、编辑、查看"
-					}else if(this.pagingList[i].performanceeditor){
+					}else if(this.pagingList[i].performanceeditor == "编辑"){
 						this.pagingList[i].allPermissions = "编辑、查看"
-					}else if(this.pagingList[i].performancequery){
+					}else if(this.pagingList[i].performancequery == "查看"){
 						this.pagingList[i].allPermissions = "查看"
 					}else{
 						this.pagingList[i].allPermissions = "暂无权限"
@@ -294,15 +296,15 @@
 				}else if(this.value == 'B'){
 					this.editForm.performanceadd = ""
 					this.editForm.performanceeditor = "编辑"
-					this.editForm.performanceeditor = "查看"
+					this.editForm.performancequery = "查看"
 				}else if(this.value == 'C'){
 					this.editForm.performanceadd = ""
-					this.editForm.performancequery = ""
+					this.editForm.performanceeditor = ""
 					this.editForm.performancequery = "查看"
 					console.log(this.editForm)
 				}else if(this.value == 'D'){
 					this.editForm.performanceadd = ""
-					this.editForm.performancequery = ""
+					this.editForm.performanceeditor = ""
 					this.editForm.performancequery = ""
 				}else{
 					console.log("错误")

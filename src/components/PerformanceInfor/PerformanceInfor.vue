@@ -1,42 +1,34 @@
 <template>
 	<div>
 		<!-- 创建搜索区域 -->
-		<el-row :gutter="10">
+		<el-row :gutter="24">
 
 			<el-col :span="2">
-				<el-button type="info" @click="showAddCompanyDialog">创建</el-button>
+				<el-button type="info" @click="showAddDialog">创建</el-button>
 			</el-col>
 
-			<el-col :span="2">
-				<el-input placeholder="员工ID" v-model="queryInfo.plistEmployeeId" clearable></el-input>
+			<el-col :span="3">
+				<el-input placeholder="运营人" v-model="queryPlistEmployee" clearable></el-input>
 			</el-col>
 
-			<el-col :span="2">
-				<el-input placeholder="员工姓名" v-model="queryInfo.plistEmployeeName" clearable></el-input>
+			<el-col :span="3">
+				<el-input placeholder="订单号" v-model="queryPlistNo" clearable></el-input>
 			</el-col>
-			<el-col :span="2">
-				<el-input placeholder="车牌" v-model="queryInfo.plistDriverLicense" clearable></el-input>
+			<el-col :span="3">
+				<el-date-picker v-model="queryPlistCtime"  type="date" placeholder="选择日期" value-format="yyyy-MM-dd" width="80%">
+				</el-date-picker>
 			</el-col>
-			<el-col :span="2">
-				<el-input placeholder="车主ID" v-model="queryInfo.plistDriverId" clearable></el-input>
+			<el-col :span="3">
+				<el-input placeholder="公司" v-model="queryPlistAclient" clearable></el-input>
 			</el-col>
-			<el-col :span="2">
-				<el-input placeholder="车主名" v-model="queryInfo.plistDriverOwner" clearable></el-input>
-			</el-col>
-			<el-col :span="2">
-				<el-input placeholder="分公司ID" v-model="queryInfo.plistCompanyId" clearable></el-input>
-			</el-col>
-			<el-col :span="2">
-				<el-input placeholder="分公司名" v-model="queryInfo.plistCompanyName" clearable></el-input>
-			</el-col>
-			<el-col :span="2">
+			<el-col :span="3">
 				<el-select v-model="queryInfo.plistState" clearable placeholder="请选择状态">
 					<el-option v-for="item in plistStateData" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
 			</el-col>
 
-			<el-col :span="1">
+			<el-col :span="2">
 				<el-button type="info" @click="handleQueryBtn">查询</el-button>
 			</el-col>
 
@@ -63,12 +55,12 @@
 				</el-table-column>
 				<el-table-column v-if="false" prop="plistFristApointTtele" label="装配点第三联系人电话">
 				</el-table-column>
-				<el-table-column label="定位" width="50px">
+				<el-table-column width="30px">
 					<template slot-scope="scope">
 						<i class="el-icon-location" @click="handleLocation(scope.row.plistFristApointAddr)"></i>
 					</template>
 				</el-table-column>
-				<el-table-column label="复制" width="50px">
+				<el-table-column width="30px">
 
 					<template slot-scope="scope">
 						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.plistFristApointAddr+ '  ' + scope.row.plistFristApointFname+ ':' + scope.row.plistFristApointFtele+ '  ' + scope.row.plistFristApointSname+ ':' + scope.row.plistFristApointStele+ '  ' + scope.row.plistFristApointTname+ ':' + scope.row.plistFristApointTtele"
@@ -76,14 +68,15 @@
 					</template>
 
 				</el-table-column>
-				<el-table-column  label="悬停">
+				<el-table-column width="40px">
 					<template slot-scope="scope">
-					 <el-tooltip class="item" effect="dark" :content="scope.row.plistFristApointFname+ ':' + scope.row.plistFristApointFtele" placement="top">
-					      <i class="el-icon-phone"></i>
-					    </el-tooltip>
-							</template>
+						<el-tooltip class="item" effect="dark" :content="scope.row.plistFristApointFname+ ':' + scope.row.plistFristApointFtele"
+						 placement="top">
+							<i class="el-icon-phone"></i>
+						</el-tooltip>
+					</template>
 				</el-table-column>
-				<el-table-column prop="plistFristApointGrade" label="等级">
+				<el-table-column prop="plistFristApointGrade" label="等级" width="50px">
 				</el-table-column>
 				<el-table-column prop="plistFristApointUtime" label="装配时间">
 				</el-table-column>
@@ -105,12 +98,12 @@
 				</el-table-column>
 				<el-table-column v-if="false" prop="plistFristUpointTtele" label="卸货点第三联系人电话">
 				</el-table-column>
-				<el-table-column label="定位" width="50px">
+				<el-table-column width="30px">
 					<template slot-scope="scope">
 						<i class="el-icon-location" @click="handleLocation(scope.row.plistFristUpointAddr)"></i>
 					</template>
 				</el-table-column>
-				<el-table-column label="复制" width="50px">
+				<el-table-column width="30px">
 
 					<template slot-scope="scope">
 						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.plistFristUpointAddr+ '  ' + scope.row.plistFristUpointFname+ ':' + scope.row.plistFristUpointFtele+ '  ' + scope.row.plistFristUpointSname+ ':' + scope.row.plistFristUpointStele+ '  ' + scope.row.plistFristUpointTname+ ':' + scope.row.plistFristUpointTtele"
@@ -118,15 +111,16 @@
 					</template>
 
 				</el-table-column>
-				
-				<el-table-column  label="悬停">
+
+				<el-table-column width="40px">
 					<template slot-scope="scope">
-					 <el-tooltip class="item" effect="dark" :content="scope.row.plistFristUpointFname+ ':' + scope.row.plistFristUpointFtele" placement="top">
-					      <i class="el-icon-phone"></i>
-					    </el-tooltip>
-							</template>
+						<el-tooltip class="item" effect="dark" :content="scope.row.plistFristUpointFname+ ':' + scope.row.plistFristUpointFtele"
+						 placement="top">
+							<i class="el-icon-phone"></i>
+						</el-tooltip>
+					</template>
 				</el-table-column>
-				<el-table-column prop="plistFristUpointGrade" label="等级">
+				<el-table-column prop="plistFristUpointGrade" label="等级" width="50px">
 				</el-table-column>
 				<el-table-column prop="plistFristUpointFtime" label="卸货时间">
 				</el-table-column>
@@ -136,7 +130,7 @@
 				</el-table-column>
 				<el-table-column label="操作" width="200px">
 					<template slot-scope="scope">
-						<!-- 修改按钮 -->
+						<!-- 详情按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.plistNo)">详情</el-button>
 					</template>
 				</el-table-column>
@@ -155,172 +149,189 @@
 		<!-- 创建的对话框 -->
 		<el-dialog title="新增信息" :visible.sync="addDialogVisible" width="80%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
-			<el-form :model="addForm" ref="addFormRef" label-width="100px">
+			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
 				<el-form-item label="订单ID:">
 					<el-input disabled placeholder="自动生成"></el-input>
 				</el-form-item>
 				<el-form-item label="创建时间:">
 					<el-input disabled placeholder="自动生成"></el-input>
 				</el-form-item>
-				<el-form-item label="状态:">
+				<el-form-item label="状态:" prop="plistState">
 					<el-select v-model="addForm.plistState" clearable placeholder="状态">
 						<el-option v-for="item in plistStateData" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="承运对接人:"></el-form-item>
+				<el-form-item label="承运对接人:" prop="searchEmployee">
+					<el-select v-model="searchEmployee" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseEmployeeName"
+					 :loading="employeeNameLoading" style="width: 50%;" @change="handleChooseName">
+						<el-option v-for="item in employeeNameOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
 
-				<el-form-item label="查询:">
-					<el-input placeholder="请输入员工ID/姓名" v-model="searchEmployee">
+				<!-- 	<el-form-item label="查询:">
+					<el-input placeholder="请输入员工姓名" v-model="searchEmployee">
 						<el-button slot="append" icon="el-icon-search" @click="handleSearchEmployee"></el-button>
 					</el-input>
 				</el-form-item>
 
 				<el-form-item label="员工姓名:">
 					<el-input v-model="addForm.plistEmployeeName" placeholder="员工姓名"></el-input>
+				</el-form-item> -->
+
+				<el-form-item label="电话:" prop="plistEmployeeTele">
+					<el-input disabled v-model="addForm.plistEmployeeTele" placeholder="员工手机号"></el-input>
 				</el-form-item>
 
-				<el-form-item label="员工手机号:">
-					<el-input v-model="addForm.plistEmployeeTele" placeholder="员工手机号"></el-input>
-				</el-form-item>
 
-				<el-form-item label="下单企业">
-					<el-select v-model="addForm.plistCompanyName" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
-					 :loading="loading" style="width: 50%;">
-						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-form-item>
-
+				<!-- 
 				<el-form-item label="查询:">
+					
 					<el-input placeholder="请输入车牌号" v-model="searchDriver">
 						<el-button slot="append" icon="el-icon-search" @click="handleSearchDriver"></el-button>
 					</el-input>
+				</el-form-item> -->
+
+				<el-form-item label="车牌号" prop="searchDriver">
+					<el-select v-model="searchDriver" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseCarLicense"
+					 :loading="carLicenseLoading" style="width: 50%;" @change="handleChooseCarLicense">
+						<el-option v-for="item in carLicenseOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+
+					<!-- <el-input v-model="addForm.plistDriverLicense" placeholder="车牌号"></el-input> -->
 				</el-form-item>
 
-				<el-form-item label="车牌号">
-					<el-input v-model="addForm.plistDriverLicense" placeholder="车牌号"></el-input>
+				<el-form-item label="司机" prop="plistDriverName">
+					<el-input disabled v-model="addForm.plistDriverName" placeholder="司机"></el-input>
 				</el-form-item>
 
-				<el-form-item label="司机">
-					<el-input v-model="addForm.plistDriverName" placeholder="司机"></el-input>
+				<el-form-item label="司机电话" prop="plistDriverTele">
+					<el-input disabled v-model="addForm.plistDriverTele" placeholder="司机电话"></el-input>
 				</el-form-item>
 
-				<el-form-item label="司机电话">
-					<el-input v-model="addForm.plistDriverTele" placeholder="司机电话"></el-input>
-				</el-form-item>
-
-				<el-form-item label="类型">
-					<el-input v-model="addForm.plistDriverModel" placeholder="类型"></el-input>
+				<el-form-item label="车型" prop="plistDriverModel">
+					<el-input disabled v-model="addForm.plistDriverModel" placeholder="类型"></el-input>
 				</el-form-item>
 
 
-				<el-form-item label="定金">
-					<el-input type="number" v-model.number="addForm.plistDeposit" placeholder="单位:元"></el-input>
+				<el-form-item label="定金" prop="plistDeposit">
+					<el-input v-model="addForm.plistDeposit" placeholder="单位:元(保留两位小数)"></el-input>
 				</el-form-item>
-				<el-form-item label="尾款">
-					<el-input type="number" v-model.number="addForm.plistBp" placeholder="单位:元"></el-input>
+				<el-form-item label="尾款" prop="plistBp">
+					<el-input v-model="addForm.plistBp" placeholder="单位:元(保留两位小数)"></el-input>
 				</el-form-item>
-				<el-form-item label="支付时间">
-					    <el-date-picker
-					      v-model="addForm.plistPtime"
-					      type="datetime"
-					      placeholder="选择日期时间"
-								value-format="yyyy-MM-dd HH:mm:ss"
-								>
-					    </el-date-picker>
-					
+				<el-form-item label="支付时间" prop="plistPtime">
+					<el-date-picker v-model="addForm.plistPtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+					</el-date-picker>
+
 				</el-form-item>
 
-				<el-form-item label="履约详情">
+
+				<el-form-item label="履约详情" >
 				</el-form-item>
-				<el-form-item label="配送里程">
-					<el-input v-model="addForm.plistDr" placeholder="Km"></el-input>
-				</el-form-item>
-				<el-form-item label="空置里程">
-					<el-input v-model="addForm.plistCr" placeholder="Km"></el-input>
-				</el-form-item>
+
 				<!-- 装货点 -->
-				<el-form-item label="装货信息">
+				<el-form-item label="下单客户" prop="plistAclient">
+					<el-select v-model="addForm.plistAclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
+					 :loading="loading" style="width: 50%;" @change="searchAssemblyPoint">
+						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="装货信息" prop="allAssemblyPointData">
 					<template>
-						<el-table :data="addForm.apoints" style="width: 100%">
+						<el-table :data="allAssemblyPointData" style="width: 100%">
 							<el-table-column prop="apointId" label="装货点8位ID" style="width:6vw;">
 								<template scope="scope">
-									<el-input size="mini" v-model="scope.row.apointId"></el-input>
+									<el-input disabled size="mini" v-model="scope.row.clientPointId"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="apointAddress"  label="地址">
+							<el-table-column label="地址">
 								<template scope="scope">
-									<!-- <el-input id='apointAddress' clearable type="text" v-model="scope.row.apointAddress" style="width: 80%;" ></el-input> -->
-									<el-input size="mini" v-model="scope.row.apointAddress"></el-input>
+									<el-input disabled size="mini" v-model="scope.row.clientAddress"></el-input>
 								</template>
-								
 							</el-table-column>
-							<el-table-column prop="apointDate" label="时间">
+							<el-table-column label="选择">
 								<template scope="scope">
-									<el-date-picker
-									  v-model="scope.row.apointDate"
-									  type="datetime"
-									  placeholder="选择日期时间"
-										value-format="yyyy-MM-dd HH:mm:ss"
-										>									
+									<el-checkbox v-model="scope.row.choose" @change="checkboxChange"></el-checkbox>
+								</template>
+							</el-table-column>
+							<el-table-column label="时间">
+								<template scope="scope">
+									<el-date-picker v-if="scope.row.choose" v-model="scope.row.apointDate" type="datetime" placeholder="选择日期时间"
+									 value-format="yyyy-MM-dd HH:mm:ss">
 									</el-date-picker>
 								</template>
 							</el-table-column>
-							<el-table-column fixed="right" label="操作">
+
+							<!-- 					<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
 									<el-button @click.native.prevent="deleteApointInfo(scope.$index, addForm.apoints)" size="small"> 移除
 									</el-button>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 						</el-table>
 					</template>
-					<el-button @click="addApointInfo(addForm.apoints)">添加</el-button>
+					<!-- <el-button @click="addApointInfo(addForm.apoints)">添加</el-button> -->
 				</el-form-item>
 
 				<!-- 卸货点 -->
-				<el-form-item label="卸货信息">
+				<div>送至</div>
+				<el-form-item label="配送里程" prop="plistDr">
+					<el-input v-model="addForm.plistDr" placeholder="Km"></el-input>
+				</el-form-item>
+				<el-form-item label="空置里程" prop="plistCr">
+					<el-input v-model="addForm.plistCr" placeholder="Km"></el-input>
+				</el-form-item>
+				<el-form-item label="收单客户" prop="plistUclient">
+					<el-select v-model="addForm.plistUclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
+					 :loading="loading" style="width: 50%;" @change="searchUnloadingPoint">
+						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="卸货信息" prop="allUnloadingPointData">
 					<template>
-						<el-table :data="addForm.upoints" style="width: 100%">
-							<el-table-column prop="upointId" label="卸货点8位ID" style="width:6vw;">
+						<el-table :data="allUnloadingPointData" style="width: 100%">
+							<el-table-column prop="apointId" label="装货点8位ID" style="width:6vw;">
 								<template scope="scope">
-									<el-input size="mini" v-model="scope.row.upointId"></el-input>
+									<el-input disabled size="mini" v-model="scope.row.clientPointId"></el-input>
 								</template>
 							</el-table-column>
-							
-							<el-table-column prop="upointAddress" label="地址">
+							<el-table-column label="地址">
 								<template scope="scope">
-									<!-- <el-input id='upointAddress' clearable type="text" v-model="scope.row.upointAddress" style="width: 80%;"></el-input> -->
-									<el-input size="mini" v-model="scope.row.upointAddress"></el-input>
+									<el-input disabled size="mini" v-model="scope.row.clientAddress"></el-input>
 								</template>
 							</el-table-column>
-							
-							<el-table-column prop="upointDate" label="时间">
+							<el-table-column label="选择">
 								<template scope="scope">
-								<el-date-picker
-								  v-model="scope.row.upointDate"
-								  type="datetime"
-								  placeholder="选择日期时间"
-									value-format="yyyy-MM-dd HH:mm:ss"
-									>									
-								</el-date-picker>
-								
+									<el-checkbox v-model="scope.row.choose" @change="checkboxChange"></el-checkbox>
 								</template>
 							</el-table-column>
-							<el-table-column fixed="right" label="操作">
-								<template slot-scope="scope">
-									<el-button @click.native.prevent="deleteUpointInfo(scope.$index, addForm.upoints)" size="small"> 移除
-									</el-button>
+							<el-table-column label="时间">
+								<template scope="scope">
+									<el-date-picker v-if="scope.row.choose" v-model="scope.row.upointDate" type="datetime" placeholder="选择日期时间"
+									 value-format="yyyy-MM-dd HH:mm:ss">
+									</el-date-picker>
 								</template>
 							</el-table-column>
+
+							<!-- 					<el-table-column fixed="right" label="操作">
+							<template slot-scope="scope">
+								<el-button @click.native.prevent="deleteApointInfo(scope.$index, addForm.apoints)" size="small"> 移除
+								</el-button>
+							</template>
+						</el-table-column> -->
 						</el-table>
 					</template>
-					<el-button @click="addUpointInfo(addForm.upoints)">添加</el-button>
+					<!-- <el-button @click="addApointInfo(addForm.apoints)">添加</el-button> -->
 				</el-form-item>
-				
+
 				<!-- 备注信息 -->
-				<el-form-item label="备注信息">
+				<el-form-item label="备注信息" prop="notes">
 					<template>
 						<el-table :data="addForm.notes" style="width: 100%">
 							<el-table-column prop="noteArea" label="备注" style="width:6vw;">
@@ -349,17 +360,17 @@
 		</el-dialog>
 
 		<!-- 详情的对话框 -->
-		<el-dialog title="新增信息" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
+		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<el-form-item label="订单ID:">
-					<el-input v-model="editForm.plistId" ></el-input>
+					<el-input disabled v-model="editForm.plistId"></el-input>
 				</el-form-item>
 				<el-form-item label="创建时间:">
-					<el-input v-model="editForm.plistCtime"></el-input>
+					<el-input disabled v-model="editForm.plistCtime"></el-input>
 				</el-form-item>
 				<el-form-item label="状态:">
-					<el-select v-model="editForm.plistState" clearable placeholder="状态">
+					<el-select :disabled="disabled" v-model="editForm.plistState" clearable placeholder="状态" >
 						<el-option v-for="item in plistStateData" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -368,128 +379,122 @@
 				<el-form-item label="承运对接人:"></el-form-item>
 
 				<el-form-item label="员工姓名:">
-					<el-input v-model="editForm.plistEmployeeName" placeholder="员工姓名"></el-input>
+					<el-input disabled v-model="editForm.employeeName" placeholder="员工姓名"></el-input>
 				</el-form-item>
 
 				<el-form-item label="员工手机号:">
-					<el-input v-model="editForm.plistEmployeeTele" placeholder="员工手机号"></el-input>
-				</el-form-item>
-
-				<el-form-item label="下单企业">
-					<el-select v-model="editForm.plistCompanyName" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
-					 :loading="loading" style="width: 50%;">
-						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
+					<el-input disabled v-model="editForm.employeeTel" placeholder="员工手机号"></el-input>
 				</el-form-item>
 
 				<el-form-item label="车牌号">
-					<el-input v-model="editForm.plistDriverLicense" placeholder="车牌号"></el-input>
+					<el-input disabled v-model="editForm.driverLicense" placeholder="车牌号"></el-input>
 				</el-form-item>
 
 				<el-form-item label="司机">
-					<el-input v-model="editForm.plistDriverName" placeholder="司机"></el-input>
+					<el-input disabled v-model="editForm.driverName" placeholder="司机"></el-input>
 				</el-form-item>
 
-				<el-form-item label="司机电话">
-					<el-input v-model="editForm.plistDriverTele" placeholder="司机电话"></el-input>
+				<el-form-item label="电话">
+					<el-input disabled v-model="editForm.driverTel" placeholder="司机电话"></el-input>
 				</el-form-item>
 
-				<el-form-item label="类型">
-					<el-input v-model="editForm.plistDriverModel" placeholder="类型"></el-input>
+				<el-form-item label="车型">
+					<el-input disabled v-model="editForm.driverModel" placeholder="类型"></el-input>
 				</el-form-item>
 
 
 				<el-form-item label="定金">
-					<el-input type="number" v-model.number="editForm.plistDeposit" placeholder="单位:元"></el-input>
+					<el-input disabled v-model="editForm.plistDeposit" placeholder="单位:元"></el-input>
 				</el-form-item>
 				<el-form-item label="尾款">
-					<el-input type="number" v-model.number="editForm.plistBp" placeholder="单位:元"></el-input>
+					<el-input disabled v-model="editForm.plistBp" placeholder="单位:元"></el-input>
+				</el-form-item>
+				<el-form-item label="实际收入">
+					<el-input disabled v-model="editForm.plistIncome" placeholder="单位:元"></el-input>
 				</el-form-item>
 				<el-form-item label="支付时间">
-					    <el-date-picker
-					      v-model="editForm.plistPtime"
-					      type="datetime"
-					      placeholder="选择日期时间"
-								value-format="yyyy-MM-dd HH:mm:ss"
-								>
-					    </el-date-picker>
-					
+					<el-date-picker disabled v-model="editForm.plistPtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+					</el-date-picker>
 				</el-form-item>
 
 				<el-form-item label="履约详情">
 				</el-form-item>
-				<el-form-item label="配送里程">
-					<el-input v-model="editForm.plistDr" placeholder="Km"></el-input>
+				<el-form-item label="下单客户">
+					<el-select disabled v-model="editForm.plistAclient" clearable filterable remote placeholder="请输入公司名称"
+					 :remote-method="remoteMethod" :loading="loading" style="width: 50%;">
+					</el-select>
 				</el-form-item>
-				<el-form-item label="空置里程">
-					<el-input v-model="editForm.plistCr" placeholder="Km"></el-input>
-				</el-form-item>
+
 				<!-- 装货点 -->
+
 				<el-form-item label="装货信息">
 					<template>
-						<el-table :data="editForm.apoints" style="width: 100%">
-							<el-table-column prop="apointId" label="装货点8位ID" style="width:6vw;">
+						<el-table :data="editAssemblyPointData" style="width: 100%">
+							<el-table-column label="装货点8位ID">
 								<template scope="scope">
-									<el-input size="mini" v-model="scope.row.apointId"></el-input>
+									<el-input disabled v-model="scope.row.clientPointId"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="apointAddress"  label="地址">
+							<el-table-column label="地址">
 								<template scope="scope">
-									<!-- <el-input id='apointAddress' clearable type="text" v-model="scope.row.apointAddress" style="width: 80%;" ></el-input> -->
-									<el-input size="mini" v-model="scope.row.apointAddress"></el-input>
+									<el-input disabled v-model="scope.row.clientAddress"></el-input>
 								</template>
-								
 							</el-table-column>
-							<el-table-column prop="apointDate" label="时间">
+
+							<el-table-column label="选择">
 								<template scope="scope">
-									<el-date-picker
-									  v-model="scope.row.apointDate"
-									  type="datetime"
-									  placeholder="选择日期时间"
-										value-format="yyyy-MM-dd HH:mm:ss"
-										>									
+									<el-checkbox :disabled="scope.row.isdisabled" v-model="scope.row.choose" @change="editAssemblycheckboxChange( scope.row.choose,scope.$index)"></el-checkbox>
+								</template>
+							</el-table-column>
+							<el-table-column label="时间">
+								<template scope="scope">
+									<el-date-picker v-if="scope.row.choose" v-model="scope.row.apointDate" type="datetime" placeholder="选择日期时间"
+									 value-format="yyyy-MM-dd HH:mm:ss" :disabled="scope.row.isdisabled">
 									</el-date-picker>
 								</template>
 							</el-table-column>
-<!-- 							<el-table-column fixed="right" label="操作">
-								<template slot-scope="scope">
-									<el-button @click.native.prevent="deleteApointInfo(scope.$index, editForm.apoints)" size="small"> 移除
-									</el-button>
-								</template>
-							</el-table-column> -->
 						</el-table>
 					</template>
-					<!-- <el-button @click="addApointInfo(editForm.apoints)">添加</el-button> -->
 				</el-form-item>
 
 				<!-- 卸货点 -->
+				<div>送至</div>
+				<el-form-item label="配送里程">
+					<el-input disabled v-model="editForm.plistDr" placeholder="Km"></el-input>
+				</el-form-item>
+				<el-form-item label="空置里程">
+					<el-input disabled v-model="editForm.plistCr" placeholder="Km"></el-input>
+				</el-form-item>
+				<el-form-item label="收单客户">
+					<el-select disabled v-model="editForm.plistUclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
+					 :loading="loading" style="width: 50%;">
+					</el-select>
+				</el-form-item>
 				<el-form-item label="卸货信息">
 					<template>
-						<el-table :data="editForm.upoints" style="width: 100%">
-							<el-table-column prop="upointId" label="卸货点8位ID" style="width:6vw;">
+						<el-table :data="editUnloadingPointData" style="width: 100%">
+							<el-table-column prop="clientPointId" label="卸货点" style="width:6vw;">
+								<!-- <template scope="scope">
+									<el-input disabled size="mini" v-model="scope.row.clientPointId"></el-input>
+								</template> -->
+							</el-table-column>
+
+							<el-table-column label="地址信息">
 								<template scope="scope">
-									<el-input size="mini" v-model="scope.row.upointId"></el-input>
+									<el-input disabled size="mini" v-model="scope.row.clientAddress"></el-input>
 								</template>
 							</el-table-column>
-							
-							<el-table-column prop="upointAddress" label="地址">
+							<el-table-column label="选择">
 								<template scope="scope">
-									<!-- <el-input id='upointAddress' clearable type="text" v-model="scope.row.upointAddress" style="width: 80%;"></el-input> -->
-									<el-input size="mini" v-model="scope.row.upointAddress"></el-input>
+									<el-checkbox  :disabled="scope.row.isdisabled" v-model="scope.row.choose" @change="checkboxChange"></el-checkbox>
 								</template>
 							</el-table-column>
-							
-							<el-table-column prop="upointDate" label="时间">
+							<el-table-column label="时间">
 								<template scope="scope">
-								<el-date-picker
-								  v-model="scope.row.upointDate"
-								  type="datetime"
-								  placeholder="选择日期时间"
-									value-format="yyyy-MM-dd HH:mm:ss"
-									>									
-								</el-date-picker>
-								
+									<el-date-picker :disabled="scope.row.isdisabled" v-if="scope.row.choose" v-model="scope.row.upointDate" type="datetime" placeholder="选择日期时间"
+									 value-format="yyyy-MM-dd HH:mm:ss">
+									</el-date-picker>
+
 								</template>
 							</el-table-column>
 							<!-- <el-table-column fixed="right" label="操作">
@@ -502,27 +507,27 @@
 					</template>
 					<!-- <el-button @click="addUpointInfo(editForm.upoints)">添加</el-button> -->
 				</el-form-item>
-				
+
 				<!-- 备注信息 -->
 				<el-form-item label="备注信息">
 					<template>
 						<el-table :data="editForm.notes" stripe style="width: 100%">
-							<el-table-column prop="noteDate" label="时间">
-<!-- 								<template scope="scope">
+							<el-table-column prop="noteDate" label="时间"  width="150px">
+								<!-- 								<template scope="scope">
 									<el-input size="mini" v-model="scope.row.noteDate"></el-input>
 								</template> -->
 							</el-table-column>
-							<el-table-column prop="noteName" label="操作人" >
-								
+							<el-table-column prop="noteName" label="操作人" width="150px">
+
 							</el-table-column>
-							<el-table-column prop="noteArea" label="备注" >
+							<el-table-column prop="noteArea" label="备注">
 								<template scope="scope">
-									<el-input size="mini" v-model="scope.row.noteArea"></el-input>
+									<el-input :disabled="scope.row.hiddenNoteArea"  v-model="scope.row.noteArea"></el-input>
 								</template>
 							</el-table-column>
-							
 
-						<!-- 	<el-table-column fixed="right" label="操作">
+
+							<!-- 	<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
 									<el-button @click.native.prevent="deleteNotesInfo(scope.$index, editForm.notes)" size="small"> 移除
 									</el-button>
@@ -530,7 +535,7 @@
 							</el-table-column> -->
 						</el-table>
 					</template>
-					<el-button @click="addNotesInfo(editForm.notes)">添加</el-button>
+					<el-button v-if="!disabled" @click="addNotesInfo(editForm.notes)">添加</el-button>
 				</el-form-item>
 
 			</el-form>
@@ -555,10 +560,11 @@
 	export default {
 		data() {
 			return {
-
-
-
 				// 查询数据
+				queryPlistEmployee: '',
+				queryPlistNo: '',
+				queryPlistCtime: '',
+				queryPlistAclient: '',
 				queryInfo: {
 					plistEmployeeId: '',
 					plistEmployeeName: '',
@@ -566,7 +572,6 @@
 					plistDriverId: '',
 					plistDriverOwner: '',
 					plistCompanyId: '',
-					plistCompanyName: '',
 					plistState: '',
 					pageNo: 1,
 					pageSize: 10
@@ -597,7 +602,7 @@
 					value: '结算',
 					label: '结算'
 				}],
-				// 创建公司对话框数据
+				// 创建对话框数据
 				addDialogVisible: false,
 				addForm: {
 					plistEmployeeName: '',
@@ -606,26 +611,15 @@
 					plistDriverName: '',
 					plistDriverTele: '',
 					plistDriverModel: '',
-					plistPtime:'',
-					upointDate:'',
-					apointDate:'',
-					apoints: [{
-						"apointId": "",
-						"apointAddress": "",
-						"apointDate": ""
-					}],
-					upoints: [{
-						"upointId": "",
-						"upointAddress": "",
-						"upointDate": ""
-					}],
-					notes:[{
+					plistPtime: '',
+					apoints: [],
+					upoints: [],
+					notes: [{
 						"noteArea": ""
 					}]
 				},
-				// 查询
-				// 员工ID/姓名查询
-				searchEmployee: '',
+				// 
+
 				// 车牌号查询
 				searchDriver: '',
 
@@ -634,23 +628,107 @@
 				licationAddress: '',
 
 				// 创建页面公司选择框数据
-				options: [],
+				companyOptions: [],
 				companyList: [],
 				loading: false,
 				states: [],
-				
-				// 编辑对话框数据
-				editDialogVisible:false,
-				editForm:{
-					
+				allAssemblyPointData: [],
+				allUnloadingPointData: [],
+
+				// 创建页面选择员工数据
+				employeeNameOptions: [],
+				allEmployeeNameList: [],
+				employeeNameLoading: false,
+				// 员工ID/姓名查询
+				searchEmployee: '',
+
+				// 创建页面选择车牌号数据
+				carLicenseOptions: [],
+				allCarLicenseList: [],
+				carLicenseLoading: false,
+				// 创建表单验证规则
+				addFormRules:{
+					plistState:[
+						{required:true,message:"请选择状态",trigger:'blur'}
+					],
+					searchEmployee:[
+						{required:true,message:"请输入对接人",trigger:'blur'}
+					],
+					plistEmployeeTele:[
+						{required:true,message:"请输入电话",trigger:'blur'}
+					],
+					searchDriver:[
+						{required:true,message:"请输入车牌号",trigger:'blur'}
+					],
+					plistDriverName:[
+						{required:true,message:"请输入司机",trigger:'blur'}
+					],
+					plistDriverTele:[
+						{required:true,message:"请输入司机电话",trigger:'blur'}
+					],
+					plistDriverModel:[
+						{required:true,message:"请输入车型",trigger:'blur'}
+					],
+					plistDeposit:[
+						{required:true,message:"请输入定金",trigger:'blur'}
+					],
+					plistBp:[
+						{required:true,message:"请输入尾款",trigger:'blur'}
+					],
+					plistPtime:[
+						{required:true,message:"请填入下单客户",trigger:'blur'}
+					],
+					plistAclient:[
+						{required:true,message:"请填入支付时间",trigger:'blur'}
+					],
+					allAssemblyPointData:[
+						{required:true,message:"请填入装货信息",trigger:'blur'}
+					],
+				plistDr:[
+					{required:true,message:"请填入配送里程",trigger:'blur'}
+				],
+				plistCr:[
+					{required:true,message:"请填入空置里程",trigger:'blur'}
+				],
+				plistUclient:[
+					{required:true,message:"请填入收单客户",trigger:'blur'}
+				],
+				allUnloadingPointData:[
+					{required:true,message:"请填入卸货信息",trigger:'blur'}
+				],
+				notes:[
+					{required:true,message:"请填入备注信息",trigger:'blur'}
+				],
 				},
+
+				// 编辑对话框数据
+				editDialogVisible: false,
+				editForm: {},
+				editAssemblyPointData: [],
+				editUnloadingPointData: [],
+				
+				// 详情状态能否选择
+				disabled:false,
+
 			}
 		},
 		created() {
 			this.getPerformanceList(),
 				this.getAllCompanyList()
+			this.findAllEmployeeName()
+			this.findAllCarLicense()
 		},
 		methods: {
+			checkboxChange(e) {
+				console.log(e)
+
+			},
+			editAssemblycheckboxChange(e, index) {
+				console.log(e)
+				console.log(index)
+				console.log(this.editAssemblyPointData)
+				console.log(this.editAssemblyPointData[index].choose)
+			},
 			deleteApointInfo(index, rows) {
 				//删除改行
 				rows.splice(index, 1);
@@ -659,7 +737,8 @@
 				apointsData.push({
 					"apointId": "",
 					"apointAddress": "",
-					"apointDate": ""
+					"apointDate": "",
+					"hiddenNoteArea":false
 				})
 			},
 			deleteUpointInfo(index, rows) {
@@ -682,10 +761,10 @@
 					"noteArea": ""
 				})
 			},
-			
+
 			// 显示创建对话框
-			showAddCompanyDialog(){
-				this.addDialogVisible=true
+			showAddDialog() {
+				this.addDialogVisible = true
 				// 因为el-dialog显示时，高德搜索框加载未完成，用它在nextTick回调中加载，就成功了
 				// 装货信息地址高德接口
 				this.$nextTick(() => {
@@ -713,13 +792,13 @@
 					}
 				})
 			},
-			
+
 			// 获取所有公司名称
 			async getAllCompanyList() {
 				const {
 					data: res
-				} = await this.$http.get('base/tBaCompany/getAllCompanyName')
-
+				} = await this.$http.get('tPfPlist/findAllCompanyName')
+				// console.log(res)
 				if (res.code !== 200) {
 					return
 				}
@@ -730,7 +809,7 @@
 						label: `${item}`
 					};
 				});
-				this.options = this.companyList
+				this.companyOptions = this.companyList
 			},
 
 			// 创建页面选择公司方法
@@ -739,15 +818,104 @@
 					this.loading = true;
 					setTimeout(() => {
 						this.loading = false;
-						this.options = this.companyList.filter(item => {
+						this.companyOptions = this.companyList.filter(item => {
 							return item.value.indexOf(query) > -1;
 						});
 					}, 300)
 				} else {
-					this.options = this.companyList
+					this.companyOptions = this.companyList
 				}
 			},
+			// 获取所有员工姓名
+			async findAllEmployeeName() {
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findAllEmployeeName')
+				console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.allEmployeeNameList = res.result.map(item => {
+					return {
+						value: `${item}`,
+						label: `${item}`
+					};
+				});
+				this.employeeNameOptions = this.allEmployeeNameList
+			},
+			// 创建页面选择员工方法
+			chooseEmployeeName(query) {
+				if (query !== '') {
+					this.employeeNameLoading = true;
+					setTimeout(() => {
+						this.employeeNameLoading = false;
+						this.employeeNameOptions = this.allEmployeeNameList.filter(item => {
+							return item.value.indexOf(query) > -1;
+						});
+					}, 300)
+				} else {
+					this.employeeNameOptions = this.allEmployeeNameList
+				}
+			},
+			// 选择员工后发起查询请求
+			async handleChooseName(name) {
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + name)
+				console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
+				this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
+				this.addForm.plistEmployee = res.result[0].EMPLOYEE_NAME
+			},
 
+			// 获取所有车牌号
+			async findAllCarLicense() {
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findAllLicense')
+				console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.allCarLicenseList = res.result.map(item => {
+					return {
+						value: `${item}`,
+						label: `${item}`
+					};
+				});
+				this.carLicenseOptions = this.allCarLicenseList
+			},
+			// 创建页面选择车牌号方法
+			chooseCarLicense(query) {
+				if (query !== '') {
+					this.carLicenseLoading = true;
+					setTimeout(() => {
+						this.carLicenseLoading = false;
+						this.carLicenseOptions = this.allCarLicenseList.filter(item => {
+							return item.value.indexOf(query) > -1;
+						});
+					}, 300)
+				} else {
+					this.carLicenseOptions = this.allCarLicenseList
+				}
+			},
+			// 选择车牌号后发起请求
+			async handleChooseCarLicense(carLicense) {
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findDriverByLicense?license=' + carLicense)
+				console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.addForm.plistDriverId = res.result.DRIVER_NO
+				this.addForm.plistDriverName = res.result.DRIVER_NAME
+				this.addForm.plistDriverTele = res.result.DRIVER_TEL
+				this.addForm.plistDriverModel = res.result.DRIVER_MODEL
+			},
 
 			// 搜索区域
 			handleQueryBtn() {
@@ -763,7 +931,7 @@
 				} = await this.$http.get('tPfPlist/list', {
 					params: this.queryInfo
 				})
-
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -774,6 +942,11 @@
 
 			// 点击查询按钮
 			async handleQueryBtn() {
+				this.queryInfo.plistEmployee = "*" + this.queryPlistEmployee + "*"
+				this.queryInfo.plistNo = "*" + this.queryPlistNo + "*"
+				this.queryInfo.plistCtimet = "*" + this.queryPlistCtime + "*"
+				this.queryInfo.plistAclient = "*" + this.queryPlistAclient + "*"
+				console.log(this.queryInfo)
 				this.getPerformanceList()
 				// this.getAllDriverList()
 
@@ -793,6 +966,27 @@
 
 			// 创建公对话框
 			addInfo() {
+				this.allAssemblyPointData.forEach(v => {
+					if (v.choose == true) {
+						this.addForm.apoints.push(v)
+					}
+				})
+				this.addForm.apoints.forEach(v => {
+					v.apointId = v.clientPointId
+				})
+				this.allUnloadingPointData.forEach(v => {
+					if (v.choose == true) {
+						this.addForm.upoints.push(v)
+					}
+				})
+				this.addForm.upoints.forEach(v => {
+					v.upointId = v.clientPointId
+				})
+				this.addForm.plistDeposit = parseFloat(this.addForm.plistDeposit).toFixed(2);
+
+				this.addForm.plistBp = parseFloat(this.addForm.plistBp).toFixed(2);
+				this.addForm.plistEmployee = this.addForm.plistEmployeeName
+				console.log(this.addForm)
 				this.$refs.addFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起添加信息的数据请求
@@ -820,36 +1014,24 @@
 					this.addForm.plistDriverTele = '',
 					this.addForm.plistDriverModel = '',
 					this.addForm.upointDate = '',
-					this.addForm.apointDate = ''
+					this.addForm.apointDate = '',
+					this.addForm.plistDeposit = '',
+					this.addForm.plistBp = ''
 			},
 
 			// 根据员工编号/姓名查询
 			async handleSearchEmployee() {
-				const firstLetter = this.searchEmployee[0]
-				if (firstLetter == 0) {
-					const {
-						data: res
-					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeNo?employeeNo=' + this.searchEmployee)
-					if (res.code !== 200) {
-						return this.$message.error('获取信息失败')
-					}
-
-					this.$message.success('获取地区信息成功')
-					this.addForm.plistEmployeeName = res.result.EMPLOYEE_NAME
-					this.addForm.plistEmployeeTele = res.result.EMPLOYEE_TEL
-				} else {
-					const {
-						data: res
-					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + this.searchEmployee)
-					if (res.code !== 200) {
-						return this.$message.error('获取信息失败')
-					}
-
-					this.$message.success('获取信息成功')
-					this.addForm.plistEmployeeName = res.result[0].EMPLOYEE_NAME
-					this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + this.searchEmployee)
+				if (res.code !== 200) {
+					return this.$message.error('获取信息失败')
 				}
 
+				this.$message.success('获取信息成功')
+				this.addForm.plistEmployeeName = res.result[0].EMPLOYEE_NAME
+				this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
+				this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
 			},
 
 			// 根据车牌号查询
@@ -868,8 +1050,9 @@
 				this.addForm.plistDriverName = res.result.DRIVER_NAME
 				this.addForm.plistDriverTele = res.result.DRIVER_TEL
 				this.addForm.plistDriverModel = res.result.DRIVER_MODEL
+				this.addForm.plistDriverId = res.result.DRIVER_NO
 			},
-			
+
 			// 复制限行规则
 			copyAreaRule() {
 				let clipboard = new this.Clipboard(".el-icon-document-copy");
@@ -911,11 +1094,34 @@
 					});
 				})
 			},
-			
-			// 编辑对话框操作
-			// 展示编辑的对话框
+			// 根据选择的公司查询装配点
+			async searchAssemblyPoint() {
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.addForm.plistAclient)
+				console.log(res)
+				if (res.code !== 200) {
+					return this.$message.error('获取信息失败')
+				}
+
+				this.allAssemblyPointData = res.result
+			},
+			// 根据选择的公司查询卸货点
+			async searchUnloadingPoint() {
+				const {
+					data: res
+				} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.addForm.plistUclient)
+				console.log(res)
+				if (res.code !== 200) {
+					return this.$message.error('获取信息失败')
+				}
+
+				this.allUnloadingPointData = res.result
+			},
+
+			// 详情对话框操作
+			// 展示详情的对话框
 			async showEditDialog(plistNo) {
-				// console.log(Id)
 				const {
 					data: res
 				} = await this.$http.get('tPfPlist/findListPage?plistNo=' + plistNo)
@@ -925,35 +1131,170 @@
 				}
 				this.editForm = res.result[0]
 				// 显示对话框
+
+				this.editForm.employeeName = this.editForm.employee.employeeName
+				this.editForm.employeeTel = this.editForm.employee.employeeTel
+				this.editForm.driverName = this.editForm.driver.driverName
+				this.editForm.driverLicense = this.editForm.driver.driverLicense
+				this.editForm.driverTel = this.editForm.driver.driverTel
+				this.editForm.driverModel = this.editForm.driver.driverModel
+				
+
+				// 根据下单公司、收获公司获取装货点
+				const {
+					data: res1
+				} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.editForm.plistAclient)
+				this.editAssemblyPointData = res1.result
+				const {
+					data: res2
+				} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.editForm.plistUclient)
+				this.editUnloadingPointData = res2.result
+
+				this.editForm.apoints.forEach(v => {
+					this.editAssemblyPointData.forEach(j => {
+						if (j.clientPointId === v.apointId) {
+							j.choose = true
+							j.apointDate = v.apointDate
+							j.apointId = v.apointId
+							j.isdisabled = true
+						}
+					})
+				})
+
+				this.editForm.upoints.forEach(v => {
+					this.editUnloadingPointData.forEach(j => {
+						if (j.clientPointId === v.upointId) {
+							j.choose = true
+							j.upointDate = v.upointDate
+							j.upointId = v.upointId
+							j.isdisabled = true
+						}
+					})
+				})
+				
+				// 根据备注内容判断
+				this.editForm.notes.forEach(v=>{
+					if(v.noteArea !== ""){
+						v.hiddenNoteArea = true
+					}
+				})
+				
+				// 判断状态是否是结算
+				if(this.editForm.plistState == "结算"){
+					this.disabled = true
+					this.editAssemblyPointData.forEach(j =>{
+						j.isdisabled = true
+					})
+					this.editUnloadingPointData.forEach(j =>{
+						j.isdisabled = true
+					})
+					this.editForm.notes.forEach(v=>{
+						v.hiddenNoteArea = true
+					})
+				}
+				
+				
+				// console.log(this.editForm)
+				// console.log(this.editUnloadingPointData)				
+				// 显示对话框
 				this.editDialogVisible = true
 			},
-			
+
+
 			// 监听修改用户对话框关闭事件
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
+				this.disabled = false
+				this.editDialogVisible = false
+				this.carLicenseLoading = false
 			},
-			
-			
+
+
+
+			// 编辑界面状态选择/////////////////////////////////
+			//////////////////////////////////////////////////
+			editPlistStateChange(e) {
+				let nowPlistState = this.editForm.plistState
+				console.log(e)
+				console.log(nowPlistState)
+				if (e == '结算') {
+					this.$confirm('此操作将不可再编辑, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						this.editForm.plistState = e
+						this.$message({
+							type: 'success',
+							message: '已完结!'
+						});
+					}).catch(() => {
+						this.editForm.plistState = nowPlistState
+						this.$message({
+							type: 'info',
+							message: '已取消'
+						});
+					});
+				}
+			},
 			// 修改信息并提交
 			editInfo() {
+				if (this.editForm.plistState == '结算') {
+					this.$confirm('状态选择结算后将不可再编辑, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						this.handleEditInfo()
+					}).catch(() => {
+						this.$message({
+							type: 'info',
+							message: '已取消'
+						});
+					});
+				}else{
+					this.handleEditInfo()
+				}
+			},
+			
+			handleEditInfo(){
+				this.editForm.apoints = []
+				this.editForm.upoints = []
+				this.editAssemblyPointData.forEach(v => {
+					if (v.choose == true) {
+						this.editForm.apoints.push(v)
+					}
+				})
+				
+				this.editForm.apoints.forEach(v => {
+					v.apointId = v.clientPointId
+				})
+				this.editUnloadingPointData.forEach(v => {
+					if (v.choose == true) {
+						this.editForm.upoints.push(v)
+					}
+				})
+				this.editForm.upoints.forEach(v => {
+					v.upointId = v.clientPointId
+				})
 				this.$refs.editFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起修改信息的数据请求
 					const {
 						data: res
 					} = await this.$http.put('tPfPlist/edit', this.editForm)
-			
+					console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('更新信息失败')
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
-					this.getEmployeeList()
-					this.getAllEmployeeList()
+				
+					this.getPerformanceList()
 					this.$message.success('更新信息成功')
 				})
 			},
-			
+
 		}
 	}
 </script>

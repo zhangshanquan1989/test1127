@@ -43,24 +43,24 @@
 			<!-- 创建公司的对话框 -->
 			<el-dialog class="dialog" title="创建公司" :visible.sync="addCompanyDialogVisible" width="50%" @close="addCompanyDialogClosed">
 				<!-- 添加公司的表单 -->
-				<el-form :model="addCompanyForm" ref="addCompanyFormRef" label-width="100px">
-					<el-form-item label="公司名称:">
+				<el-form :model="addCompanyForm" :rules="addCompanyFormRules" ref="addCompanyFormRef" label-width="100px">
+					<el-form-item label="公司名称:" prop="companyName">
 						<el-input v-model="addCompanyForm.companyName" style="width: 50%;"></el-input>
 					</el-form-item>
 
-					<el-form-item label="状态:" >
+					<el-form-item label="状态:" prop="companyStatus">
 						<el-select v-model="addCompanyForm.companyStatus" placeholder="请选择" style="width: 30%;">
 							<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="业务对接人:">
+					<el-form-item label="业务对接人:" prop="companyBusiness" >
 						<el-input v-model="addCompanyForm.companyBusiness" style="width: 50%;"></el-input>
 					</el-form-item>
-					<el-form-item label="法人:">
+					<el-form-item label="法人:" prop="companyLegal">
 						<el-input v-model="addCompanyForm.companyLegal" style="width: 50%;"></el-input>
 					</el-form-item>
-					<el-form-item label="办公地址:">
+					<el-form-item label="办公地址:" prop="companyAddress">
 						<el-input id='tipinput' clearable type="text" v-model="addCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>
 					</el-form-item>
 				</el-form>
@@ -75,26 +75,26 @@
 			<!-- 编辑公司的对话框 -->
 			<el-dialog title="编辑公司" :visible.sync="editDialogVisible" width="50%" @close="editCompanyDialogClosed">
 				<!-- 编辑公司的表单 -->
-				<el-form :model="editCompanyForm" ref="editCompanyFormRef" label-width="100px">
+				<el-form :model="editCompanyForm" :rules="editCompanyFormRules" ref="editCompanyFormRef" label-width="100px">
 					<el-form-item label="公司ID:">{{editCompanyForm.companyNo}}</el-form-item>
-					<el-form-item label="公司名称:">
-						<el-input v-model="editCompanyForm.companyName"></el-input>
+					<el-form-item label="公司名称:" prop="companyName">
+						<el-input clearable v-model="editCompanyForm.companyName"></el-input>
 					</el-form-item>
 
-					<el-form-item label="状态:">
+					<el-form-item label="状态:" prop="companyStatus">
 						<el-select v-model="editCompanyForm.companyStatus" placeholder="请选择">
 							<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="业务对接人:">
-						<el-input v-model="editCompanyForm.companyBusiness"></el-input>
+					<el-form-item label="业务对接人:" prop="companyBusiness">
+						<el-input clearable v-model="editCompanyForm.companyBusiness"></el-input>
 					</el-form-item>
-					<el-form-item label="法人:">
-						<el-input v-model="editCompanyForm.companyLegal"></el-input>
+					<el-form-item label="法人:" prop="companyLegal">
+						<el-input clearable v-model="editCompanyForm.companyLegal"></el-input>
 					</el-form-item>
-					<el-form-item label="办公地址:">
-						<el-input v-model="editCompanyForm.companyAddress"></el-input>
+					<el-form-item label="办公地址:" prop="companyAddress">
+						<el-input clearable v-model="editCompanyForm.companyAddress"></el-input>
 
 					</el-form-item>
 				</el-form>
@@ -135,6 +135,42 @@
 					companyLegal: "",
 					companyName: "",
 					companyStatus: "运营中"
+				},
+				// 添加的表单验证规则
+				addCompanyFormRules:{
+					companyName:[
+						{required:true,message:"请输入公司名",trigger:'blur'}
+					],
+					companyStatus:[
+						{required:true,message:"请选择状态",trigger:'blur'}
+					],
+					companyBusiness:[
+						{required:true,message:"请输入对接人",trigger:'blur'}
+					],
+					companyLegal:[
+						{required:true,message:"请输入法人",trigger:'blur'}
+					],
+					companyAddress:[
+						{required:true,message:"请输入办公地址",trigger:'blur'}
+					],
+				},
+				// 编辑公司的表单验证规则
+				editCompanyFormRules:{
+					companyName:[
+						{required:true,message:"请输入公司名",trigger:'blur'}
+					],
+					companyStatus:[
+						{required:true,message:"请选择状态",trigger:'blur'}
+					],
+					companyBusiness:[
+						{required:true,message:"请输入对接人",trigger:'blur'}
+					],
+					companyLegal:[
+						{required:true,message:"请输入法人",trigger:'blur'}
+					],
+					companyAddress:[
+						{required:true,message:"请输入办公地址",trigger:'blur'}
+					],
 				},
 
 				// 添加公司表单的状态选项
@@ -230,10 +266,10 @@ console.log(res)
 			// 监听对话框的关闭事件，重置表单数据
 			addCompanyDialogClosed() {
 				this.$refs.addCompanyFormRef.resetFields()
-				this.addCompanyForm.companyAddress = ""
-				this.addCompanyForm.companyBusiness = ""
-				this.addCompanyForm.companyLegal = ""
-				this.addCompanyForm.companyName = ""
+				// this.addCompanyForm.companyAddress = ""
+				// this.addCompanyForm.companyBusiness = ""
+				// this.addCompanyForm.companyLegal = ""
+				// this.addCompanyForm.companyName = ""
 				this.addCompanyForm.companyStatus = "运营中"
 			},
 

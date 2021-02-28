@@ -8,7 +8,10 @@
 			<!-- 地区查询 -->
 			<el-col :span="1"><span>地区</span></el-col>
 			<el-col :span="4">
-				<el-input id='queryAddressinput' clearable type="text" v-model="queryInfo.clientAddress" style="width: 80%;" placeholder="高德接口"></el-input>
+				<div>
+					<el-cascader clearable :options="cityData" v-model="chooseQueryCity" @change="handleClientAddress"></el-cascader>
+				</div>
+<!-- 				<el-input id='queryAddressinput' clearable type="text" v-model="queryInfo.clientAddress" style="width: 80%;" placeholder="高德接口"></el-input> -->
 			</el-col>
 
 			<!-- 等级下拉框 -->
@@ -36,7 +39,7 @@
 
 				<el-table-column prop="clientPointId" label="装配点ID">
 				</el-table-column>
-				<el-table-column prop="clientName" label="企业名称">
+				<el-table-column prop="clientCompany" label="企业名称">
 				</el-table-column>
 				<el-table-column prop="clientAddress" label="装配点地址">
 				</el-table-column>
@@ -49,7 +52,7 @@
 				<el-table-column label="复制" width="50px">
 
 					<template slot-scope="scope">
-						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.clientName+ '  ' + scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
+						<i class="el-icon-document-copy" :data-clipboard-text=" scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
 						 @click="copyAreaRule"></i>
 					</template>
 
@@ -80,7 +83,6 @@
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row)">详情</el-button>
-
 					</template>
 				</el-table-column>
 			</el-table>
@@ -103,7 +105,7 @@
 					<div>{{editForm.clientPointId}}</div>
 				</el-form-item>
 				<el-form-item label="装配站名称:">
-					<div>{{editForm.clientName}}</div>
+					<div>{{editForm.clientCompany}}</div>
 				</el-form-item>
 				<el-form-item label="装配站地址:">
 					<div>{{editForm.clientAddress}}</div>
@@ -197,7 +199,7 @@
 					</el-table-column>
 					<el-table-column prop="CLIENT_TYPE" label="类型">
 					</el-table-column>
-					<el-table-column prop="CLIENT_LIST_PERFORMANCE" label="关联履约">
+					<el-table-column prop="RELATED_PERFORMANCR" label="关联履约">
 					</el-table-column>
 					<el-table-column prop="CLIENT_DELIVERY_FREQUENCY" label="发货频次">
 					</el-table-column>
@@ -250,9 +252,13 @@
 </template>
 
 <script>
+	import cityData from './citydata.js'
 	export default {
 		data() {
 			return {
+				// 搜索，城市
+				chooseQueryCity:[],
+				cityData:cityData,
 				// 查询数据
 				queryInfo: {
 					queryRegion: '',
@@ -343,6 +349,16 @@
 		},
 
 		methods: {
+			// 查询选择城市
+handleClientAddress(e){
+	let city = '';
+	this.chooseQueryCity.forEach(v=>{
+		city = city + v
+	})
+	this.queryInfo.clientAddress = "*" + city + "*"
+	// console.log(e)
+	console.log(this.queryInfo.clientAddress)
+},
 
 			//分页区域 
 			// 根据分页查询列表
@@ -352,7 +368,7 @@
 				} = await this.$http.get('tPfDisApoint/list', {
 					params: this.queryInfo
 				})
-
+console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -364,6 +380,7 @@
 
 			// 点击查询按钮
 			async handleQueryBtn() {
+				
 				this.getClientList()
 			},
 			// pageSize 改变的事件
@@ -403,6 +420,7 @@
 				const {
 					data: res
 				} = await this.$http.get('tPfDisApoint/findListDetails?pointId=' + row.clientPointId)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询用户信息失败')
 				}

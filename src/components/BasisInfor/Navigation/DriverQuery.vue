@@ -65,21 +65,21 @@
 			<el-table :data="driverList" stripe style="width: 100%">
 				<el-table-column v-if="false" prop="driverId" label="ID">
 				</el-table-column>
-				<el-table-column prop="driverNo" label="车主ID">
+				<el-table-column prop="driverNo" label="司机ID">
 				</el-table-column>
-				<el-table-column prop="driverName" label="司机姓名">
-				</el-table-column>
-				<el-table-column prop="driverTel" label="司机联系方式">
-				</el-table-column>
-				<el-table-column prop="driverLicense" label="车牌">
+				<el-table-column prop="driverName" label="姓名">
 				</el-table-column>
 				<el-table-column prop="driverModel" label="车型">
 				</el-table-column>
 				<el-table-column prop="driverLoad" label="载重">
 				</el-table-column>
+				<el-table-column prop="driverTel" label="司机电话">
+				</el-table-column>
+				<el-table-column v-if="false" prop="driverLicense" label="车牌">
+				</el-table-column>
 				<el-table-column prop="driverCompany" label="所属公司">
 				</el-table-column>
-				<el-table-column prop="driverScheduling" label="所属调度">
+				<el-table-column v-if="false" prop="driverScheduling" label="所属调度">
 				</el-table-column>
 				<el-table-column prop="driverStatus" label="状态">
 				</el-table-column>
@@ -125,27 +125,27 @@
 		<!-- 创建的对话框 -->
 		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
-			<el-form :model="addForm" ref="addFormRef" label-width="100px">
-				<el-form-item label="车主ID:">
+			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
+				<el-form-item label="车主ID:" >
 					<el-input disabled style="width: 30%;"></el-input>
 				</el-form-item>
 
 				<div class="addDriver">
-					<el-form-item label="司机姓名:">
+					<el-form-item label="司机姓名:" prop="driverName">
 						<el-input v-model="addForm.driverName"></el-input>
 					</el-form-item>
-					<el-form-item label="司机TEL:">
+					<el-form-item label="司机TEL:" prop="driverTel">
 						<el-input v-model="addForm.driverTel"></el-input>
 					</el-form-item>
 				</div>
 				<div class="emergency">
-					<el-form-item label="紧急联系人" class="driverEmergencyContact">
+					<el-form-item label="紧急联系人" class="driverEmergencyContact" prop="driverEmergencyContact">
 						<el-input v-model="addForm.driverEmergencyContact"></el-input>
 					</el-form-item>
-					<el-form-item label="紧急TEL:" class="driverEmergencyTel">
+					<el-form-item label="紧急TEL:" class="driverEmergencyTel" prop="driverEmergencyTel">
 						<el-input v-model="addForm.driverEmergencyTel"></el-input>
 					</el-form-item>
-					<el-form-item label="关系:" class="driverRelationship">
+					<el-form-item label="关系:" class="driverRelationship" prop="driverRelationship">
 						<el-select v-model="addForm.driverRelationship" placeholder="全部" clearable>
 							<el-option v-for="item in relationSelect" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
@@ -155,15 +155,15 @@
 				</div>
 
 				<div class="carOwner">
-					<el-form-item label="车主姓名:">
+					<el-form-item label="车主姓名:" prop="driverCarOwner">
 						<el-input v-model="addForm.driverCarOwner" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="车主TEL:">
+					<el-form-item label="车主TEL:" prop="driverOwnerTel">
 						<el-input v-model="addForm.driverOwnerTel" clearable></el-input>
 					</el-form-item>
 				</div>
 
-				<el-form-item label="车牌:">
+				<el-form-item label="车牌:" prop="driverLicense">
 					<el-input v-model="addForm.driverLicense" style="width: 30%;" clearable></el-input>
 					<!-- 车牌颜色 -->
 					<el-select v-model="addForm.driverLicenseColour" placeholder="全部" clearable style="width: 15%;margin-left: 10px;">
@@ -172,61 +172,61 @@
 					</el-select>
 				</el-form-item>
 				<div class="driverCarType">
-					<el-form-item label="车型:">
+					<el-form-item label="车型:" prop="driverModel">
 						<el-select v-model="addForm.driverModel" placeholder="选择" clearable>
 							<el-option v-for="item in driverModelSelect" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="宽:">
+					<el-form-item label="宽:" prop="driverWidth">
 						<el-input v-model="addForm.driverWidth" placeholder="单位:米"></el-input>
 					</el-form-item>
-					<el-form-item label="高:">
+					<el-form-item label="高:" prop="driverHigh">
 						<el-input v-model="addForm.driverHigh" placeholder="单位:米"></el-input>
 					</el-form-item>
-					<el-form-item label="载重:">
+					<el-form-item label="载重:" prop="driverLoad">
 						<el-input v-model="addForm.driverLoad" placeholder="单位:吨"></el-input>
 					</el-form-item>
 				</div>
 
-				<el-form-item label="合同周期" placeholder="yyyy-MM-dd">
+				<el-form-item label="合同周期" placeholder="yyyy-MM-dd" prop="chooseContractData">
 					<el-date-picker v-model="chooseContractData" type="daterange" range-separator="至" start-placeholder="开始日期"
 					 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleDataChange">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="所属公司">
+				<el-form-item label="所属公司" prop="driverCompany">
 					<el-select v-model="addForm.driverCompany" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
 					 :loading="loading" style="width: 50%;">
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="所属调度">
+				<el-form-item label="所属调度" prop="searchEmployee">
 					<el-input placeholder="请输入员工ID/姓名" v-model="searchEmployee">
 						<el-button slot="append" icon="el-icon-search" @click="handleSearchEmployee"></el-button>
 					</el-input>
 				</el-form-item>
-				<el-form-item label="状态">
+				<el-form-item label="状态" prop="driverStatus">
 					<el-select v-model="addForm.driverStatus" placeholder="请选择">
 						<el-option v-for="item in driverStatusSelect" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				
-				<el-form-item label="驾驶证:">
+				<el-form-item label="驾驶证:" prop="driverCertificateDriver">
 					<el-image v-if="addForm.driverCertificateDriver"  style="width: 100px; height: 50px;" :src="addForm.driverCertificateDriver"></el-image>
 					<el-upload name="imgFile" :before-upload="beforeAvatarUpload" :action="updateDriverUrl" :auto-upload="true" :on-success="handleDriverUrlSuccess" :show-file-list="false" >
 						<el-button size="small" type="primary" plain>点击上传</el-button>
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="行驶证:">
+				<el-form-item label="行驶证:" prop="driverCertificateDriving">
 					<el-image v-if="addForm.driverCertificateDriving"  style="width: 100px; height: 50px;" :src="addForm.driverCertificateDriving"></el-image>
 					<el-upload name="imgFile" :action="updateDrivingUrl" :auto-upload="true" :on-success="handleDrivingUrlSuccess"
 					  :show-file-list="false" >
 						<el-button size="small" type="primary" plain>点击上传</el-button>
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="上岗证:">
+				<el-form-item label="上岗证:" prop="driverCertificatePostCard">
 					<el-image v-if="addForm.driverCertificatePostCard" style="width: 100px; height: 50px;" :src="addForm.driverCertificatePostCard"></el-image>
 					<el-upload name="imgFile" :action="updatePostCardUrl" :auto-upload="true" :on-success="handlePostCardUrlSuccess"
 					  :show-file-list="false" >
@@ -311,7 +311,11 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="所属公司">
-					<el-input v-model="editForm.driverCompany"></el-input>
+					<el-select v-model="editForm.driverCompany" clearable filterable remote placeholder="请选择公司" :remote-method="remoteMethod"
+					 :loading="loading" style="width: 50%;">
+						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="所属调度">
 					<el-input v-model="editForm.driverScheduling"></el-input>
@@ -413,6 +417,67 @@
 					driverCertificateDriver:'',
 					driverCertificateDriving:'',
 					driverCertificatePostCard:''
+				},
+				// 创建表单验证规则
+				addFormRules:{
+					driverName:[
+						{required:true,message:"请输入司机姓名",trigger:'blur'}
+					],
+					driverTel:[
+						{required:true,message:"请输入司机电话",trigger:'blur'}
+					],
+					driverEmergencyContact:[
+						{required:true,message:"请输入紧急联系人",trigger:'blur'}
+					],
+					driverEmergencyTel:[
+						{required:true,message:"请输入紧急电话",trigger:'blur'}
+					],
+					driverRelationship:[
+						{required:true,message:"请选择关系",trigger:'blur'}
+					],
+					driverCarOwner:[
+						{required:true,message:"请输入车主姓名",trigger:'blur'}
+					],
+					driverOwnerTel:[
+						{required:true,message:"请输入车主电话",trigger:'blur'}
+					],
+					driverLicense:[
+						{required:true,message:"请输入车牌",trigger:'blur'}
+					],
+					driverModel:[
+						{required:true,message:"请选择车型",trigger:'blur'}
+					],
+					driverWidth:[
+						{required:true,message:"请输入车宽",trigger:'blur'}
+					],
+					driverHigh:[
+						{required:true,message:"请输入车高",trigger:'blur'}
+					],
+					driverLoad:[
+						{required:true,message:"请输入载重",trigger:'blur'}
+					],
+					chooseContractData:[
+						{required:true,message:"请输入合同周期",trigger:'blur'}
+					],
+					driverCompany:[
+						{required:true,message:"请输入所属公司",trigger:'blur'}
+					],
+					searchEmployee:[
+						{required:true,message:"请输入车所属调度",trigger:'blur'}
+					],
+					driverStatus:[
+						{required:true,message:"请选择状态",trigger:'blur'}
+					],
+					driverCertificateDriver:[
+						{required:true,message:"请上传驾驶证",trigger:'blur'}
+					],
+					driverCertificateDriving:[
+						{required:true,message:"请上传行驶证",trigger:'blur'}
+					],
+					driverCertificatePostCard:[
+						{required:true,message:"请上传上岗证",trigger:'blur'}
+					],
+					
 				},
 				// 紧急联系人关系选择
 				relationSelect: [{
