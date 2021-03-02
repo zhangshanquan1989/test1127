@@ -1,21 +1,21 @@
 <template>
 	<!-- 公司信息页面 -->
 	<div>
-		<el-button type="warning" size="mini" @click="showAddCompanyDialog">创建</el-button>
+		<el-button type="info"  @click="showAddCompanyDialog">创建</el-button>
 
 		<el-card class="box-card">
 			<el-table :data="companylist" stripe style="width: 100%">
 				<el-table-column v-if="false" prop="companyId" label="序号">
 				</el-table-column>
-				<el-table-column prop="companyNo" label="公司ID">
+				<el-table-column prop="companyNo" label="公司ID" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称">
+				<el-table-column prop="companyName" label="公司名称" width="250px">
 				</el-table-column>
-				<el-table-column prop="companyStatus" label="状态">
+				<el-table-column prop="companyStatus" label="状态" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyBusiness" label="业务对接人">
+				<el-table-column prop="companyBusiness" label="业务对接人" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyLegal" label="法人">
+				<el-table-column prop="companyLegal" label="法人" width="100px">
 				</el-table-column>
 				<el-table-column prop="companyAddress" label="办公地址">
 				</el-table-column>
@@ -33,9 +33,9 @@
 			</el-table>
 
 			<!-- 分页区域 -->
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
+			<el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total">
+			 :total="total" style="margin-top: 10px;">
 			</el-pagination>
 
 

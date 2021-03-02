@@ -6,7 +6,7 @@
 
 			<!-- 创建按钮 -->
 			<el-col :span="2">
-				<el-button type="info" size="mini" @click="addDialogVisible = true">创建</el-button>
+				<el-button type="info"  @click="addDialogVisible = true">创建</el-button>
 			</el-col>
 
 			<el-col :span="2">
@@ -23,17 +23,17 @@
 
 
 			<!-- 公司下拉框 -->
-			<el-col :span="1" style="margin-left: 20px;"><span>公司</span></el-col>
+			<el-col :span="1" style="margin-left: 20px;font-size: 17px;margin-top: 8px;"><span>公司:</span></el-col>
 			<el-col :span="2">
-				<el-select v-model="queryInfo.driverCompany" placeholder="全部" clearable>
-					<el-option v-for="item in allDriverList" :key="item.driverId" :label="item.driverCompany" :value="item.driverCompany">
+				<el-select v-model="queryInfo.driverCompany" placeholder="全部" clearable filterable remote>
+					<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
 			</el-col>
 
 
 			<!-- 状态下拉框 -->
-			<el-col :span="1" style="margin-left: 20px;"><span>状态</span></el-col>
+			<el-col :span="1"style="margin-left: 20px;font-size: 17px;margin-top: 8px;"><span>状态:</span></el-col>
 			<el-col :span="2">
 				<el-select v-model="queryInfo.driverStatus" placeholder="全部" clearable>
 					<el-option v-for="item in driverStatusSelect" :key="item.value" :label="item.label" :value="item.value">
@@ -43,7 +43,7 @@
 
 
 			<!-- 载重下拉框 -->
-			<el-col :span="1" style="margin-left: 20px;"><span>载重</span></el-col>
+			<el-col :span="1" style="margin-left: 20px;font-size: 17px;margin-top: 8px;"><span>载重:</span></el-col>
 			<el-col :span="2">
 				<el-select v-model="queryInfo.driverLoadClass" placeholder="全部" clearable>
 					<el-option v-for="item in driverLoadSelect" :key="item.value" :label="item.label" :value="item.value">
@@ -54,7 +54,12 @@
 
 			<!-- 查询按钮 -->
 			<el-col :span="2" style="margin-left: 20px;">
-				<el-button type="info" size="mini" @click="handleQueryBtn">查询</el-button>
+				<el-button type="info"  @click="handleQueryBtn">查询</el-button>
+			</el-col>
+			
+			<!-- 返回按钮 -->
+			<el-col :span="2" style="margin-left: 15px;">
+				<el-button type="info"  @click="handleQueryBackBtn">返回</el-button>
 			</el-col>
 
 		</el-row>
@@ -67,9 +72,11 @@
 				</el-table-column>
 				<el-table-column prop="driverNo" label="司机ID">
 				</el-table-column>
-				<el-table-column prop="driverName" label="姓名">
+				<el-table-column prop="driverName" label="司机名">
 				</el-table-column>
 				<el-table-column prop="driverModel" label="车型">
+				</el-table-column>
+				<el-table-column prop="driverCarOwner" label="车主名">
 				</el-table-column>
 				<el-table-column prop="driverLoad" label="载重">
 				</el-table-column>
@@ -85,17 +92,17 @@
 				</el-table-column>
 				<el-table-column prop="driverCertificateDriver" label="驾驶证">
 					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriver"></el-image>
+						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriver"   @click="handleClickImage(scope.row.driverCertificateDriver)" ></el-image>
 					</template>
 				</el-table-column>
 				<el-table-column prop="driverCertificateDriving" label="行驶证">
 					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriving"></el-image>
+						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriving" @click="handleClickImage(scope.row.driverCertificateDriving)"></el-image>
 					</template>
 				</el-table-column>
 				<el-table-column prop="driverCertificatePostCard" label="上岗证">
 					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificatePostCard"></el-image>
+						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificatePostCard" @click="handleClickImage(scope.row.driverCertificatePostCard)"></el-image>
 					</template>
 				</el-table-column>
 
@@ -190,7 +197,7 @@
 				</div>
 
 				<el-form-item label="合同周期" placeholder="yyyy-MM-dd" prop="chooseContractData">
-					<el-date-picker v-model="chooseContractData" type="daterange" range-separator="至" start-placeholder="开始日期"
+					<el-date-picker v-model="addForm.chooseContractData" type="daterange" range-separator="至" start-placeholder="开始日期"
 					 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleDataChange">
 					</el-date-picker>
 				</el-form-item>
@@ -202,7 +209,9 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="所属调度" prop="searchEmployee">
-					<el-input placeholder="请输入员工ID/姓名" v-model="searchEmployee">
+					
+					
+					<el-input clearable placeholder="请输入员工姓名" v-model="addForm.searchEmployee" style="width: 50%;">
 						<el-button slot="append" icon="el-icon-search" @click="handleSearchEmployee"></el-button>
 					</el-input>
 				</el-form-item>
@@ -357,6 +366,12 @@
 			</span>
 
 		</el-dialog>
+		
+		<!--  -->
+		<el-dialog :visible.sync="showDriverCertificateDriver" width="50%" >
+		<el-image  :src="showImageSrc"></el-image>
+		</el-dialog>
+		
 
 	</div>
 </template>
@@ -365,7 +380,7 @@
 	export default {
 		data() {
 			return {
-
+			showImageSrc:'',
 				// 查询数据
 				queryInfo: {
 					driverName: '',
@@ -377,9 +392,12 @@
 				// 总列表
 				allDriverList: [],
 				// 分页列表
-				driverList: [],
+				driverList: [
+					
+				],
 				// 总条数
 				total: 0,
+				srcList:[],
 				// 状态选项
 				driverStatusSelect: [{
 					value: '在职',
@@ -414,6 +432,8 @@
 				// 创建对话框数据
 				addDialogVisible: false,
 				addForm: {
+					// 创建时间选择器
+					chooseContractData: [],
 					driverCertificateDriver:'',
 					driverCertificateDriving:'',
 					driverCertificatePostCard:''
@@ -536,7 +556,10 @@
 
 				updateDriverUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriver",
 				updateDrivingUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImageDriving",
-				updatePostCardUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImagePostCard"
+				updatePostCardUrl: "http://81.70.151.121:8080/jeecg-boot/base/tBaDriver/uploadImagePostCard",
+				
+				// 图片放大
+				showDriverCertificateDriver:false
 			}
 		},
 
@@ -602,19 +625,39 @@
 				} = await this.$http.get('base/tBaDriver/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
 				this.$message.success('获取信息成功')
 				this.driverList = res.result.records
 				this.total = res.result.total
+				console.log(this.driverList)
 			},
 
+			handleClickImage(src){
+				this.showImageSrc = src
+				this.showDriverCertificateDriver=true
+			},
+			
 			// 点击查询按钮
 			async handleQueryBtn() {
 				this.getDriverList()
 				this.getAllDriverList()
+			},
+			
+			// 点击返回按钮
+			handleQueryBackBtn(){
+				this.queryInfo.driverName = ''
+				this.queryInfo.driverCarOwner = ''
+				this.queryInfo.driverLicense = ''
+				this.queryInfo.driverCompany = ''
+				this.queryInfo.driverStatus = ''
+				this.queryInfo.driverLoadClass = ''
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				
+				this.getDriverList()
 			},
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
@@ -647,6 +690,7 @@
 			handleDriverUrlSuccess(response, file, fileList) {
 				console.log(response)
 				this.addForm.driverCertificateDriver = response.result.DriverFileName
+				this.srcList[0] = this.addForm.driverCertificateDriver
 			},
 			handleDrivingUrlSuccess(response, file, fileList) {
 				this.addForm.driverCertificateDriving = response.result.DrivingFileName
@@ -766,9 +810,9 @@
 
 			// 创建日期时间选择
 			handleDataChange() {
-				console.log(this.chooseContractData)
-				this.addForm.driverStartContractPeriod = this.chooseContractData[0]
-				this.addForm.driverEndContractPeriod = this.chooseContractData[1]
+				console.log(this.addForm.chooseContractData)
+				this.addForm.driverStartContractPeriod = this.addForm.chooseContractData[0]
+				this.addForm.driverEndContractPeriod = this.addForm.chooseContractData[1]
 			},
 			// 编辑日期时间选择
 			handleditDataChange() {
@@ -779,31 +823,34 @@
 
 			// 根据员工编号/姓名查询
 			async handleSearchEmployee() {
-				const firstLetter = this.searchEmployee[0]
+				const firstLetter = this.addForm.searchEmployee[0]
 				// console.log(firstLetter)
 				if (firstLetter == 0) {
 					const {
 						data: res
-					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeNo?employeeNo=' + this.searchEmployee)
+					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeNo?employeeNo=' + this.addForm.searchEmployee)
 					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('获取信息失败')
 					}
 					this.addForm.plistEmployeeName = res.result.EMPLOYEE_NAME
 					this.addForm.plistEmployeeTele = res.result.EMPLOYEE_TEL
-					this.searchEmployee = res.result.EMPLOYEE_NAME + res.result.EMPLOYEE_TEL
+					this.addForm.searchEmployee = res.result.EMPLOYEE_NAME + res.result.EMPLOYEE_TEL
+					this.addForm.driverScheduling = res.result.EMPLOYEE_NAME + res.result.EMPLOYEE_TEL
+					
 				} else {
 
 					const {
 						data: res
-					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + this.searchEmployee)
+					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + this.addForm.searchEmployee)
 					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('获取信息失败')
 					}
 					this.addForm.plistEmployeeName = res.result[0].EMPLOYEE_NAME
 					this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
-					this.searchEmployee = res.result[0].EMPLOYEE_NAME + res.result[0].EMPLOYEE_TEL
+					this.addForm.searchEmployee = res.result[0].EMPLOYEE_NAME + res.result[0].EMPLOYEE_TEL
+					this.addForm.driverScheduling = res.result[0].EMPLOYEE_NAME + res.result[0].EMPLOYEE_TEL
 				}
 
 			}
@@ -866,5 +913,9 @@
 		width: 178px;
 		height: 178px;
 		display: block;
+	}
+	
+	.box-card{
+		margin-top: 10px;
 	}
 </style>

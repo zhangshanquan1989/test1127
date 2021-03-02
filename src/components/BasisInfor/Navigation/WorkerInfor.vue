@@ -8,20 +8,21 @@
 
 			<!-- 创建按钮 -->
 			<el-col :span="2">
-				<el-button type="info" size="mini" @click="addDialogVisible = true">创建</el-button>
+				<el-button type="info"  @click="addDialogVisible = true">创建</el-button>
 			</el-col>
 
 <!-- 员工搜索框 -->
-			<el-col :span="2">
-				<el-input v-model="queryInfo.employeeName" placeholder="员工姓名" clearable></el-input>
+			<el-col :span="3">
+				<el-input v-model="queryInfo.employeeName" placeholder="员工姓名查询" clearable></el-input>
 			</el-col>
 
-			<el-col :span="2"></el-col>
 
 			<!-- 公司下拉框 -->
-			<el-col :span="1" style="margin-left: 20px;"><span>公司：</span></el-col>
-			<el-col :span="2">
-				<el-select v-model="queryInfo.employeeCompany" placeholder="全部" clearable>
+			<el-col :span="1" style="margin-left: 20px;" class="queryCompanyInfo">
+				<span >公司：</span>
+			</el-col>
+			<el-col :span="3" >
+				<el-select v-model="queryInfo.employeeCompany" placeholder="公司名称查询" clearable>
 					<el-option v-for="item in companyList" :key="item.index" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
@@ -29,9 +30,9 @@
 
 
 			<!-- 状态下拉框 -->
-			<el-col :span="1" style="margin-left: 15px;"><span>状态：</span></el-col>
-			<el-col :span="2">
-				<el-select v-model="queryInfo.employeeStatus" placeholder="全部" clearable>
+			<el-col :span="1" style="margin-left: 15px;" class="queryStatusInfo"><span>状态：</span></el-col>
+			<el-col :span="3">
+				<el-select v-model="queryInfo.employeeStatus" placeholder="状态查询" clearable>
 					<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
@@ -39,29 +40,34 @@
 
 			<!-- 查询按钮 -->
 			<el-col :span="2" style="margin-left: 15px;">
-				<el-button type="info" size="mini" @click="handleQueryBtn">查询</el-button>
+				<el-button type="info"  @click="handleQueryBtn">查询</el-button>
+			</el-col>
+			
+			<!-- 返回按钮 -->
+			<el-col :span="3" style="margin-left: 15px;">
+				<el-button type="info"  @click="handleQueryBackBtn">返回</el-button>
 			</el-col>
 
 		</el-row>
 
 		<!-- 卡片视图区 -->
-		<el-card class="box-card">
+		<el-card class="box-card" style="margin-top: 8px;">
 			<el-table :data="employeeList" stripe style="width: 100%">
 				<el-table-column v-if="false" prop="employeeId" label="ID">
 				</el-table-column>
-				<el-table-column prop="employeeNo" label="员工ID">
+				<el-table-column prop="employeeNo" label="员工ID" width="130px">
 				</el-table-column>
-				<el-table-column prop="employeeName" label="员工姓名">
+				<el-table-column prop="employeeName" label="员工姓名" width="130px">
 				</el-table-column>
-				<el-table-column prop="employeeDepartment" label="部门">
+				<el-table-column prop="employeeDepartment" label="部门" width="150px">
 				</el-table-column>
-				<el-table-column prop="employeePost" label="岗位">
+				<el-table-column prop="employeePost" label="岗位" width="150px">
 				</el-table-column>
 				<el-table-column prop="employeeCompany" label="所属公司">
 				</el-table-column>
-				<el-table-column prop="employeeTel" label="联系方式">
+				<el-table-column prop="employeeTel" label="联系方式" width="150px">
 				</el-table-column>
-				<el-table-column prop="employeeStatus" label="状态">
+				<el-table-column prop="employeeStatus" label="状态" width="100px">
 				</el-table-column>
 
 				<el-table-column label="操作" width="200px">
@@ -329,9 +335,21 @@
 			},
 
 			// 点击查询按钮
-			async handleQueryBtn() {
+			 handleQueryBtn() {
 				this.getEmployeeList()
 			},
+			
+			// 点击返回按钮
+			handleQueryBackBtn(){
+				this.queryInfo.employeeName = ''
+				this.queryInfo.employeeCompany = ''
+				this.queryInfo.employeeStatus = '在职'
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				
+				this.getEmployeeList()
+			},
+			
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
 				this.queryInfo.pageSize = newSize
@@ -433,5 +451,14 @@
 </script>
 
 <style scoped>
+	.queryCompanyInfo{
+		font-size: 17px;
+		margin-top: 8px;
+	}
+	
+	.queryStatusInfo{
+		font-size: 17px;
+		margin-top: 8px;
+	}
 
 </style>

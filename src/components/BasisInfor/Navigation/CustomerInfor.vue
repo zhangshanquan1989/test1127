@@ -3,57 +3,63 @@
 	<div>
 
 		<!-- 创建搜索区 -->
-		<el-row :gutter="20">
+		<el-row>
 			<el-col :span="2">
-				<el-button type="info" size="mini" @click="showAddDialog">创建</el-button>
+				<el-button type="info" @click="showAddDialog">创建</el-button>
 			</el-col>
 			<!-- 地区查询 -->
-			<el-col :span="1"><span>地区</span></el-col>
-			<el-col :span="4">
+			<el-col :span="1" style="font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>地区：</span></el-col>
+			<el-col :span="2">
 				<el-cascader clearable :options="cityData" v-model="chooseQueryCity" @change="handleClientAddress"></el-cascader>
 				<!-- <el-input id='queryAddressinput' clearable type="text" v-model="queryInfo.clientAddress" style="width: 80%;" placeholder="高德接口"></el-input> -->
 			</el-col>
 
 			<!-- 等级下拉框 -->
-			<el-col :span="1"><span>等级</span></el-col>
-			<el-col :span="4">
-				<el-select v-model="queryInfo.clientLevel" placeholder="全部" clearable>
+			<el-col :span="1" style="font-size: 17px;margin-top: 8px;padding-left: 5px;margin-left: 20px;"><span>等级：</span></el-col>
+			<el-col :span="2">
+				<el-select v-model="queryInfo.grade" placeholder="选择等级" clearable>
 					<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
 			</el-col>
 
 			<!-- 查询按钮 -->
-			<el-col :span="2">
-				<el-button type="info" size="mini" @click="handleQueryBtn">查询</el-button>
+			<el-col :span="2" style="margin-left: 20px;">
+				<el-button type="info" @click="handleQueryBtn">查询</el-button>
 			</el-col>
+			<!-- 返回按钮 -->
+			<el-col :span="2" style="margin-left: 20px;">
+				<el-button type="info" @click="handleQueryBackBtn">返回</el-button>
+			</el-col>
+
 		</el-row>
 
 		<!-- 卡片视图区 -->
-		<el-card class="box-card">
-			<el-table :data="newClientList"  style="width: 100%" :span-method="arraySpanMethod">
+		<el-card class="box-card" style="margin-top: 8px;">
+			<el-table :data="newClientList" style="width: 100%" :span-method="arraySpanMethod">
 				<el-table-column v-if="false" prop="clientId" label="客户ID">
 				</el-table-column>
 				<el-table-column prop="clientNo" label="客户ID">
 				</el-table-column>
 				<el-table-column prop="clientName" label="客户名称">
 				</el-table-column>
-				<el-table-column prop="id" label="装配点ID" >
+				<el-table-column prop="id" label="装配点ID">
 				</el-table-column>
-				<el-table-column prop="clientAddress" label="装配点地址" >
+				<el-table-column prop="clientAddress" label="装配点地址">
 				</el-table-column>
-				<el-table-column  width="30px" >
+				<el-table-column width="30px">
 					<template slot-scope="scope">
-						<i class="el-icon-location"  @click="handleLocation(scope.row.clientAddress)"></i>
-					</template>				
-					
+						<i class="el-icon-location" @click="handleLocation(scope.row.clientAddress)"></i>
+					</template>
+
 				</el-table-column>
-				<el-table-column  width="30px">
-					
-				<template slot-scope="scope">
-						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.clientName+ '  ' + scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel" @click="copyAreaRule"></i>
-					</template>		
-							
+				<el-table-column width="30px">
+
+					<template slot-scope="scope">
+						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.clientName+ '  ' + scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
+						 @click="copyAreaRule"></i>
+					</template>
+
 				</el-table-column>
 				<el-table-column prop="clientLevel" label="级别" width="50px">
 				</el-table-column>
@@ -71,13 +77,13 @@
 				</el-table-column>
 				<el-table-column prop="clientThirdTel" label="电话">
 				</el-table-column>
-				<el-table-column label="操作"　>
+				<el-table-column label="操作" 　>
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.clientNo)">编辑</el-button>
 						<!-- 删除按钮 -->
-						
-<!-- 						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.clientId)" style="margin-left: 10px;">
+
+						<!-- 						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.clientId)" style="margin-left: 10px;">
 							<el-button type="danger" size="mini" slot="reference" >删除</el-button>
 						</el-popconfirm> -->
 
@@ -98,7 +104,7 @@
 		<el-dialog title="新增客户信息" :visible.sync="addDialogVisible" width="85%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
-				<el-form-item  label="客户ID:"></el-form-item>
+				<el-form-item label="客户ID:"></el-form-item>
 				<el-form-item label="客户名称:" prop="clientName">
 					<el-input v-model="addForm.clientName"></el-input>
 				</el-form-item>
@@ -112,80 +118,82 @@
 					<el-input v-model="addForm.clientCall"></el-input>
 				</el-form-item>
 				<el-form-item label="办公地址:" prop="clientOfficeAddress">
-					<el-input id='tipinput' clearable type="text" v-model="addForm.clientOfficeAddress" style="width: 80%;" placeholder="高德接口"></el-input>
+					<el-input id='tipinput' clearable type="text" v-model="addForm.clientOfficeAddress" style="width: 80%;"
+					 placeholder="高德接口"></el-input>
 				</el-form-item>
 				<el-form-item label="创建人:" prop="clientFounder">
 					<el-input disabled v-model="addForm.clientFounder"></el-input>
 				</el-form-item>
-				<el-form-item  label="电话:" prop="clientFounderTel">
+				<el-form-item label="电话:" prop="clientFounderTel">
 					<el-input disabled v-model="addForm.clientFounderTel"></el-input>
 				</el-form-item>
-				<el-form-item label="维护人:" prop="searchEmployee">
-					<el-select v-model="searchEmployee" clearable filterable remote placeholder="请输入姓名" :remote-method="chooseEmployeeName" :loading="employeeNameLoading" style="width: 50%;" @change="handleChooseName">
+				<el-form-item label="维护人:" prop="searchEmploye">
+					<el-select v-model="addForm.searchEmployee" clearable filterable remote placeholder="请输入姓名" :remote-method="chooseEmployeeName"
+					 :loading="employeeNameLoading" style="width: 50%;" @change="handleChooseName">
 						<el-option v-for="item in employeeNameOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
-<!-- 					<el-input v-model="addForm.clientMaintain"></el-input> -->
+					<!-- 					<el-input v-model="addForm.clientMaintain"></el-input> -->
 				</el-form-item>
 				<el-form-item label="电话:" prop="clientMaintainTel">
 					<el-input disabled v-model="addForm.clientMaintainTel"></el-input>
 				</el-form-item>
 				<!-- 装配站信息 -->
-				<el-form-item  label="装配站:" prop="points">
+				<el-form-item label="装配站:" prop="points">
 					<template>
 						<el-table :data="addForm.points" style="width: 100%">
-							<el-table-column  label="ID" width="40px">
+							<el-table-column label="ID" width="40px">
 							</el-table-column>
-							
-							<el-table-column  label="地址" width="300px">
+
+							<el-table-column label="地址" width="300px">
 								<template scope="scope">
-									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" style="width: 100%;"  size="small">
-										<el-button  slot="append" icon="el-icon-search" @click="choosePointsAddress(scope.$index)" size="small"></el-button>
+									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" style="width: 100%;" size="small">
+										<el-button slot="append" icon="el-icon-search" @click="choosePointsAddress(scope.$index)" size="small"></el-button>
 									</el-input>
-								</template>								
-							</el-table-column>							
-							<el-table-column   label="地区等级">
+								</template>
+							</el-table-column>
+							<el-table-column label="地区等级">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientLevel"></el-input>
-								</template>								
-							</el-table-column>							
-							<el-table-column   label="装配站类型">
+								</template>
+							</el-table-column>
+							<el-table-column label="装配站类型">
 								<template scope="scope">
-									<el-select size="small" v-model="scope.row.clientType"  clearable>
+									<el-select size="small" v-model="scope.row.clientType" clearable>
 										<el-option v-for="item in typeSelect" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
-								</template>								
+								</template>
 							</el-table-column>
-							<el-table-column   label="联系人">
+							<el-table-column label="联系人">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientFirstPerson"></el-input>
-								</template>								
-							</el-table-column>			
-							<el-table-column   label="电话">
+								</template>
+							</el-table-column>
+							<el-table-column label="电话">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientFirstTel"></el-input>
-								</template>								
+								</template>
 							</el-table-column>
-							<el-table-column   label="联系人">
+							<el-table-column label="联系人">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientSecondPerson"></el-input>
-								</template>								
-							</el-table-column>			
-							<el-table-column   label="电话">
+								</template>
+							</el-table-column>
+							<el-table-column label="电话">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientSecondTel"></el-input>
-								</template>								
+								</template>
 							</el-table-column>
-							<el-table-column   label="联系人">
+							<el-table-column label="联系人">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientThirdPerson"></el-input>
-								</template>								
-							</el-table-column>			
-							<el-table-column   label="电话">
+								</template>
+							</el-table-column>
+							<el-table-column label="电话">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientThirdTel"></el-input>
-								</template>								
+								</template>
 							</el-table-column>
 							<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
@@ -197,8 +205,8 @@
 					</template>
 					<el-button @click="addPointsInfo(addForm.points)">添加</el-button>
 				</el-form-item>
-				
-</el-form>
+
+			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="addDialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="addInfo">确 定</el-button>
@@ -211,7 +219,7 @@
 		<el-dialog title="编辑客户信息" :visible.sync="editDialogVisible" width="85%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
-				<el-form-item  label="客户ID:"></el-form-item>
+				<el-form-item label="客户ID:"></el-form-item>
 				<el-form-item label="企业名称:">
 					<el-input v-model="editForm.clientName"></el-input>
 				</el-form-item>
@@ -239,68 +247,69 @@
 				<el-form-item label="电话:">
 					<el-input v-model="editForm.clientMaintainTel"></el-input>
 				</el-form-item>
-				
-				<el-form-item >
+
+				<el-form-item>
 					<template>
 						<el-table :data="editForm.points" style="width: 100%">
-							<el-table-column  label="ID" >
+							<el-table-column label="ID">
 								<template scope="scope">
-									<el-input  size="mini" v-model="scope.row.clientPointId"></el-input>
-								</template>	
+									<el-input size="mini" v-model="scope.row.clientPointId"></el-input>
+								</template>
 							</el-table-column>
-							
-							<el-table-column  label="地址" width="150px">
+
+							<el-table-column label="地址" width="150px">
 								<template scope="scope">
-									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" style="width: 80%;" ></el-input>
-								<!-- 	<el-input clearable size="mini" v-model="scope.row.clientAddress"></el-input> -->
-								</template>								
-							</el-table-column>							
-							<el-table-column   label="地区等级">
+									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" style="width: 80%;"></el-input>
+									<!-- 	<el-input clearable size="mini" v-model="scope.row.clientAddress"></el-input> -->
+								</template>
+							</el-table-column>
+							<el-table-column label="地区等级">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientLevel"></el-input>
-								</template>								
-							</el-table-column>							
-							<el-table-column   label="装配站类型">
+								</template>
+							</el-table-column>
+							<el-table-column label="装配站类型">
 								<template scope="scope">
-									<el-select v-model="scope.row.clientType"  clearable>
+									<el-select v-model="scope.row.clientType" clearable>
 										<el-option v-for="item in typeSelect" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
-								</template>								
+								</template>
 							</el-table-column>
-							<el-table-column   label="联系人">
+							<el-table-column label="联系人">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientFirstPerson"></el-input>
-								</template>								
-							</el-table-column>			
-							<el-table-column   label="电话">
+								</template>
+							</el-table-column>
+							<el-table-column label="电话">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientFirstTel"></el-input>
-								</template>								
+								</template>
 							</el-table-column>
-							<el-table-column   label="联系人">
+							<el-table-column label="联系人">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientSecondPerson"></el-input>
-								</template>								
-							</el-table-column>			
-							<el-table-column   label="电话">
+								</template>
+							</el-table-column>
+							<el-table-column label="电话">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientSecondTel"></el-input>
-								</template>								
+								</template>
 							</el-table-column>
-							<el-table-column   label="联系人">
+							<el-table-column label="联系人">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientThirdPerson"></el-input>
-								</template>								
-							</el-table-column>			
-							<el-table-column   label="电话">
+								</template>
+							</el-table-column>
+							<el-table-column label="电话">
 								<template scope="scope">
 									<el-input clearable size="mini" v-model="scope.row.clientThirdTel"></el-input>
-								</template>								
+								</template>
 							</el-table-column>
 							<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
-									<el-button @click.native.prevent="editDeletePointsInfo(scope.$index, editForm.points, scope.row.clientPointId)" size="small"> 移除
+									<el-button @click.native.prevent="editDeletePointsInfo(scope.$index, editForm.points, scope.row.clientPointId)"
+									 size="small"> 移除
 									</el-button>
 								</template>
 							</el-table-column>
@@ -308,7 +317,7 @@
 					</template>
 					<el-button @click="editPointsInfo(editForm.points)">添加</el-button>
 				</el-form-item>
-				
+
 			</el-form>
 
 			<span slot="footer" class="dialog-footer">
@@ -317,16 +326,16 @@
 			</span>
 
 		</el-dialog>
-		
+
 		<!-- 高德的对话框 -->
-		<el-dialog title="地图" :visible.sync="locationDialogVisible" width="50%" >
+		<el-dialog title="地图" :visible.sync="locationDialogVisible" width="50%">
 			<div>{{licationAddress}}:</div>
 			<div id="container"></div>
 
-		
+
 		</el-dialog>
-		
-		
+
+
 
 	</div>
 </template>
@@ -337,24 +346,23 @@
 		data() {
 			return {
 				// 搜索，城市
-				chooseQueryCity:[],
-				cityData:cityData,
+				chooseQueryCity: [],
+				cityData: cityData,
 				// 查询数据
 				queryInfo: {
-					queryRegion: '',
-					areaNo: '',
-					areaGrade: '',
+					address: '',
+					grade: '',
 					pageNo: 1,
 					pageSize: 10
 				},
 				// 列表
 				clientList: [],
 				// 二维数组转换后的一维数组
-				newClientList:[],
+				newClientList: [],
 				// 要合并的行的数组
-				spanArray:[],
+				spanArray: [],
 				// 要合并的行的数组的下标
-				tableIndex:'',
+				tableIndex: '',
 				// 总条数
 				total: 0,
 				// 添加的状态选项
@@ -376,72 +384,90 @@
 				}],
 				// 创建对话框数据
 				addDialogVisible: false,
-				i:0,
+				i: 0,
 				addForm: {
-					  "clientName": "",
-					  "clientLegalPerson": "",
-					  "clientBusinessMatcher": "",
-					  "clientCall": "",
-					  "clientOfficeAddress": "",
-					  "ClientOfficeLevel":"",
-					  "clientFounder": "",
-					  "clientFounderTel": "",
-					  "clientMaintain": "",
-					  "clientMaintainTel": "",
-					  "points": [
-					    {
-					        "clientAddress": "",
-					        "clientLevel": "",
-					        "clientType": "",
-					        "clientFirstPerson": "",
-					        "clientFirstTel": "",
-					        "clientSecondPerson": "",
-					        "clientSecondTel": "",
-					        "clientThirdPerson": "",
-					        "clientThirdTel": ""
-					    }
-					   ]
+					"clientName": "",
+					"clientLegalPerson": "",
+					"clientBusinessMatcher": "",
+					"clientCall": "",
+					"clientOfficeAddress": "",
+					"ClientOfficeLevel": "",
+					"clientFounder": "",
+					"clientFounderTel": "",
+					"clientMaintain": "",
+					"clientMaintainTel": "",
+					"points": [{
+						"clientAddress": "",
+						"clientLevel": "",
+						"clientType": "",
+						"clientFirstPerson": "",
+						"clientFirstTel": "",
+						"clientSecondPerson": "",
+						"clientSecondTel": "",
+						"clientThirdPerson": "",
+						"clientThirdTel": ""
+					}]
 				},
 				// 创建页面选择员工数据
-				employeeNameOptions:[],
-				allEmployeeNameList:[],
-				employeeNameLoading:false,
-				searchEmployee:'',
+				employeeNameOptions: [],
+				allEmployeeNameList: [],
+				employeeNameLoading: false,
+				searchEmployee: '',
 				// 创建表单验证规则
-				addFormRules:{
-					clientName:[
-						{required:true,message:"请输入客户名称",trigger:'blur'}
-					],
-					clientLegalPerson:[
-						{required:true,message:"请输入法人",trigger:'blur'}
-					],
-					clientBusinessMatcher:[
-						{required:true,message:"请输入业务对接人",trigger:'blur'}
-					],
-					clientCall:[
-						{required:true,message:"请输入电话",trigger:'blur'}
-					],
-					clientOfficeAddress:[
-						{required:true,message:"请输入办公地址",trigger:'blur'}
-					],
-					clientFounder:[
-						{required:true,message:"请输入创建人",trigger:'blur'}
-					],
-					clientFounderTel:[
-						{required:true,message:"请输入电话",trigger:'blur'}
-					],
-					searchEmployee:[
-						{required:true,message:"请输入维护人",trigger:'blur'}
-					],
-					clientMaintainTel:[
-						{required:true,message:"请选择电话",trigger:'blur'}
-					],
-					points:[
-						{required:true,message:"请填入信息",trigger:'blur'}
-					],
-				
+				addFormRules: {
+					clientName: [{
+						required: true,
+						message: "请输入客户名称",
+						trigger: 'blur'
+					}],
+					clientLegalPerson: [{
+						required: true,
+						message: "请输入法人",
+						trigger: 'blur'
+					}],
+					clientBusinessMatcher: [{
+						required: true,
+						message: "请输入业务对接人",
+						trigger: 'blur'
+					}],
+					clientCall: [{
+						required: true,
+						message: "请输入电话",
+						trigger: 'blur'
+					}],
+					clientOfficeAddress: [{
+						required: true,
+						message: "请输入办公地址",
+						trigger: 'blur'
+					}],
+					clientFounder: [{
+						required: true,
+						message: "请输入创建人",
+						trigger: 'blur'
+					}],
+					clientFounderTel: [{
+						required: true,
+						message: "请输入电话",
+						trigger: 'blur'
+					}],
+					searchEmploye: [{
+						required: true,
+						message: "请输入维护人",
+						trigger: 'blur'
+					}],
+					clientMaintainTel: [{
+						required: true,
+						message: "请选择电话",
+						trigger: 'blur'
+					}],
+					points: [{
+						required: true,
+						message: "请填入信息",
+						trigger: 'blur'
+					}],
+
 				},
-				
+
 				// 装配站类型选择
 				// 状态选项
 				typeSelect: [{
@@ -453,7 +479,7 @@
 				}, {
 					value: '小货站',
 					label: '小货站'
-				},{
+				}, {
 					value: '大工厂',
 					label: '大工厂'
 				}, {
@@ -467,10 +493,10 @@
 				// 编辑对话框显示与隐藏
 				editDialogVisible: false,
 				editForm: {},
-				
+
 				// 地图icon显示地图
-				locationDialogVisible:false,
-				licationAddress:''
+				locationDialogVisible: false,
+				licationAddress: ''
 			}
 		},
 
@@ -478,18 +504,18 @@
 			this.getClientList();
 			this.findLogin();
 			this.findAllEmployeeName();
-			
+
 			this.$nextTick(() => {
 				let that = this
-			//输入提示
-			var queryAddressauto = new AMap.Autocomplete({
-				input: "queryAddressinput"
-			});
-			AMap.event.addListener(queryAddressauto, "select", queryAddressselect); //注册监听，当选中某条记录时会触发
-			function queryAddressselect(e) {
-				that.queryInfo.clientAddress = e.poi.district 
+				//输入提示
+				var queryAddressauto = new AMap.Autocomplete({
+					input: "queryAddressinput"
+				});
+				AMap.event.addListener(queryAddressauto, "select", queryAddressselect); //注册监听，当选中某条记录时会触发
+				function queryAddressselect(e) {
+					that.queryInfo.clientAddress = e.poi.district
 				}
-				})
+			})
 		},
 		mounted() {
 
@@ -497,17 +523,17 @@
 
 		methods: {
 			// 查询选择城市
-			handleClientAddress(e){
+			handleClientAddress(e) {
 				let city = '';
-				this.chooseQueryCity.forEach(v=>{
+				this.chooseQueryCity.forEach(v => {
 					city = city + v
 				})
-				this.queryInfo.address = city 
+				this.queryInfo.address = city
 				// console.log(e)
 				console.log(this.queryInfo.address)
 			},
-			
-			showAddDialog(){
+
+			showAddDialog() {
 				this.addDialogVisible = true
 				// 因为el-dialog显示时，高德搜索框加载未完成，用它在nextTick回调中加载，就成功了
 				this.$nextTick(() => {
@@ -521,7 +547,7 @@
 						console.log(e)
 						that.addForm.clientOfficeAddress = e.poi.district + e.poi.address
 					}
-					
+
 					// var assemblyauto = new AMap.Autocomplete({
 					// 	input: "pointsAddress"
 					// });
@@ -531,9 +557,9 @@
 					// 	that.addForm.clientAddress = e.poi.district 
 					// }
 				})
-				
+
 				this.$nextTick(() => {
-					let that = this				
+					let that = this
 					var assemblyauto = new AMap.Autocomplete({
 						input: "pointsAddress"
 					});
@@ -547,7 +573,7 @@
 				})
 			},
 			// 根据选择的地址查询地区等级
-			async choosePointsAddress(index){
+			async choosePointsAddress(index) {
 				console.log(index)
 				const {
 					data: res
@@ -562,72 +588,72 @@
 			//分页区域 
 			// 根据分页查询列表
 			async getClientList() {
-				this.newClientList=[]
+				this.newClientList = []
 				const {
 					data: res
 				} = await this.$http.get('base/tBaClient/list', {
 					params: this.queryInfo
 				})
-        console.log(res)
+				console.log(res)
 				// if (res.code !== 200) {
 				// 	return this.$message.error('获取信息失败')
 				// }
-				
+
 				// this.$message.success('获取地区信息成功')
 				this.clientList = res.rows
 				// 将请求的二维数组，转换为一维数组
-				this.clientList.forEach((item,index) =>{
-					for(let i=0; i<item.points.length; i++){
+				this.clientList.forEach((item, index) => {
+					for (let i = 0; i < item.points.length; i++) {
 						let current = {
-							clientBusinessMatcher:item.clientBusinessMatcher,
-							clientCall:item.clientCall,
-							clientFounder:item.clientFounder,
-							clientFounderTel:item.clientFounderTel,
-							clientId:item.clientId,
-							clientLegalPerson:item.clientLegalPerson,
-							clientMaintain:item.clientMaintain,
-							clientMaintainTel:item.clientMaintainTel,
-							clientName:item.clientName,
-							clientNo:item.clientNo,
-							clientOfficeAddress:item.clientOfficeAddress,
-							clientOfficeLevel:item.clientOfficeLevel,
-							clientAddress:item.points[i].clientAddress,
-							clientCompany:item.points[i].clientCompany,
-							clientCtime:item.points[i].clientCtime,
-							clientDeliveryFrequency:item.points[i].clientDeliveryFrequency,
-							clientDisApoint:item.points[i].clientDisApoint,
-							clientFirstPerson:item.points[i].clientFirstPerson,
-							clientFirstTel:item.points[i].clientFirstTel,
-							clientFounder:item.points[i].clientFounder,
-							clientFounderTel:item.points[i].clientFounderTel,
-							clientLevel:item.points[i].clientLevel,
-							clientListPerformance:item.points[i].clientListPerformance,
-							clientPointId:item.points[i].clientPointId,
-							clientSecondPerson:item.points[i].clientSecondPerson,
-							clientSecondTel:item.points[i].clientSecondTel,
-							clientThirdPerson:item.points[i].clientThirdPerson,
-							clientThirdTel:item.points[i].clientThirdTel,
-							clientType:item.points[i].clientType,
-							id:item.points[i].id,
-							isDelete:item.points[i].isDelete,
+							clientBusinessMatcher: item.clientBusinessMatcher,
+							clientCall: item.clientCall,
+							clientFounder: item.clientFounder,
+							clientFounderTel: item.clientFounderTel,
+							clientId: item.clientId,
+							clientLegalPerson: item.clientLegalPerson,
+							clientMaintain: item.clientMaintain,
+							clientMaintainTel: item.clientMaintainTel,
+							clientName: item.clientName,
+							clientNo: item.clientNo,
+							clientOfficeAddress: item.clientOfficeAddress,
+							clientOfficeLevel: item.clientOfficeLevel,
+							clientAddress: item.points[i].clientAddress,
+							clientCompany: item.points[i].clientCompany,
+							clientCtime: item.points[i].clientCtime,
+							clientDeliveryFrequency: item.points[i].clientDeliveryFrequency,
+							clientDisApoint: item.points[i].clientDisApoint,
+							clientFirstPerson: item.points[i].clientFirstPerson,
+							clientFirstTel: item.points[i].clientFirstTel,
+							clientFounder: item.points[i].clientFounder,
+							clientFounderTel: item.points[i].clientFounderTel,
+							clientLevel: item.points[i].clientLevel,
+							clientListPerformance: item.points[i].clientListPerformance,
+							clientPointId: item.points[i].clientPointId,
+							clientSecondPerson: item.points[i].clientSecondPerson,
+							clientSecondTel: item.points[i].clientSecondTel,
+							clientThirdPerson: item.points[i].clientThirdPerson,
+							clientThirdTel: item.points[i].clientThirdTel,
+							clientType: item.points[i].clientType,
+							id: item.points[i].id,
+							isDelete: item.points[i].isDelete,
 						}
 						this.newClientList.push(current);
 					}
 				})
-				
+
 				// 对新数组操作，确定要合并的行
 				this.spanArray = []
 				this.tableIndex = ''
-				this.newClientList.forEach((item,index)=>{
-					if(index == 0){
+				this.newClientList.forEach((item, index) => {
+					if (index == 0) {
 						// 第一项
 						this.spanArray.push(1);
 						this.tableIndex = 0
-					}else{
-						if(this.newClientList[index].clientNo == this.newClientList[index - 1].clientNo){
+					} else {
+						if (this.newClientList[index].clientNo == this.newClientList[index - 1].clientNo) {
 							this.spanArray[this.tableIndex] = this.spanArray[this.tableIndex] + 1;
 							this.spanArray.push(0)
-						}else{
+						} else {
 							this.spanArray.push(1);
 							this.tableIndex = index;
 						}
@@ -637,21 +663,34 @@
 				console.log(this.spanArray)
 				this.total = res.total
 			},
-			
+
 			// 合并行
-			arraySpanMethod({row, column, rowIndex, columnIndex}){
-				if(columnIndex === 0 || columnIndex===1 ||columnIndex===14){
+			arraySpanMethod({
+				row,
+				column,
+				rowIndex,
+				columnIndex
+			}) {
+				if (columnIndex === 0 || columnIndex === 1 || columnIndex === 14) {
 					let _row = this.spanArray[rowIndex];
 					let _col = _row > 0 ? 1 : 0;
-					return{
-						rowspan:_row,
-						colspan:_col
+					return {
+						rowspan: _row,
+						colspan: _col
 					}
 				}
 			},
 
 			// 点击查询按钮
-			async handleQueryBtn() {
+			handleQueryBtn() {
+				this.getClientList()
+			},
+			// 点击返回按钮
+			handleQueryBackBtn() {
+				this.queryInfo.address = ''
+				this.queryInfo.grade = ''
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
 				this.getClientList()
 			},
 			// pageSize 改变的事件
@@ -685,7 +724,7 @@
 				})
 			},
 			// 创建时候获取创建人及电话
-			async findLogin(){
+			async findLogin() {
 				const {
 					data: res
 				} = await this.$http.get('base/tBaClient/findLogin')
@@ -694,7 +733,7 @@
 				this.addForm.clientFounderTel = res.result.EMPLOYEE_TEL
 			},
 			// 获取所有员工姓名
-			async findAllEmployeeName(){
+			async findAllEmployeeName() {
 				const {
 					data: res
 				} = await this.$http.get('tPfPlist/findAllEmployeeName')
@@ -725,22 +764,22 @@
 				}
 			},
 			// 选择员工后发起查询请求
-			async handleChooseName(name){
-				if(name !== ''){
+			async handleChooseName(name) {
+				if (name !== '') {
 					const {
 						data: res
-					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName='+name)
-					// console.log(res)
+					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + name)
+					console.log(res)
 					if (res.code !== 200) {
 						return
 					}
 					this.addForm.clientMaintain = res.result[0].EMPLOYEE_NO
 					this.addForm.clientMaintainTel = res.result[0].EMPLOYEE_TEL
-				}else {
+				} else {
 					this.addForm.clientMaintain = ''
 					this.addForm.clientMaintainTel = ''
 				}
-				
+
 			},
 			// 创建页面表格添加删除
 			deletePointsInfo(index, rows) {
@@ -748,7 +787,7 @@
 				rows.splice(index, 1);
 			},
 			addPointsInfo(pointsData, event) {
-				
+
 				pointsData.push({
 					"clientAddress": "",
 					"clientLevel": "",
@@ -760,32 +799,32 @@
 					"clientThirdPerson": "",
 					"clientThirdTel": ""
 				})
-				},
-				
-				// 编辑页面表格添加删除
-				async editDeletePointsInfo(index, rows, clientPointId) {
-					//删除改行
-					const {
-						data: res
-					} = await this.$http.put('base/tBaClient/deleteById?clientPointId=' + clientPointId)
-					console.log(res)
-					rows.splice(index, 1);
-				},
-				editPointsInfo(pointsData, event) {
-					
-					pointsData.push({
-						"clientAddress": "",
-						"clientLevel": "",
-						"clientType": "",
-						"clientFirstPerson": "",
-						"clientFirstTel": "",
-						"clientSecondPerson": "",
-						"clientSecondTel": "",
-						"clientThirdPerson": "",
-						"clientThirdTel": ""
-					})
-					},
-					
+			},
+
+			// 编辑页面表格添加删除
+			async editDeletePointsInfo(index, rows, clientPointId) {
+				//删除改行
+				const {
+					data: res
+				} = await this.$http.put('base/tBaClient/deleteById?clientPointId=' + clientPointId)
+				console.log(res)
+				rows.splice(index, 1);
+			},
+			editPointsInfo(pointsData, event) {
+
+				pointsData.push({
+					"clientAddress": "",
+					"clientLevel": "",
+					"clientType": "",
+					"clientFirstPerson": "",
+					"clientFirstTel": "",
+					"clientSecondPerson": "",
+					"clientSecondTel": "",
+					"clientThirdPerson": "",
+					"clientThirdTel": ""
+				})
+			},
+
 			// 监听创建对话框关闭
 			addDialogClosed() {
 				this.$refs.addFormRef.resetFields()
@@ -820,7 +859,7 @@
 					const {
 						data: res
 					} = await this.$http.put('base/tBaClient/edit', this.editForm)
-console.log(res)
+					console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('更新信息失败')
 					}
@@ -844,46 +883,51 @@ console.log(res)
 				this.getClientList()
 				this.$message.success('删除成功')
 			},
-			
+
 			// 复制限行规则
-			copyAreaRule(){
+			copyAreaRule() {
 				let clipboard = new this.Clipboard(".el-icon-document-copy");
-				      clipboard.on("success", e => {
-				        // 释放内存
-								this.$message.success('已成功复制')
-				        clipboard.destroy();
-				      });
+				clipboard.on("success", e => {
+					// 释放内存
+					this.$message.success('已成功复制')
+					clipboard.destroy();
+				});
 			},
-			
+
 			// 高德poi接口,根据地址在页面显示地址
-			handleLocation(clientAddress){
+			handleLocation(clientAddress) {
 				this.locationDialogVisible = true
 				this.licationAddress = clientAddress
 				this.$nextTick(() => {
-				var geocoder = new AMap.Geocoder(); 
-				        geocoder.getLocation(clientAddress, function(status, result) {
-				            if (status === 'complete' && result.info === 'OK') {
-				
-				                // 经纬度                      
-				                var lng = result.geocodes[0].location.lng;
-				                var lat = result.geocodes[0].location.lat;
-				
-				                // 地图实例
-				                var map = new AMap.Map("container", {
-				                    resizeEnable: true, // 允许缩放
-				                    center: [lng, lat], // 设置地图的中心点
-				                    zoom: 12 　　　　　　 // 设置地图的缩放级别，0 - 20
-				                });
-				                        
-				                // 添加标记
-				                var marker = new AMap.Marker({
-				                    map: map,
-				                    position: new AMap.LngLat(lng, lat),   // 经纬度
-				                });
-				            } else {
-				                console.log('定位失败！');
-				            }
-				        });
+					var geocoder = new AMap.Geocoder();
+					geocoder.getLocation(clientAddress, function(status, result) {
+						if (status === 'complete' && result.info === 'OK') {
+
+							// 经纬度                      
+							var lng = result.geocodes[0].location.lng;
+							var lat = result.geocodes[0].location.lat;
+
+							// 地图实例
+							var map = new AMap.Map("container", {
+								resizeEnable: true, // 允许缩放
+								center: [lng, lat], // 设置地图的中心点
+								zoom: 12 // 设置地图的缩放级别，0 - 20
+							});
+							
+						
+							    //加载工具条
+							    var tool = new AMap.ToolBar();
+						map.addControl(tool);
+
+							// 添加标记
+							var marker = new AMap.Marker({
+								map: map,
+								position: new AMap.LngLat(lng, lat), // 经纬度
+							});
+						} else {
+							console.log('定位失败！');
+						}
+					});
 
 				})
 			}
@@ -892,8 +936,8 @@ console.log(res)
 </script>
 
 <style scoped>
-#container {
-	width: 31.25rem;
-	height: 500px;
-}
+	#container {
+		width: 100%;
+		height: 500px;
+	}
 </style>

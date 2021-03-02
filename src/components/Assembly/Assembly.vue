@@ -3,11 +3,11 @@
 	<div>
 
 		<!-- 创建搜索区 -->
-		<el-row :gutter="20">
+		<el-row >
 			
 			<!-- 地区查询 -->
-			<el-col :span="1"><span>地区</span></el-col>
-			<el-col :span="4">
+			<el-col :span="1" style="font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>地区：</span></el-col>
+			<el-col :span="3">
 				<div>
 					<el-cascader clearable :options="cityData" v-model="chooseQueryCity" @change="handleClientAddress"></el-cascader>
 				</div>
@@ -15,8 +15,8 @@
 			</el-col>
 
 			<!-- 等级下拉框 -->
-			<el-col :span="1"><span>等级</span></el-col>
-			<el-col :span="4">
+			<el-col :span="1" style="margin-left: 20px;font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>等级：</span></el-col>
+			<el-col :span="2">
 				<el-select v-model="queryInfo.clientLevel" placeholder="全部" clearable>
 					<el-option v-for="item in levelSelect" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
@@ -24,13 +24,19 @@
 			</el-col>
 
 			<!-- 查询按钮 -->
-			<el-col :span="2">
-				<el-button type="info" size="mini" @click="handleQueryBtn">查询</el-button>
+			<el-col :span="2" style="margin-left: 20px;">
+				<el-button type="info"  @click="handleQueryBtn">查询</el-button>
 			</el-col>
+			
+			<!-- 返回按钮 -->
+			<el-col :span="2" style="margin-left: 20px;">
+				<el-button type="info"  @click="handleQueryBackBtn">返回</el-button>
+			</el-col>
+			
 		</el-row>
 
 		<!-- 卡片视图区 -->
-		<el-card class="box-card">
+		<el-card class="box-card" style="margin-top: 8px;">
 			<el-table :data="pagingList" stripe style="width: 100%">
 				<el-table-column v-if="false" prop="clientId" label="企业ID">
 				</el-table-column>
@@ -40,6 +46,8 @@
 				<el-table-column prop="clientPointId" label="装配点ID">
 				</el-table-column>
 				<el-table-column prop="clientCompany" label="企业名称">
+				</el-table-column>
+				<el-table-column prop="clientType" label="类型">
 				</el-table-column>
 				<el-table-column prop="clientAddress" label="装配点地址">
 				</el-table-column>
@@ -59,13 +67,14 @@
 				</el-table-column>
 				<el-table-column prop="clientLevel" label="级别">
 				</el-table-column>
-				<el-table-column prop="clientListPerformance" label="履约情况">
+				<el-table-column prop="clientListPerformance" label="履约情况(单)">
+					
 				</el-table-column>
-				<el-table-column prop="clientDeliveryFrequency" label="发货频次">
+				<el-table-column prop="clientDeliveryFrequency" label="发货频次(/上周)">
 				</el-table-column>
-				<el-table-column v-if="false" prop="clientFirstPerson" label="装配点第一联系人">
+				<el-table-column  prop="clientFirstPerson" label="联系人">
 				</el-table-column>
-				<el-table-column prop="clientFirstTel" label="装配点第一联系人电话">
+				<el-table-column prop="clientFirstTel" label="电话">
 				</el-table-column>
 				<el-table-column v-if="false" prop="clientSecondPerson" label="装配点第二联系人">
 				</el-table-column>
@@ -76,6 +85,8 @@
 				<el-table-column v-if="false" prop="clientThirdTel" label="装配点第三联系人电话">
 				</el-table-column>
 				<el-table-column prop="clientFounder" label="创建人">
+				</el-table-column>
+				<el-table-column prop="clientFounderTel" label="电话">
 				</el-table-column>
 				<el-table-column prop="clientDisApoint" label="关联装配点">
 				</el-table-column>
@@ -89,7 +100,7 @@
 		</el-card>
 
 		<!-- 分页区域 -->
-		<el-col>
+		<el-col style="margin-top: 10px;">
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
 			 :total="total">
@@ -97,64 +108,77 @@
 		</el-col>
 
 		<!-- 详情的对话框 -->
-		<el-dialog title="装配站详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
+		<el-dialog title="装配点详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
-				<el-form-item label="装配点详情"></el-form-item>
-				<el-form-item label="装配站ID:">
+				<div class="firstLine" style="display: flex;">
+				<el-form-item label="装配点ID:">
 					<div>{{editForm.clientPointId}}</div>
 				</el-form-item>
-				<el-form-item label="装配站名称:">
+				<el-form-item label="名称:">
 					<div>{{editForm.clientCompany}}</div>
 				</el-form-item>
-				<el-form-item label="装配站地址:">
+				<el-form-item label="地址:">
 					<div>{{editForm.clientAddress}}</div>
 				</el-form-item>
-				<el-form-item label="地址icon">
+				<el-form-item label="导航:">
 					<template>
 						<i class="el-icon-location" @click="handleLocation(editForm.clientAddress)"></i>
 					</template>
 				</el-form-item>
-				<el-form-item label="装配点详情">
+				<el-form-item label="复制:">
 					<template>
 						<i class="el-icon-document-copy" :data-clipboard-text="editForm.clientName+ '  ' + editForm.clientAddress+ '  ' + editForm.clientFirstPerson+ ':' + editForm.clientFirstTel+ '  ' + editForm.clientSecondPerson+ ':' + editForm.clientSecondTel+ '  ' + editForm.clientThirdPerson+ ':' + editForm.clientThirdTel"
 						 @click="copyAreaRule"></i>
 					</template>
 				</el-form-item>
+				
 				<el-form-item label="类型:">
 					<div>{{editForm.clientType}}</div>
 				</el-form-item>
-				<el-form-item label="履约情况:">
-					<div>{{editForm.clientListPerformance}}</div>
+				<el-form-item label="履约共计:">
+					<div>{{editForm.clientListPerformance}}单</div>
 				</el-form-item>
-				<el-form-item label="第一联系人:">
+				</div>
+				<div class="secondLine" style="display: flex;">
+				<el-form-item label="联系人:">
 					<div>{{editForm.clientFirstPerson}}</div>
 				</el-form-item>
-				<el-form-item label="第一联系电话:">
+				<el-form-item label="电话:">
 					<div>{{editForm.clientFirstTel}}</div>
 				</el-form-item>
-
+				<el-form-item label="创建日期:">
+					<div>{{editForm.clientCtime}}</div>
+				</el-form-item>
+				<el-form-item label="创建人:">
+					<div>{{editForm.clientFounder}}</div>
+				</el-form-item>
+				<el-form-item label="电话:">
+					<div>{{editForm.clientFounderTel}}</div>
+				</el-form-item>
+</div>
 				<!-- 关联查询，需要更改 -->
 				<el-form-item label="关联查询">
 					<!-- 创建搜索区 -->
 					<el-row :gutter="20">
 
 						<!-- 地区下拉框 -->
-						<el-col :span="1"><span>地区</span></el-col>
+						<el-col :span="2"><span>地区</span></el-col>
 						<el-col :span="4">
-							<el-input v-model="associatedQueryInfo.address" placeholder="地区" clearable @clear="handleClearAddress"></el-input>
+							<el-cascader clearable :options="cityData" v-model="chooseRelatedAreas" @change="handleRelatedAreas" @clear="handleClearAddress"></el-cascader>
+					<!-- 		<el-input v-model="associatedQueryInfo.address" placeholder="地区" clearable @clear="handleClearAddress"></el-input> -->
 						</el-col>
 
-						<el-col :span="1"><span>地区等级</span></el-col>
+						<el-col :span="2"><span>地区等级</span></el-col>
 						<el-col :span="4">
-							<el-select v-model="associatedQueryInfo.addrGrade" placeholder="全部" clearable @clear="handleClearAddrGrade">
+							<el-select v-model="associatedQueryInfo.addrGrade" placeholder="请选择" clearable @clear="handleClearAddrGrade">
 								<el-option v-for="item in levelSelect" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
 						</el-col>
-						<el-col :span="1"><span>关联距离</span></el-col>
+						<el-col :span="2"><span>关联距离</span></el-col>
 						<el-col :span="4">
-							<el-select v-model="associatedQueryInfo.distance" placeholder="全部" clearable @clear="handleClearDistance">
+							<el-select v-model="associatedQueryInfo.distance" placeholder="单位:KM" clearable @clear="handleClearDistance">
 								<el-option v-for="item in distanceSelect" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
@@ -177,7 +201,7 @@
 
 					<el-table-column prop="CLIENT_POINT_ID" label="装配点ID">
 					</el-table-column>
-					<el-table-column prop="CLIENT_NAME" label="企业名称">
+					<el-table-column prop="CLIENT_COMPANY" label="企业名称">
 					</el-table-column>
 					<el-table-column prop="CLIENT_ADDRESS" label="装配点地址">
 					</el-table-column>
@@ -203,17 +227,17 @@
 					</el-table-column>
 					<el-table-column prop="CLIENT_DELIVERY_FREQUENCY" label="发货频次">
 					</el-table-column>
-					<el-table-column prop="CLIENT_FIRST_PERSON" label="装配点第一联系人">
+					<el-table-column prop="CLIENT_FIRST_PERSON" label="第一联系人">
 					</el-table-column>
-					<el-table-column prop="CLIENT_FIRST_TEL" label="装配点第一联系人电话">
+					<el-table-column prop="CLIENT_FIRST_TEL" label="电话">
 					</el-table-column>
-					<el-table-column prop="CLIENT_SECOND_PERSON" label="装配点第二联系人">
+					<el-table-column prop="CLIENT_SECOND_PERSON" label="第二联系人">
 					</el-table-column>
-					<el-table-column prop="CLIENT_SECOND_TEL" label="装配点第二联系人电话">
+					<el-table-column prop="CLIENT_SECOND_TEL" label="电话">
 					</el-table-column>
-					<el-table-column prop="CLIENT_THIRD_PERSON" label="装配点第三联系人">
+					<el-table-column prop="CLIENT_THIRD_PERSON" label="第三联系人">
 					</el-table-column>
-					<el-table-column prop="CLIENT_THIRD_TEL" label="装配点第三联系人电话">
+					<el-table-column prop="CLIENT_THIRD_TEL" label="电话">
 					</el-table-column>
 					<el-table-column prop="CLIENT_DISTANCE" label="关联距离">
 					</el-table-column>
@@ -261,9 +285,8 @@
 				cityData:cityData,
 				// 查询数据
 				queryInfo: {
-					queryRegion: '',
-					areaNo: '',
-					areaGrade: '',
+					clientAddress: '',
+					clientLevel: '',
 					pageNo: 1,
 					pageSize: 10
 				},
@@ -295,7 +318,8 @@
 				editForm: {},
 				// 关联装配站列表
 				findList: {},
-
+				// 关联查询，地区
+				chooseRelatedAreas:[],
 				// 详情查询数据
 				associatedQueryInfo: {
 					address: '',
@@ -359,6 +383,15 @@ handleClientAddress(e){
 	// console.log(e)
 	console.log(this.queryInfo.clientAddress)
 },
+handleRelatedAreas(){
+	let city = '';
+	this.chooseRelatedAreas.forEach(v=>{
+		city = city + v
+	})
+	this.associatedQueryInfo.address =  city 
+},
+
+// 详情页关联地区查询
 
 			//分页区域 
 			// 根据分页查询列表
@@ -379,8 +412,17 @@ console.log(res)
 			},
 
 			// 点击查询按钮
-			async handleQueryBtn() {
+			handleQueryBtn() {
 				
+				this.getClientList()
+			},
+			// 点击返回按钮
+			handleQueryBackBtn(){
+				this.chooseQueryCity = ''
+				this.queryInfo.clientAddress = ""
+				this.queryInfo.clientLevel = ""
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
 				this.getClientList()
 			},
 			// pageSize 改变的事件
@@ -518,6 +560,9 @@ console.log(res)
 								center: [lng, lat], // 设置地图的中心点
 								zoom: 12 // 设置地图的缩放级别，0 - 20
 							});
+							// 添加工具条
+							var tool = new AMap.ToolBar();
+							map.addControl(tool);
 
 							// 添加标记
 							var marker = new AMap.Marker({
@@ -560,6 +605,9 @@ console.log(res)
 							panel: "panel"
 						});
 						
+						var tool = new AMap.ToolBar();
+						map.addControl(tool);
+						
 						// 根据起终点经纬度规划驾车导航路线
 						driving.search(this.startLngLat,this.endLngLat, function(status, result) {
 							// result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
@@ -593,12 +641,12 @@ console.log(res)
 
 <style scoped>
 	#container {
-		width: 31.25rem;
+		width: 100%;
 		height: 500px;
 	}
 
 	#navigationContainer {
-		width: 500px;
+		width: 100%;
 		height: 500px;
 	}
 

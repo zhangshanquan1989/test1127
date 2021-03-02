@@ -1,9 +1,15 @@
 <template>
 	<div class="login_container">
+		<div class="background">
+			<img src="../assets/登陆界面4.jpg" alt="">
+		</div>
+		<div class="welcome">
+			<span>欢迎登陆天康系统</span>
+		</div>
 		<div class="login_box">
 			<!-- 头像区域 -->
 			<div class="acatar_box">
-				<img src="../assets/logo.png" alt="">
+				<img src="../assets/天康系统1.png" alt="">
 			</div>
 			<!-- 登录表单区域 -->
 			<el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
@@ -15,12 +21,13 @@
 				<el-form-item prop="password">
 					<el-input type="password" v-model="loginForm.password" prefix-icon="el-icon-goods"></el-input>
 				</el-form-item>
-				<span>账号：zhangsan </span>
-				<span>密码：zhangsan </span>
+<!-- 				<span>账号：zhangsan </span>
+				<span>密码：zhangsan </span> -->
 				<!-- 按钮 -->
 				<el-form-item class="btns">
+
+					<el-button plain type="info" @click="resetLoginForm">重置</el-button>
 					<el-button type="primary" @click="login">登录</el-button>
-					<el-button type="info" @click="resetLoginForm">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
@@ -94,17 +101,41 @@
 
 <style lang="less" scoped>
 	.login_container {
-		background-color: #2b4b6b;
+		// background-color: #2b4b6b;
 		height: 100%;
 	}
+	
+	.background{
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		 position: absolute;
+		img{
+			width: 100%;
+			height: 100%;
+		}
+	}
 
+.welcome{
+	width: 450px;
+	height: 150px;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	text-align: center;
+	span{
+		font-size: 50px;
+		color: #ffffff;
+	}
+}
 	.login_box {
 		width: 450px;
 		height: 300px;
 		background-color: #fff;
 		border-radius: 3px;
 		position: absolute;
-		top: 50%;
+		top: 60%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 
@@ -112,7 +143,7 @@
 			height: 130px;
 			width: 130px;
 			border: 1px solid #EEEEEE;
-			border-radius: 50%;
+			border-radius: 10%;
 			padding: 0.625rem;
 			box-shadow: 0 0 10px #ddd;
 			position: absolute;
@@ -123,7 +154,7 @@
 			img {
 				width: 100%;
 				height: 100%;
-				border-radius: 50%;
+				// border-radius: 50%;
 				background-color: #EEEEEE;
 			}
 		}

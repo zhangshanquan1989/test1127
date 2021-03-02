@@ -3,15 +3,15 @@
 	<div>
 
 		<!-- 创建搜索区 -->
-		<el-row :gutter="20">
-			<el-col :span="1"><span>地区</span></el-col>
+		<el-row >
+			<el-col :span="1" style="font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>地区:</span></el-col>
 			<el-col :span="2">
-				<el-input placeholder="地区" v-model="queryInfo.areaProvinceBegin	" clearable></el-input>
+				<el-input placeholder="输入省份" v-model="queryInfo.areaProvinceBegin	" clearable></el-input>
 			</el-col>
 
 			<!-- 等级下拉框 -->
-			<el-col :span="1"><span>等级</span></el-col>
-			<el-col :span="4">
+			<el-col :span="1" style="margin-left: 20px;font-size: 17px;margin-top: 8px; padding-left: 5px;"><span>等级:</span></el-col>
+			<el-col :span="2">
 				<el-select v-model="queryInfo.areaGrade" placeholder="全部" clearable>
 					<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
@@ -19,13 +19,19 @@
 			</el-col>
 
 			<!-- 查询按钮 -->
-			<el-col :span="2">
-				<el-button type="info" size="mini" @click="handleQueryBtn">查询</el-button>
+			<el-col :span="2" style="margin-left: 40px;">
+				<el-button type="info"  @click="handleQueryBtn">查询</el-button>
 			</el-col>
+			
+			<!-- 返回按钮 -->
+			<el-col :span="2" style="margin-left: 15px;">
+				<el-button type="info"  @click="handleQueryBackBtn">返回</el-button>
+			</el-col>
+			
 		</el-row>
 
 		<!-- 卡片视图区 -->
-		<el-card class="box-card">
+		<el-card class="box-card" style="margin-top: 8px;">
 			<el-table :data="regionlist" stripe style="width: 100%">
 				<el-table-column v-if="false" prop="id" label="ID">
 				</el-table-column>
@@ -37,9 +43,9 @@
 				</el-table-column>
 				<el-table-column prop="areaCounty" label="区/县" width="150px">
 				</el-table-column>
-				<el-table-column prop="areaGrade" label="等级" width="50px">
+				<el-table-column prop="areaGrade" label="等级" width="100px">
 				</el-table-column>
-				<el-table-column label="定位" width="50px">
+				<el-table-column label="定位" width="100px">
 					<template slot-scope="scope">
 						<i class="el-icon-location" @click="handleLocation(scope.row.areaCounty)"></i>
 					</template>
@@ -63,7 +69,7 @@
 		</el-card>
 
 		<!-- 分页区域 -->
-		<el-col>
+		<el-col style="margin-top: 10px;">
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
 			 :total="total">
@@ -177,9 +183,19 @@
 			},
 
 			// 点击查询按钮
-			async handleQueryBtn() {
+			 handleQueryBtn() {
 				this.getRegionList()
 			},
+			// 点击返回按钮
+			handleQueryBackBtn(){
+				this.queryInfo.areaGrade = ''
+				this.queryInfo.areaProvince = ''
+				this.queryInfo.areaProvinceBegin = ''
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.getRegionList()
+			},
+			
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
 				this.queryInfo.pageSize = newSize
@@ -211,6 +227,9 @@
 								center: [lng, lat], // 设置地图的中心点
 								zoom: 12 // 设置地图的缩放级别，0 - 20
 							});
+							
+							var tool = new AMap.ToolBar();
+							map.addControl(tool);
 			
 							// 添加标记
 							var marker = new AMap.Marker({
