@@ -193,7 +193,7 @@
 
 
 			<el-card class="box-card">
-				<el-table :data="findList" stripe style="width: 100%">
+				<el-table :data="findList" stripe style="width: 100%;" :row-style="rowClass">
 					<el-table-column v-if="false" prop="CLIENT_ID" label="企业ID">
 					</el-table-column>
 					<el-table-column v-if="false" prop="CLIENT_NO" label="企业ID">
@@ -373,6 +373,14 @@
 		},
 
 		methods: {
+rowClass ({row, rowIndex}) {
+      console.log(row)
+      console.log(rowIndex)
+			if(row.IS_DELETE == 1){
+				return { "color": "#d1cbd1" }
+			}
+    },
+			
 			// 查询选择城市
 handleClientAddress(e){
 	let city = '';
@@ -464,7 +472,7 @@ console.log(res)
 				} = await this.$http.get('tPfDisApoint/findListDetails?pointId=' + row.clientPointId)
 				console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('查询用户信息失败')
+					return this.$message.error('查询信息失败')
 				}
 				// console.log(res)
 				this.editForm = res.result
@@ -476,7 +484,7 @@ console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
-				// console.log(result)
+				console.log(result)
 				this.findList = result.result
 				// 显示对话框
 				this.editDialogVisible = true
@@ -670,5 +678,14 @@ console.log(res)
 		border-bottom-left-radius: 4px;
 		border-bottom-right-radius: 4px;
 		overflow: hidden;
+	}
+	
+.success-row {
+	    color: blue ;
+	}
+	
+.warning-row {
+	background-color: #000080;
+	    color: red ;
 	}
 </style>

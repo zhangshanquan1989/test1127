@@ -68,14 +68,18 @@
 				</el-table-column>
 				<el-table-column width="30px">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="定位" placement="top">
 						<i class="el-icon-location" @click="handleLocation(scope.row.plistFristApointAddr)"></i>
+						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column width="30px">
 
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="复制" placement="top">
 						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.plistFristApointAddr+ '  ' + scope.row.plistFristApointFname+ ':' + scope.row.plistFristApointFtele+ '  ' + scope.row.plistFristApointSname+ ':' + scope.row.plistFristApointStele+ '  ' + scope.row.plistFristApointTname+ ':' + scope.row.plistFristApointTtele"
 						 @click="copyAreaRule"></i>
+						 </el-tooltip>
 					</template>
 
 				</el-table-column>
@@ -111,22 +115,25 @@
 				</el-table-column>
 				<el-table-column width="30px">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="定位" placement="top">
 						<i class="el-icon-location" @click="handleLocation(scope.row.plistFristUpointAddr)"></i>
+						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column width="30px">
 
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="复制" placement="top">
 						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.plistFristUpointAddr+ '  ' + scope.row.plistFristUpointFname+ ':' + scope.row.plistFristUpointFtele+ '  ' + scope.row.plistFristUpointSname+ ':' + scope.row.plistFristUpointStele+ '  ' + scope.row.plistFristUpointTname+ ':' + scope.row.plistFristUpointTtele"
 						 @click="copyAreaRule"></i>
+						 </el-tooltip>
 					</template>
 
 				</el-table-column>
 
 				<el-table-column width="40px">
 					<template slot-scope="scope">
-						<el-tooltip class="item" effect="dark" :content="scope.row.plistFristUpointFname+ ':' + scope.row.plistFristUpointFtele"
-						 placement="top">
+						<el-tooltip class="item" effect="dark" :content="scope.row.plistFristUpointFname+ ':' + scope.row.plistFristUpointFtele" placement="top">
 							<i class="el-icon-phone"></i>
 						</el-tooltip>
 					</template>

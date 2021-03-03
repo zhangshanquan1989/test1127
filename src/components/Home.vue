@@ -3,8 +3,8 @@
 		<!-- 头部区域 -->
 	  <el-header>
 		  <div>
-			  <img src="../assets/logo.png" alt="">
-			  <span>天康系统</span>
+			  <img src="../assets/天康系统2.png" alt="">
+			  <!-- <span>天康系统</span> -->
 		  </div>
 		  <el-button type="info" @click="logout">退出</el-button>
 	  </el-header>
@@ -108,9 +108,9 @@
 		display: flex;
 		align-items: center;
 		img{
-			width: 48px;
-			height: 48px;
-			border-radius: 50%;
+			width: 160px;
+			height: 65px;
+			// border-radius: 50%;
 		}
 		span{
 			margin-left: 15px;

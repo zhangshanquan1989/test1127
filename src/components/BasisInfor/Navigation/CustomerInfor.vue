@@ -49,17 +49,18 @@
 				</el-table-column>
 				<el-table-column width="30px">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="定位" placement="top">
 						<i class="el-icon-location" @click="handleLocation(scope.row.clientAddress)"></i>
+						</el-tooltip>
 					</template>
-
 				</el-table-column>
 				<el-table-column width="30px">
-
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="复制" placement="top">
 						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.clientName+ '  ' + scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
 						 @click="copyAreaRule"></i>
+						 </el-tooltip>
 					</template>
-
 				</el-table-column>
 				<el-table-column prop="clientLevel" label="级别" width="50px">
 				</el-table-column>
@@ -127,7 +128,7 @@
 				<el-form-item label="电话:" prop="clientFounderTel">
 					<el-input disabled v-model="addForm.clientFounderTel"></el-input>
 				</el-form-item>
-				<el-form-item label="维护人:" prop="searchEmploye">
+				<el-form-item label="维护人:" prop="searchEmployee">
 					<el-select v-model="addForm.searchEmployee" clearable filterable remote placeholder="请输入姓名" :remote-method="chooseEmployeeName"
 					 :loading="employeeNameLoading" style="width: 50%;" @change="handleChooseName">
 						<el-option v-for="item in employeeNameOptions" :key="item.index" :label="item.label" :value="item.value">
@@ -139,6 +140,19 @@
 					<el-input disabled v-model="addForm.clientMaintainTel"></el-input>
 				</el-form-item>
 				<!-- 装配站信息 -->
+				
+				<!-- 地址搜索 -->
+				
+				<el-form-item label="地址查询">
+					<el-input clearable id='pointsAddress' v-model="detailedAddress" style="width: 25%;"></el-input>
+				</el-form-item>
+				
+				<el-form-item label="详细地址">
+					<el-input clearable v-model="chooseDetailedAddress" style="width: 50%;" >
+		<i class="el-icon-document-copy" slot="append" :data-clipboard-text="chooseDetailedAddress"	 @click="copyAreaRule" style="margin-left: 20px;"> 复制</i>
+					</el-input>
+				</el-form-item>
+			
 				<el-form-item label="装配站:" prop="points">
 					<template>
 						<el-table :data="addForm.points" style="width: 100%">
@@ -147,19 +161,19 @@
 
 							<el-table-column label="地址" width="300px">
 								<template scope="scope">
-									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" style="width: 100%;" size="small">
-										<el-button slot="append" icon="el-icon-search" @click="choosePointsAddress(scope.$index)" size="small"></el-button>
+									<el-input  clearable type="text" v-model="scope.row.clientAddress" style="width: 100%;" >
+										
 									</el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="地区等级">
+							<el-table-column label="地区等级"width="180px">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientLevel"></el-input>
+									<el-input disabled  v-model="scope.row.clientLevel"><el-button slot="append" icon="el-icon-search" @click="choosePointsAddress(scope.$index)" >查询</el-button></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装配站类型">
 								<template scope="scope">
-									<el-select size="small" v-model="scope.row.clientType" clearable>
+									<el-select  v-model="scope.row.clientType" clearable>
 										<el-option v-for="item in typeSelect" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
@@ -167,37 +181,37 @@
 							</el-table-column>
 							<el-table-column label="联系人">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientFirstPerson"></el-input>
+									<el-input clearable  v-model="scope.row.clientFirstPerson"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="电话">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientFirstTel"></el-input>
+									<el-input clearable v-model="scope.row.clientFirstTel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="联系人">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientSecondPerson"></el-input>
+									<el-input clearable  v-model="scope.row.clientSecondPerson"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="电话">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientSecondTel"></el-input>
+									<el-input clearable  v-model="scope.row.clientSecondTel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="联系人">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientThirdPerson"></el-input>
+									<el-input clearable  v-model="scope.row.clientThirdPerson"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="电话">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientThirdTel"></el-input>
+									<el-input clearable  v-model="scope.row.clientThirdTel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
-									<el-button @click.native.prevent="deletePointsInfo(scope.$index, addForm.points)" size="small"> 移除
+									<el-button @click.native.prevent="deletePointsInfo(scope.$index, addForm.points)" > 移除
 									</el-button>
 								</template>
 							</el-table-column>
@@ -345,6 +359,9 @@
 	export default {
 		data() {
 			return {
+				my:100,
+				detailedAddress:'',
+				chooseDetailedAddress:'',
 				// 搜索，城市
 				chooseQueryCity: [],
 				cityData: cityData,
@@ -412,7 +429,7 @@
 				employeeNameOptions: [],
 				allEmployeeNameList: [],
 				employeeNameLoading: false,
-				searchEmployee: '',
+
 				// 创建表单验证规则
 				addFormRules: {
 					clientName: [{
@@ -450,7 +467,7 @@
 						message: "请输入电话",
 						trigger: 'blur'
 					}],
-					searchEmploye: [{
+					searchEmployee: [{
 						required: true,
 						message: "请输入维护人",
 						trigger: 'blur'
@@ -558,15 +575,18 @@
 					// }
 				})
 
+
+				
 				this.$nextTick(() => {
 					let that = this
-					var assemblyauto = new AMap.Autocomplete({
+					var assemblyauto101 = new AMap.Autocomplete({
 						input: "pointsAddress"
 					});
-					AMap.event.addListener(assemblyauto, "select", assemblyselect); //注册监听，当选中某条记录时会触发
+					AMap.event.addListener(assemblyauto101, "select", assemblyselect); //注册监听，当选中某条记录时会触发
 					function assemblyselect(e) {
 						// console.log(e)
-						that.addForm.points[0].clientAddress = e.poi.district + e.poi.address
+						// that.addForm.points[0].clientAddress = e.poi.district + e.poi.address
+						that.chooseDetailedAddress = e.poi.district + e.poi.address
 						// that.choosePointsAddress();
 						// console.log(that.addForm.points.clientAddress)
 					}
@@ -775,6 +795,7 @@
 					}
 					this.addForm.clientMaintain = res.result[0].EMPLOYEE_NO
 					this.addForm.clientMaintainTel = res.result[0].EMPLOYEE_TEL
+					this.addForm.searchEmployee = res.result[0].EMPLOYEE_NAME
 				} else {
 					this.addForm.clientMaintain = ''
 					this.addForm.clientMaintainTel = ''
@@ -787,7 +808,7 @@
 				rows.splice(index, 1);
 			},
 			addPointsInfo(pointsData, event) {
-
+				
 				pointsData.push({
 					"clientAddress": "",
 					"clientLevel": "",
@@ -799,6 +820,7 @@
 					"clientThirdPerson": "",
 					"clientThirdTel": ""
 				})
+				this.my++
 			},
 
 			// 编辑页面表格添加删除
@@ -811,7 +833,7 @@
 				rows.splice(index, 1);
 			},
 			editPointsInfo(pointsData, event) {
-
+				this.my+=1
 				pointsData.push({
 					"clientAddress": "",
 					"clientLevel": "",
