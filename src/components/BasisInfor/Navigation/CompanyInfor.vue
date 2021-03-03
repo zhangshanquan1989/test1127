@@ -94,7 +94,9 @@
 						<el-input clearable v-model="editCompanyForm.companyLegal"></el-input>
 					</el-form-item>
 					<el-form-item label="办公地址:" prop="companyAddress">
-						<el-input clearable v-model="editCompanyForm.companyAddress"></el-input>
+						<el-input id='editInput' clearable type="text" v-model="editCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>
+						
+						<!-- <el-input clearable v-model="editCompanyForm.companyAddress"></el-input> -->
 
 					</el-form-item>
 				</el-form>
@@ -283,6 +285,19 @@ console.log(res)
 					return this.$message.error('查询公司信息失败！')
 				}
 				this.editCompanyForm = res.result
+				
+				// 因为el-dialog显示时，高德搜索框加载未完成，用它在nextTick回调中加载，就成功了
+				this.$nextTick(() => {
+					let that = this
+					//输入提示
+					var auto = new AMap.Autocomplete({
+						input: "editInput"
+					});
+					AMap.event.addListener(auto, "select", select); //注册监听，当选中某条记录时会触发
+					function select(e) {
+						that.editCompanyForm.companyAddress = e.poi.district + e.poi.address
+					}
+				})
 				// 显示对话框
 				this.editDialogVisible = true
 			},

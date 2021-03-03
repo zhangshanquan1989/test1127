@@ -47,7 +47,9 @@
 				</el-table-column>
 				<el-table-column label="定位" width="100px">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="定位" placement="top">
 						<i class="el-icon-location" @click="handleLocation(scope.row.areaCounty)"></i>
+						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column prop="areaRule" label="限行规则">
