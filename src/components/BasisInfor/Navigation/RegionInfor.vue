@@ -300,7 +300,7 @@
 
 <style scoped>
 #container {
-		width: 31.25rem;
+		width: 100%;
 		height: 500px;
 	}
 </style>
