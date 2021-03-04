@@ -1,9 +1,9 @@
 <template>
 	<el-container class="home_container">
 		<!-- 头部区域 -->
-	  <el-header>
+	  <el-header >
 		  <div>
-			  <img src="../assets/天康系统2.png" alt="">
+			  <img src="../assets/天康系统3.png" alt="">
 			  <!-- <span>天康系统</span> -->
 		  </div>
 		  <el-button type="info" @click="logout">退出</el-button>
@@ -12,7 +12,7 @@
 	  <el-container>
 			
 			<!-- 侧边栏菜单区域 -->
-				<el-menu background-color="#333744" text-color="#fff" active-text-color="#409eff" 
+				<el-menu background-color="#536080" text-color="#fff" active-text-color="#FFFFFF" 
 			 :unique-opened="true" 
 			 :router="true" :default-active="activePath">
 					<!-- <el-submenu > -->
@@ -52,7 +52,11 @@
 					{id:4,
 					authName:'权限管理',
 					path:'rights'
-					}
+					},
+					// {id:5,
+					// authName:'text',
+					// path:'text'
+					// }
 				],
 				iconsObj:{
 					'125':'el-icon-user-solid',
@@ -97,19 +101,21 @@
 	height: 100%;
 }
 .el-header{
-	background-color: #373d41 ;
+	background-color: #536080 ;
 	display: flex;
 	justify-content: space-between;
 	padding-left: 0;
 	align-items: center;
 	color: #FFFFFF;
 	font-size: 20px;
+	height: 75px !important;
 	div{
 		display: flex;
 		align-items: center;
 		img{
-			width: 160px;
-			height: 65px;
+			width: 197px;
+			height: 32px;
+			margin-left: 14px;
 			// border-radius: 50%;
 		}
 		span{
@@ -117,14 +123,24 @@
 		}
 	}
 }
-
+.el-menu{
+	width: 187px;
+}
 .el-aside{
-	background-color: #333744;
+	background-color: #536080;
 	// border-right: none;
 }
 .el-main{
 	background-color: #eaedf1;
+	font-size: 25px !important;
+}
+.el-menu-item.is-active {
+   background-color: #409eff !important;
 }
 
+.el-menu-item{
+	padding-left: 30px !important;
+	font-size: 18px;
+}
 
 </style>

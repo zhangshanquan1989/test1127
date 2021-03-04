@@ -110,8 +110,8 @@
 					<el-input v-model="addForm.employeePost" style="width: 50%;"></el-input>
 				</el-form-item>
 				<el-form-item label="所属公司" prop="employeeCompany">
-					<el-select v-model="addForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" >
-						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
+					<el-select v-model="addForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" @change="handleSelectCompany" @clear="clearSelectCompany">
+						<el-option clearable v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
@@ -148,7 +148,7 @@
 					<el-input v-model="editForm.employeePost"></el-input>
 				</el-form-item>
 				<el-form-item label="所属公司" prop="employeeCompany">
-					<el-select v-model="editForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" >
+					<el-select v-model="editForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" @change="handleSelectCompany">
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -304,7 +304,13 @@
 					this.options =this.companyList
 				}
 			},
-			
+			// 选择公司后
+			handleSelectCompany(){
+				this.options =this.companyList
+			},
+			clearSelectCompany(){
+				this.options =this.companyList
+			},
 
 			// 查询总数据
 			async getAllEmployeeList() {
@@ -337,6 +343,7 @@
 			// 点击查询按钮
 			 handleQueryBtn() {
 				this.getEmployeeList()
+				this.options =this.companyList
 			},
 			
 			// 点击返回按钮

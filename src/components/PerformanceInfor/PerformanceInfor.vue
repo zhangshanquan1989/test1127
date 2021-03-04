@@ -19,8 +19,7 @@
 				</el-date-picker>
 			</el-col>
 			<el-col :span="2" style="margin-left: 30px;">
-				<el-select v-model="queryPlistAclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
-				 :loading="loading"  >
+				<el-select v-model="queryPlistAclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod" :loading="loading"  >
 					<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
@@ -168,6 +167,7 @@
 		<el-dialog title="新增信息" :visible.sync="addDialogVisible" width="80%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
+				<div style="display: flex;">
 				<el-form-item label="订单ID:">
 					<el-input disabled placeholder="自动生成"></el-input>
 				</el-form-item>
@@ -180,10 +180,11 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-
+</div>
+<div style="display: flex;">
 				<el-form-item label="承运对接人:" prop="searchEmployee">
 					<el-select v-model="addForm.searchEmployee" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseEmployeeName"
-					 :loading="employeeNameLoading" style="width: 50%;" @change="handleChooseName">
+					 :loading="employeeNameLoading"  @change="handleChooseName">
 						<el-option v-for="item in employeeNameOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -202,7 +203,7 @@
 				<el-form-item label="电话:" prop="plistEmployeeTele">
 					<el-input disabled v-model="addForm.plistEmployeeTele" placeholder="员工手机号"></el-input>
 				</el-form-item>
-
+</div>
 
 				<!-- 
 				<el-form-item label="查询:">
@@ -211,10 +212,11 @@
 						<el-button slot="append" icon="el-icon-search" @click="handleSearchDriver"></el-button>
 					</el-input>
 				</el-form-item> -->
-
+				
+				<div style="display: flex;">
 				<el-form-item label="车牌号" prop="searchDriver">
 					<el-select v-model="addForm.searchDriver" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseCarLicense"
-					 :loading="carLicenseLoading" style="width: 50%;" @change="handleChooseCarLicense">
+					 :loading="carLicenseLoading"  @change="handleChooseCarLicense">
 						<el-option v-for="item in carLicenseOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -233,8 +235,8 @@
 				<el-form-item label="车型" prop="plistDriverModel">
 					<el-input disabled v-model="addForm.plistDriverModel" placeholder="类型"></el-input>
 				</el-form-item>
-
-
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="定金" prop="plistDeposit">
 					<el-input clearable  v-model="addForm.plistDeposit" placeholder="单位:元(保留两位小数)"></el-input>
 				</el-form-item>
@@ -246,7 +248,7 @@
 					</el-date-picker>
 
 				</el-form-item>
-
+</div>
 
 				<el-form-item label="履约详情" >
 				</el-form-item>
@@ -264,12 +266,12 @@
 						<el-table :data="allAssemblyPointData" style="width: 100%">
 							<el-table-column prop="apointId" label="装货点8位ID" style="width:6vw;">
 								<template scope="scope">
-									<el-input disabled size="mini" v-model="scope.row.clientPointId"></el-input>
+									<el-input disabled v-model="scope.row.clientPointId" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="地址">
 								<template scope="scope">
-									<el-input disabled size="mini" v-model="scope.row.clientAddress"></el-input>
+									<el-input disabled  v-model="scope.row.clientAddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="选择">
@@ -297,13 +299,15 @@
 				</el-form-item>
 
 				<!-- 卸货点 -->
-				<div>送至</div>
+				<div style="font-size: 28px;margin-bottom: 8px;margin-left: 10px;">送至:</div>
+				<div style="display: flex;">
 				<el-form-item label="配送里程" prop="plistDr">
 					<el-input v-model="addForm.plistDr" placeholder="Km"></el-input>
 				</el-form-item>
 				<el-form-item label="空置里程" prop="plistCr">
 					<el-input v-model="addForm.plistCr" placeholder="Km"></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="收单客户" prop="plistUclient">
 					<el-select v-model="addForm.plistUclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
 					 :loading="loading" style="width: 50%;" @change="searchUnloadingPoint">
@@ -316,12 +320,12 @@
 						<el-table :data="allUnloadingPointData" style="width: 100%">
 							<el-table-column prop="apointId" label="装货点8位ID" style="width:6vw;">
 								<template scope="scope">
-									<el-input disabled size="mini" v-model="scope.row.clientPointId"></el-input>
+									<el-input disabled  v-model="scope.row.clientPointId" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="地址">
 								<template scope="scope">
-									<el-input disabled size="mini" v-model="scope.row.clientAddress"></el-input>
+									<el-input disabled  v-model="scope.row.clientAddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="选择">
@@ -359,8 +363,7 @@
 
 							<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
-									<el-button @click.native.prevent="deleteNotesInfo(scope.$index, addForm.notes)" size="small"> 移除
-									</el-button>
+									<el-button @click.native.prevent="deleteNotesInfo(scope.$index, addForm.notes)">移除</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
@@ -380,6 +383,7 @@
 		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+				<div style="display: flex;">
 				<el-form-item label="订单ID:">
 					<el-input disabled v-model="editForm.plistNo"></el-input>
 				</el-form-item>
@@ -392,17 +396,18 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-
-				<el-form-item label="承运对接人:"></el-form-item>
-
-				<el-form-item label="员工姓名:">
+				</div>
+				
+				<div style="display: flex;">
+				<el-form-item label="承运对接人:">
 					<el-input disabled v-model="editForm.employeeName" placeholder="员工姓名"></el-input>
 				</el-form-item>
 
-				<el-form-item label="员工手机号:">
+				<el-form-item label="电话:">
 					<el-input disabled v-model="editForm.employeeTel" placeholder="员工手机号"></el-input>
 				</el-form-item>
-
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="车牌号">
 					<el-input disabled v-model="editForm.driverLicense" placeholder="车牌号"></el-input>
 				</el-form-item>
@@ -418,8 +423,8 @@
 				<el-form-item label="车型">
 					<el-input disabled v-model="editForm.driverModel" placeholder="类型"></el-input>
 				</el-form-item>
-
-
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="定金">
 					<el-input disabled v-model="editForm.plistDeposit" placeholder="单位:元"></el-input>
 				</el-form-item>
@@ -433,9 +438,8 @@
 					<el-date-picker disabled v-model="editForm.plistPtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
 					</el-date-picker>
 				</el-form-item>
-
-				<el-form-item label="履约详情">
-				</el-form-item>
+				</div>
+				<div style="font-size: 18px;margin-bottom: 10px;">履约详情</div>
 				<el-form-item label="下单客户">
 					<el-select disabled v-model="editForm.plistAclient" clearable filterable remote placeholder="请输入公司名称"
 					 :remote-method="remoteMethod" :loading="loading" style="width: 50%;">
@@ -449,12 +453,12 @@
 						<el-table :data="editAssemblyPointData" style="width: 100%">
 							<el-table-column label="装货点8位ID">
 								<template scope="scope">
-									<el-input disabled v-model="scope.row.clientPointId"></el-input>
+									<el-input disabled v-model="scope.row.clientPointId" ></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="地址">
 								<template scope="scope">
-									<el-input disabled v-model="scope.row.clientAddress"></el-input>
+									<el-input disabled v-model="scope.row.clientAddress" ></el-input>
 								</template>
 							</el-table-column>
 
@@ -475,13 +479,15 @@
 				</el-form-item>
 
 				<!-- 卸货点 -->
-				<div>送至</div>
+				<div style="font-size: 18px;margin-bottom: 10px;">送至</div>
+				<div style="display: flex;">
 				<el-form-item label="配送里程">
 					<el-input disabled v-model="editForm.plistDr" placeholder="Km"></el-input>
 				</el-form-item>
 				<el-form-item label="空置里程">
 					<el-input disabled v-model="editForm.plistCr" placeholder="Km"></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="收单客户">
 					<el-select disabled v-model="editForm.plistUclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
 					 :loading="loading" style="width: 50%;">
@@ -490,15 +496,15 @@
 				<el-form-item label="卸货信息">
 					<template>
 						<el-table :data="editUnloadingPointData" style="width: 100%">
-							<el-table-column prop="clientPointId" label="卸货点" style="width:6vw;">
-								<!-- <template scope="scope">
-									<el-input disabled size="mini" v-model="scope.row.clientPointId"></el-input>
-								</template> -->
+							<el-table-column  label="卸货点" style="width:6vw;">
+								<template scope="scope">
+									<el-input disabled v-model="scope.row.clientPointId"></el-input>
+								</template>
 							</el-table-column>
 
 							<el-table-column label="地址信息">
 								<template scope="scope">
-									<el-input disabled size="mini" v-model="scope.row.clientAddress"></el-input>
+									<el-input disabled  v-model="scope.row.clientAddress"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="选择">
@@ -884,6 +890,8 @@
 					this.addForm.searchEmployee = ''
 					return this.$message.error('查询失败失败')
 				}
+				this.employeeNameOptions = this.allEmployeeNameList
+				
 				this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
 				this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
 				this.addForm.plistEmployee = res.result[0].EMPLOYEE_NAME
@@ -929,6 +937,7 @@
 				if (res.code !== 200) {
 					return
 				}
+				this.carLicenseOptions = this.allCarLicenseList
 				this.addForm.plistDriverId = res.result.DRIVER_NO
 				this.addForm.plistDriverName = res.result.DRIVER_NAME
 				this.addForm.plistDriverTele = res.result.DRIVER_TEL
@@ -967,6 +976,7 @@
 				console.log(this.queryInfo)
 				this.getPerformanceList()
 				// this.getAllDriverList()
+				this.companyOptions = this.companyList
 
 			},
 			// 点击返回按钮
@@ -983,6 +993,7 @@
 				this.queryInfo.pageNo = 1
 				this.queryInfo.pageSize = 10
 				this.getPerformanceList()
+				this.companyOptions = this.companyList
 			},
 
 			// pageSize 改变的事件
@@ -1153,7 +1164,7 @@
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
-
+				this.companyOptions = this.companyList
 				this.allAssemblyPointData = res.result
 			},
 			// 根据选择的公司查询卸货点
@@ -1165,7 +1176,7 @@
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
-
+				this.companyOptions = this.companyList
 				this.allUnloadingPointData = res.result
 			},
 
@@ -1353,5 +1364,10 @@
 	#container {
 		width: 100%;
 		height: 500px;
+	}
+	
+	.rt-input /deep/ .el-input__inner {
+	  color: #606266 !important;
+	  
 	}
 </style>

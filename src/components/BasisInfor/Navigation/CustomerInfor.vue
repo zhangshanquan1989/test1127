@@ -105,7 +105,10 @@
 		<el-dialog title="新增客户信息" :visible.sync="addDialogVisible" width="85%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
-				<el-form-item label="客户ID:"></el-form-item>
+				<div style="display: flex;">
+				<el-form-item label="客户ID:">
+					<el-input placeholder="自动生成" style="width: 100px;" disabled class="rt-input"></el-input>
+				</el-form-item>
 				<el-form-item label="客户名称:" prop="clientName">
 					<el-input v-model="addForm.clientName"></el-input>
 				</el-form-item>
@@ -118,10 +121,12 @@
 				<el-form-item label="电话:" prop="clientCall">
 					<el-input v-model="addForm.clientCall"></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="办公地址:" prop="clientOfficeAddress">
-					<el-input id='tipinput' clearable type="text" v-model="addForm.clientOfficeAddress" style="width: 80%;"
+					<el-input  id='tipinput' clearable type="text" v-model="addForm.clientOfficeAddress" style="width: 800px;"
 					 placeholder="高德接口"></el-input>
 				</el-form-item>
+				<div style="display: flex;">
 				<el-form-item label="创建人:" prop="clientFounder">
 					<el-input disabled v-model="addForm.clientFounder"></el-input>
 				</el-form-item>
@@ -130,7 +135,7 @@
 				</el-form-item>
 				<el-form-item label="维护人:" prop="searchEmployee">
 					<el-select v-model="addForm.searchEmployee" clearable filterable remote placeholder="请输入姓名" :remote-method="chooseEmployeeName"
-					 :loading="employeeNameLoading" style="width: 50%;" @change="handleChooseName">
+					 :loading="employeeNameLoading"  @change="handleChooseName">
 						<el-option v-for="item in employeeNameOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -139,20 +144,24 @@
 				<el-form-item label="电话:" prop="clientMaintainTel">
 					<el-input disabled v-model="addForm.clientMaintainTel"></el-input>
 				</el-form-item>
+				</div>
 				<!-- 装配站信息 -->
 				
 				<!-- 地址搜索 -->
-				
-				<el-form-item label="地址查询">
-					<el-input clearable id='pointsAddress' v-model="detailedAddress" style="width: 25%;"></el-input>
+				<div style="display: flex;">
+				<el-form-item label="查询地址:">
+				</el-form-item>
+				<el-form-item label="输入公司">
+					<el-input clearable id='pointsAddress' v-model="detailedAddress" style="width: 250px"></el-input>
 				</el-form-item>
 				
 				<el-form-item label="详细地址">
-					<el-input clearable v-model="chooseDetailedAddress" style="width: 50%;" >
-		<i class="el-icon-document-copy" slot="append" :data-clipboard-text="chooseDetailedAddress"	 @click="copyAreaRule" style="margin-left: 20px;"> 复制</i>
+					<el-input clearable v-model="chooseDetailedAddress" style="width: 500px" >
+						<el-button slot="prepend">复制</el-button>
+<!-- 		<i class="el-icon-document-copy" slot="append" :data-clipboard-text="chooseDetailedAddress"	 @click="copyAreaRule" style="margin-left: 20px;">复制</i> -->
 					</el-input>
 				</el-form-item>
-			
+			</div>
 				<el-form-item label="装配站:" prop="points">
 					<template>
 						<el-table :data="addForm.points" style="width: 100%">
@@ -230,30 +239,35 @@
 
 
 		<!-- 编辑的对话框 -->
-		<el-dialog title="编辑客户信息" :visible.sync="editDialogVisible" width="85%" @close="editDialogClosed">
+		<el-dialog title="编辑客户信息" :visible.sync="editDialogVisible" width="90%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
-				<el-form-item label="客户ID:"></el-form-item>
+				<div style="display: flex;">
+				<el-form-item label="客户ID:" >
+					<el-input clearable v-model="editForm.clientNo" style="width: 100px;" disabled class="rt-input"></el-input>
+				</el-form-item>
 				<el-form-item label="企业名称:">
-					<el-input v-model="editForm.clientName"></el-input>
+					<el-input clearable v-model="editForm.clientName" style="width: 250px;"></el-input>
 				</el-form-item>
 				<el-form-item label="法人:">
-					<el-input v-model="editForm.clientLegalPerson"></el-input>
+					<el-input clearable v-model="editForm.clientLegalPerson" style="width: 100px;"></el-input>
 				</el-form-item>
-				<el-form-item label="业务对接人:">
-					<el-input v-model="editForm.clientBusinessMatcher"></el-input>
+				<el-form-item label="业务对接人:" style="margin-left: 30px;">
+					<el-input clearable v-model="editForm.clientBusinessMatcher" style="width: 100px;"></el-input>
 				</el-form-item>
-				<el-form-item label="对接人电话:">
-					<el-input v-model="editForm.clientCall"></el-input>
+				<el-form-item label="对接人电话:" style="margin-left: 30px;">
+					<el-input clearable v-model="editForm.clientCall"></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="办公地址:">
-					<el-input v-model="editForm.clientOfficeAddress"></el-input>
+					<el-input clearable v-model="editForm.clientOfficeAddress" style="width: 800px;"></el-input>
 				</el-form-item>
+				<div style="display: flex;">
 				<el-form-item label="创建人:">
-					<el-input v-model="editForm.clientFounder"></el-input>
+					<el-input disabled v-model="editForm.clientFounder" class="rt-input"></el-input>
 				</el-form-item>
 				<el-form-item label="电话:">
-					<el-input v-model="editForm.clientFounderTel"></el-input>
+					<el-input  v-model="editForm.clientFounderTel" disabled class="rt-input"></el-input>
 				</el-form-item>
 				<el-form-item label="维护人:">
 					<el-input v-model="editForm.clientMaintain"></el-input>
@@ -261,25 +275,25 @@
 				<el-form-item label="电话:">
 					<el-input v-model="editForm.clientMaintainTel"></el-input>
 				</el-form-item>
-
-				<el-form-item>
+				</div>
+				<el-form-item  >
 					<template>
-						<el-table :data="editForm.points" style="width: 100%">
-							<el-table-column label="ID">
+						<el-table :data="editForm.points" >
+							<el-table-column label="ID" width="120px" >
 								<template scope="scope">
-									<el-input size="mini" v-model="scope.row.clientPointId"></el-input>
+									<el-input disabled  v-model="scope.row.clientPointId" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 
-							<el-table-column label="地址" width="150px">
+							<el-table-column label="地址" width="180px">
 								<template scope="scope">
-									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" style="width: 80%;"></el-input>
+									<el-input id='pointsAddress' clearable type="text" v-model="scope.row.clientAddress" ></el-input>
 									<!-- 	<el-input clearable size="mini" v-model="scope.row.clientAddress"></el-input> -->
 								</template>
 							</el-table-column>
-							<el-table-column label="地区等级">
+							<el-table-column label="地区等级" width="100px">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientLevel"></el-input>
+									<el-input clearable  v-model="scope.row.clientLevel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装配站类型">
@@ -292,44 +306,43 @@
 							</el-table-column>
 							<el-table-column label="联系人">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientFirstPerson"></el-input>
+									<el-input clearable  v-model="scope.row.clientFirstPerson"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="电话">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientFirstTel"></el-input>
+									<el-input clearable  v-model="scope.row.clientFirstTel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="联系人">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientSecondPerson"></el-input>
+									<el-input clearable  v-model="scope.row.clientSecondPerson"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="电话">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientSecondTel"></el-input>
+									<el-input clearable  v-model="scope.row.clientSecondTel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="联系人">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientThirdPerson"></el-input>
+									<el-input clearable  v-model="scope.row.clientThirdPerson"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="电话">
 								<template scope="scope">
-									<el-input clearable size="mini" v-model="scope.row.clientThirdTel"></el-input>
+									<el-input clearable  v-model="scope.row.clientThirdTel"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column fixed="right" label="操作">
 								<template slot-scope="scope">
-									<el-button @click.native.prevent="editDeletePointsInfo(scope.$index, editForm.points, scope.row.clientPointId)"
-									 size="small"> 移除
+									<el-button @click.native.prevent="editDeletePointsInfo(scope.$index, editForm.points, scope.row.clientPointId)"> 移除
 									</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
 					</template>
-					<el-button @click="editPointsInfo(editForm.points)">添加</el-button>
+					<el-button @click="editPointsInfo(editForm.points)" style="margin-left: 10px;margin-top: 10px;">添加</el-button>
 				</el-form-item>
 
 			</el-form>
@@ -785,6 +798,7 @@
 			},
 			// 选择员工后发起查询请求
 			async handleChooseName(name) {
+				this.employeeNameOptions = this.allEmployeeNameList
 				if (name !== '') {
 					const {
 						data: res
@@ -793,6 +807,7 @@
 					if (res.code !== 200) {
 						return
 					}
+					
 					this.addForm.clientMaintain = res.result[0].EMPLOYEE_NO
 					this.addForm.clientMaintainTel = res.result[0].EMPLOYEE_TEL
 					this.addForm.searchEmployee = res.result[0].EMPLOYEE_NAME
@@ -962,4 +977,10 @@
 		width: 100%;
 		height: 500px;
 	}
+	
+	.rt-input /deep/ .el-input__inner {
+	  color: #606266 !important;
+	  
+	}
+	
 </style>

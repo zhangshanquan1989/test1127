@@ -25,7 +25,7 @@
 			<!-- 公司下拉框 -->
 			<el-col :span="1" style="margin-left: 20px;font-size: 17px;margin-top: 8px;"><span>公司:</span></el-col>
 			<el-col :span="2">
-				<el-select v-model="queryInfo.driverCompany" placeholder="全部" clearable filterable remote>
+				<el-select v-model="queryInfo.driverCompany" placeholder="全部" clearable filterable remote >
 					<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
@@ -92,17 +92,27 @@
 				</el-table-column>
 				<el-table-column prop="driverCertificateDriver" label="驾驶证">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriver"   @click="handleClickImage(scope.row.driverCertificateDriver)" ></el-image>
+						</el-tooltip>
+						
 					</template>
 				</el-table-column>
 				<el-table-column prop="driverCertificateDriving" label="行驶证">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriving" @click="handleClickImage(scope.row.driverCertificateDriving)"></el-image>
+						</el-tooltip>
+						
 					</template>
 				</el-table-column>
 				<el-table-column prop="driverCertificatePostCard" label="上岗证">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 						<el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificatePostCard" @click="handleClickImage(scope.row.driverCertificatePostCard)"></el-image>
+						</el-tooltip>
+						
+						
 					</template>
 				</el-table-column>
 
@@ -202,8 +212,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="所属公司" prop="driverCompany">
-					<el-select v-model="addForm.driverCompany" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
-					 :loading="loading" style="width: 50%;">
+					<el-select v-model="addForm.driverCompany" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"	 :loading="loading" style="width: 50%;" @change="handleSelectCompany">
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -211,8 +220,8 @@
 				<el-form-item label="所属调度" prop="searchEmployee">
 					
 					
-					<el-input clearable placeholder="请输入员工姓名" v-model="addForm.searchEmployee" style="width: 50%;">
-						<el-button slot="append" icon="el-icon-search" @click="handleSearchEmployee"></el-button>
+					<el-input clearable placeholder="请输入员工姓名" v-model="addForm.searchEmployee" style="width: 400px;">
+						<el-button slot="append" icon="el-icon-search" @click="handleSearchEmployee">查询</el-button>
 					</el-input>
 				</el-form-item>
 				<el-form-item label="状态" prop="driverStatus">
@@ -321,7 +330,7 @@
 				</el-form-item>
 				<el-form-item label="所属公司">
 					<el-select v-model="editForm.driverCompany" clearable filterable remote placeholder="请选择公司" :remote-method="remoteMethod"
-					 :loading="loading" style="width: 50%;">
+					 :loading="loading" style="width: 50%;" @change="handleSelectCompany">
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -367,9 +376,9 @@
 
 		</el-dialog>
 		
-		<!--  -->
-		<el-dialog :visible.sync="showDriverCertificateDriver" width="50%" >
-		<el-image  :src="showImageSrc"></el-image>
+		<!-- 显示大图 -->
+		<el-dialog :visible.sync="showDriverCertificateDriver" width="35%">
+		<el-image  :src="showImageSrc" style="width: 100%;"></el-image>
 		</el-dialog>
 		
 
@@ -604,6 +613,10 @@
 				} else {
 					this.options = this.companyList
 				}
+			},
+			// 选择公司后重置
+			handleSelectCompany(){
+				this.options = this.companyList
 			},
 
 			// 查询总数据

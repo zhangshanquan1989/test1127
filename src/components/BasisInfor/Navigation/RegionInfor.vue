@@ -57,7 +57,10 @@
 				
 				<el-table-column width="100px">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="复制" placement="top">
 						<i class="el-icon-document-copy" :data-clipboard-text="scope.row.areaRule" @click="copyAreaRule"></i>
+						</el-tooltip>
+						
 					</template>				
 				</el-table-column>
 

@@ -51,17 +51,22 @@
 				</el-table-column>
 				<el-table-column prop="clientAddress" label="装配点地址">
 				</el-table-column>
-				<el-table-column label="地址" width="50px">
+				<el-table-column  width="50px">
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="定位" placement="top">
 						<i class="el-icon-location" @click="handleLocation(scope.row.clientAddress)"></i>
+						</el-tooltip>
 					</template>
 
 				</el-table-column>
-				<el-table-column label="复制" width="50px">
+				<el-table-column  width="50px">
 
 					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="复制" placement="top">
 						<i class="el-icon-document-copy" :data-clipboard-text=" scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
 						 @click="copyAreaRule"></i>
+						</el-tooltip>
+						
 					</template>
 
 				</el-table-column>
@@ -113,52 +118,56 @@
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<div class="firstLine" style="display: flex;">
 				<el-form-item label="装配点ID:">
-					<div>{{editForm.clientPointId}}</div>
+					<el-input disabled  v-model="editForm.clientPointId" class="rt-input"></el-input>
 				</el-form-item>
 				<el-form-item label="名称:">
-					<div>{{editForm.clientCompany}}</div>
+					<el-input disabled  v-model="editForm.clientCompany" class="rt-input"></el-input>
 				</el-form-item>
-				<el-form-item label="地址:">
-					<div>{{editForm.clientAddress}}</div>
+				<el-form-item label="地址:" style="width: 300px;">
+					<el-input disabled  v-model="editForm.clientAddress" class="rt-input" style="width: 280px;"></el-input>
 				</el-form-item>
-				<el-form-item label="导航:">
+				<el-form-item style="width: 20px;margin-left: 0;">
 					<template>
+						<el-tooltip class="item" effect="dark" content="定位" placement="top">
 						<i class="el-icon-location" @click="handleLocation(editForm.clientAddress)"></i>
+						</el-tooltip>						
 					</template>
 				</el-form-item>
-				<el-form-item label="复制:">
-					<template>
+				<el-form-item >
+					<template>						
+						<el-tooltip class="item" effect="dark" content="复制联系人" placement="top">
 						<i class="el-icon-document-copy" :data-clipboard-text="editForm.clientName+ '  ' + editForm.clientAddress+ '  ' + editForm.clientFirstPerson+ ':' + editForm.clientFirstTel+ '  ' + editForm.clientSecondPerson+ ':' + editForm.clientSecondTel+ '  ' + editForm.clientThirdPerson+ ':' + editForm.clientThirdTel"
 						 @click="copyAreaRule"></i>
+						</el-tooltip>							
 					</template>
 				</el-form-item>
 				
 				<el-form-item label="类型:">
-					<div>{{editForm.clientType}}</div>
+					<el-input disabled  v-model="editForm.clientType" class="rt-input" style="width: 100px;"></el-input>
 				</el-form-item>
 				<el-form-item label="履约共计:">
-					<div>{{editForm.clientListPerformance}}单</div>
+					<el-input disabled  v-model="editForm.clientListPerformance + '单' " class="rt-input" style="width: 70px;"></el-input>
 				</el-form-item>
 				</div>
 				<div class="secondLine" style="display: flex;">
 				<el-form-item label="联系人:">
-					<div>{{editForm.clientFirstPerson}}</div>
+					<el-input disabled  v-model="editForm.clientFirstPerson" class="rt-input" style="width: 100px;"></el-input>
 				</el-form-item>
 				<el-form-item label="电话:">
-					<div>{{editForm.clientFirstTel}}</div>
+					<el-input disabled  v-model="editForm.clientFirstTel" class="rt-input" style="width: 150px;"></el-input>
 				</el-form-item>
 				<el-form-item label="创建日期:">
-					<div>{{editForm.clientCtime}}</div>
+					<el-input disabled  v-model="editForm.clientCtime" class="rt-input" style="width: 200px;"></el-input>
 				</el-form-item>
 				<el-form-item label="创建人:">
-					<div>{{editForm.clientFounder}}</div>
+					<el-input disabled  v-model="editForm.clientFounder" class="rt-input" style="width: 100px;"></el-input>
 				</el-form-item>
 				<el-form-item label="电话:">
-					<div>{{editForm.clientFounderTel}}</div>
+				<el-input disabled  v-model="editForm.clientFounderTel" class="rt-input" style="width: 150px;"></el-input>
 				</el-form-item>
 </div>
 				<!-- 关联查询，需要更改 -->
-				<el-form-item label="关联查询">
+				<el-form-item label="关联查询:">
 					<!-- 创建搜索区 -->
 					<el-row :gutter="20">
 
@@ -207,15 +216,21 @@
 					</el-table-column>
 					<el-table-column label="地址" width="50px">
 						<template slot-scope="scope">
+							<el-tooltip class="item" effect="dark" content="定位" placement="top">
 							<i class="el-icon-location" @click="handleLocation(scope.row.CLIENT_ADDRESS)"></i>
+							</el-tooltip>
+							
 						</template>
 
 					</el-table-column>
 					<el-table-column label="复制" width="50px">
 
 						<template slot-scope="scope">
+							<el-tooltip class="item" effect="dark" content="复制" placement="top">
 							<i class="el-icon-document-copy" :data-clipboard-text="scope.row.CLIENT_NAME+ '  ' + scope.row.CLIENT_ADDRESS+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
 							 @click="copyAreaRule"></i>
+							</el-tooltip>
+							
 						</template>
 
 					</el-table-column>
@@ -243,7 +258,10 @@
 					</el-table-column>
 					<el-table-column prop="CLIENT_DISTANCE" label="地图路线">
 						<template slot-scope="scope">
+							<el-tooltip class="item" effect="dark" content="定位" placement="top">
 							<i class="el-icon-s-promotion" @click="handleNavigation(scope.row.CLIENT_ADDRESS)"></i>
+							</el-tooltip>
+							
 						</template>
 					</el-table-column>
 					<el-table-column prop="AREA_RULE" label="限行规则">
@@ -261,7 +279,7 @@
 
 		<!-- 高德的对话框 -->
 		<el-dialog title="地图" :visible.sync="locationDialogVisible" width="50%">
-			<div>{{licationAddress}}:</div>
+			<!-- <div>{{licationAddress}}:</div> -->
 			<div id="container"></div>
 		</el-dialog>
 
@@ -687,5 +705,10 @@ console.log(res)
 .warning-row {
 	background-color: #000080;
 	    color: red ;
+	}
+	
+	.rt-input /deep/ .el-input__inner {
+	  color: #606266 !important;
+	  
 	}
 </style>
