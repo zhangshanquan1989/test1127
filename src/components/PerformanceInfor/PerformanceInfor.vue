@@ -14,11 +14,15 @@
 			<el-col :span="2" style="margin-left: 20px;">
 				<el-input placeholder="订单号" v-model="queryPlistNo" clearable></el-input>
 			</el-col>
-			<el-col :span="3" style="margin-left: 20px;">
-				<el-date-picker v-model="queryPlistCtime"  type="date" placeholder="选择日期" value-format="yyyy-MM-dd" >
-				</el-date-picker>
+			<el-col :span="4" style="margin-left: 20px;">
+			<el-date-picker v-model="queryPlistCtime" type="daterange" range-separator="至" start-placeholder="开始日期"
+			 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleDataChange">
+			</el-date-picker>	
+				
+<!-- 				<el-date-picker v-model="queryPlistCtime"  type="date" placeholder="选择日期" value-format="yyyy-MM-dd" >
+				</el-date-picker> -->
 			</el-col>
-			<el-col :span="2" style="margin-left: 30px;">
+			<el-col :span="2" style="margin-left: 95px;">
 				<el-select v-model="queryPlistAclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod" :loading="loading"  >
 					<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 					</el-option>
@@ -156,7 +160,7 @@
 
 		<!-- 分页区域 -->
 		<el-col style="margin-top: 10px;">
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNum"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
 			 :total="total">
 			</el-pagination>
@@ -586,7 +590,7 @@
 				// 查询数据
 				queryPlistEmployee: '',
 				queryPlistNo: '',
-				queryPlistCtime: '',
+				queryPlistCtime: [],
 				queryPlistAclient: '',
 				queryInfo: {
 					plistEmployeeId: '',
@@ -596,7 +600,7 @@
 					plistDriverOwner: '',
 					plistCompanyId: '',
 					plistState: '',
-					pageNo: 1,
+					pageNum: 1,
 					pageSize: 10
 				},
 				// 总列表
@@ -742,6 +746,11 @@
 			this.findAllCarLicense()
 		},
 		methods: {
+			// 搜索区域选址时间
+			handleDataChange() {
+				
+			},
+			
 			checkboxChange(e) {
 				console.log(e)
 
@@ -959,20 +968,28 @@
 					params: this.queryInfo
 				})
 				console.log(res)
-				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
-				}
+				// if (res.code !== 200) {
+				// 	return this.$message.error('获取信息失败')
+				// }
 				this.$message.success('获取信息成功')
-				this.performanceList = res.result.records
-				this.total = res.result.total
+				this.performanceList = res.rows
+				this.total = res.total
 			},
 
 			// 点击查询按钮
 			handleQueryBtn() {
-				this.queryInfo.plistEmployee = "*" + this.queryPlistEmployee + "*"
-				this.queryInfo.plistNo = "*" + this.queryPlistNo + "*"
-				this.queryInfo.plistCtimet = "*" + this.queryPlistCtime + "*"
-				this.queryInfo.plistAclient = "*" + this.queryPlistAclient + "*"
+				console.log(this.queryPlistCtime)
+				if(this.queryPlistCtime){
+					
+					this.queryInfo.plistCtime1 = this.queryPlistCtime[0]
+					this.queryInfo.plistCtime2 = this.queryPlistCtime[1]
+				}else{
+					this.queryInfo.plistCtime1 = ''
+					this.queryInfo.plistCtime2 = ''
+				}
+				this.queryInfo.plistEmployee =  this.queryPlistEmployee 
+				this.queryInfo.plistNo =  this.queryPlistNo 
+				this.queryInfo.plistAclient =  this.queryPlistAclient 
 				console.log(this.queryInfo)
 				this.getPerformanceList()
 				// this.getAllDriverList()
@@ -984,13 +1001,15 @@
 				this.queryPlistEmployee = ''
 				this.queryPlistNo = ''
 				this.queryPlistCtime = ''
+				this.queryInfo.plistCtime1 = ''
+				this.queryInfo.plistCtime2 = ''
 				this.queryPlistAclient = ''
 				this.queryInfo.plistState = ""
 				this.queryInfo.plistEmployee = ""
 				this.queryInfo.plistNo = ""
 				this.queryInfo.plistCtimet = ""
 				this.queryInfo.plistAclient = ""
-				this.queryInfo.pageNo = 1
+				this.queryInfo.pageNum = 1
 				this.queryInfo.pageSize = 10
 				this.getPerformanceList()
 				this.companyOptions = this.companyList
@@ -1004,7 +1023,7 @@
 
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
-				this.queryInfo.pageNo = newPage
+				this.queryInfo.pageNum = newPage
 				this.getPerformanceList()
 			},
 			

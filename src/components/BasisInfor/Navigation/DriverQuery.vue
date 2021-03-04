@@ -284,30 +284,37 @@
 
 
 		<!-- 编辑地区的对话框 -->
-		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+				<div style="display: flex;">
 				<el-form-item label="车主ID:">
 					<el-input disabled v-model="editForm.driverNo"></el-input>
 				</el-form-item>
 				<el-form-item label="司机姓名:">
 					<el-input v-model="editForm.driverName"></el-input>
 				</el-form-item>
-				<el-form-item label="司机联系方式:">
+				<el-form-item label="司机电话:">
 					<el-input v-model="editForm.driverTel"></el-input>
 				</el-form-item>
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="紧急联系人">
 					<el-input v-model="editForm.driverEmergencyContact"></el-input>
 				</el-form-item>
 				<el-form-item label="关系:">
 					<el-input v-model="editForm.driverRelationship"></el-input>
 				</el-form-item>
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="车主姓名:">
 					<el-input v-model="editForm.driverCarOwner"></el-input>
 				</el-form-item>
-				<el-form-item label="车主联系方式:">
+				<el-form-item label="车主电话:">
 					<el-input v-model="editForm.driverOwnerTel"></el-input>
 				</el-form-item>
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="车牌:">
 					<el-input v-model="editForm.driverLicense"></el-input>
 				</el-form-item>
@@ -323,6 +330,7 @@
 				<el-form-item label="载重">
 					<el-input v-model="editForm.driverLoad"></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="合同周期" placeholder="yyyy-MM-dd">
 					<el-date-picker v-model="editContractData" type="daterange" range-separator="至" start-placeholder="开始日期"
 					 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleditDataChange">
@@ -335,6 +343,7 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+				<div style="display: flex;">
 				<el-form-item label="所属调度">
 					<el-input v-model="editForm.driverScheduling"></el-input>
 				</el-form-item>
@@ -344,31 +353,31 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-
+				</div>
+				<div style="display: flex;">
 				<el-form-item label="驾驶证:">
-					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriver"></el-image>
+					<el-image style="width: 150px; height: 75px;" :src="editForm.driverCertificateDriver"></el-image>
 					<el-upload name="imgFile" :action="updateDriverUrl" :auto-upload="true" :on-success="handleEditDriverUrlSuccess"
 					 :show-file-list="false" >
 						<el-button size="small" type="primary" plain>重新上传</el-button>
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="行驶证:">
-					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificateDriving"></el-image>
+				<el-form-item label="行驶证:" style="margin-left: 50px;">
+					<el-image style="width: 150px; height: 75px;" :src="editForm.driverCertificateDriving"></el-image>
 					<el-upload name="imgFile" :action="updateDrivingUrl" :auto-upload="true" :on-success="handleEditDrivingUrlUrlSuccess"
 					  :show-file-list="false" >
 						<el-button size="small" type="primary" plain>重新上传</el-button>
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="上岗证:">
-					<el-image style="width: 100px; height: 50px;" :src="editForm.driverCertificatePostCard"></el-image>
+				<el-form-item label="上岗证:" style="margin-left: 50px;">
+					<el-image style="width: 150px; height: 75px;" :src="editForm.driverCertificatePostCard"></el-image>
 					<el-upload name="imgFile" :action="updatePostCardUrl" :auto-upload="true" :on-success="handleEditPostCardUrlSuccess"
 					  :show-file-list="false" >
 						<el-button size="small" type="primary" plain>重新上传</el-button>
 					</el-upload>
 				</el-form-item>
+				</div>
 			</el-form>
-
-
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="editDialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="editInfo">确 定</el-button>

@@ -15,7 +15,7 @@
 			<div class="form_box">
 				<!-- 登录表单区域 -->
 				<div class="form_box_text">
-					<span>欢迎登录天康系统</span>
+					<span>欢迎登录货好多天康系统</span>
 				</div>
 				<el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
 					<!-- 用户名 -->
@@ -171,8 +171,8 @@
 			// text-align: center;
 			.form_box_text{
 				margin-top: 88px;
-				font-size: 42px;
-			  margin-left: 139px;
+				font-size: 40px;
+			  margin-left: 90px;
 			}
 		}
 		

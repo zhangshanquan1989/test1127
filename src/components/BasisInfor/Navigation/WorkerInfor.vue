@@ -134,27 +134,27 @@
 
 
 		<!-- 编辑对话框 -->
-		<el-dialog title="编辑员工信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+		<el-dialog title="编辑员工信息" :visible.sync="editDialogVisible" width="30%" @close="editDialogClosed">
 			<!-- 编辑表单 -->
 			<el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
-				<el-form-item label="ID:">{{editForm.employeeId}}</el-form-item>
+				<el-form-item label="ID:">{{editForm.employeeNo}}</el-form-item>
 				<el-form-item label="员工姓名:" prop="employeeName">
-					<el-input v-model="editForm.employeeName"></el-input>
+					<el-input v-model="editForm.employeeName" style="width: 90%;"></el-input>
 				</el-form-item>
 				<el-form-item label="部门:" prop="employeeDepartment">
-					<el-input v-model="editForm.employeeDepartment"></el-input>
+					<el-input v-model="editForm.employeeDepartment" style="width: 90%;"></el-input>
 				</el-form-item>
 				<el-form-item label="岗位:" prop="employeePost">
-					<el-input v-model="editForm.employeePost"></el-input>
+					<el-input v-model="editForm.employeePost" style="width: 90%;"></el-input>
 				</el-form-item>
 				<el-form-item label="所属公司" prop="employeeCompany">
-					<el-select v-model="editForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 50%;" @change="handleSelectCompany">
+					<el-select v-model="editForm.employeeCompany" clearable filterable remote  placeholder="请输入公司名称" :remote-method="remoteMethod":loading="loading" style="width: 90%;" @change="handleSelectCompany">
 						<el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="联系方式:" prop="employeeTel">
-					<el-input v-model="editForm.employeeTel"></el-input>
+					<el-input v-model="editForm.employeeTel" style="width: 90%;"></el-input>
 				</el-form-item>
 				<el-form-item label="状态" prop="employeeStatus">
 					<el-select v-model="editForm.employeeStatus" :placeholder="editForm.employeeStatus">
