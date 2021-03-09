@@ -53,7 +53,7 @@
 			<el-table :data="performanceList" stripe style="width: 100%">
 				<el-table-column prop="plistNo" label="订单ID">
 				</el-table-column>
-				<el-table-column prop="plistFristApointId" label="装货点ID">
+				<el-table-column prop="plistAclient" label="下单公司">
 				</el-table-column>
 				<el-table-column prop="plistFristApointAddr" label="地址">
 				</el-table-column>
@@ -100,7 +100,7 @@
 				</el-table-column>
 
 
-				<el-table-column prop="plistFristUpointId" label="卸货点ID">
+				<el-table-column prop="plistUclient" label="卸货公司">
 				</el-table-column>
 				<el-table-column prop="plistFristUpointAddr" label="地址">
 				</el-table-column>

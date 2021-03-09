@@ -19,6 +19,20 @@
 				</el-table-column>
 				<el-table-column prop="companyAddress" label="办公地址">
 				</el-table-column>
+				<el-table-column label="营业执照">
+					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+						<el-image style="width: 80px; height: 40px" :src="scope.row.business"   @click="handleClickImage(scope.row.business)" ></el-image>
+						</el-tooltip>						
+					</template>
+				</el-table-column>
+				<el-table-column  label="运输许可证">
+					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+						<el-image style="width: 80px; height: 40px" :src="scope.row.transport"   @click="handleClickImage(scope.row.transport)" ></el-image>
+						</el-tooltip>						
+					</template>
+				</el-table-column>
 				<el-table-column label="操作" width="200">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
@@ -63,6 +77,20 @@
 					<el-form-item label="办公地址:" prop="companyAddress">
 						<el-input id='tipinput' clearable type="text" v-model="addCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>
 					</el-form-item>
+					
+					<el-form-item label="营业执照:">
+						<el-image v-if="addCompanyForm.business"  style="width: 100px; height:150px;" :src="addCompanyForm.business"></el-image>
+						<el-upload name="imgFile"  :action="updateBusinessUrl" :auto-upload="true" :on-success="handleBusinessSuccess" :show-file-list="false" >
+							<el-button size="small" type="primary" plain>点击上传</el-button>
+						</el-upload>
+					</el-form-item>
+					
+					<el-form-item label="运输许可证:">
+						<el-image v-if="addCompanyForm.transport"  style="width: 100px; height:150px;" :src="addCompanyForm.transport"></el-image>
+						<el-upload name="imgFile"  :action="updateTransportUrl" :auto-upload="true" :on-success="handleTransportSuccess" :show-file-list="false" >
+							<el-button size="small" type="primary" plain>点击上传</el-button>
+						</el-upload>
+					</el-form-item>
 				</el-form>
 
 				<span slot="footer" class="dialog-footer">
@@ -94,10 +122,20 @@
 						<el-input clearable v-model="editCompanyForm.companyLegal"></el-input>
 					</el-form-item>
 					<el-form-item label="办公地址:" prop="companyAddress">
-						<el-input id='editInput' clearable type="text" v-model="editCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>
-						
-						<!-- <el-input clearable v-model="editCompanyForm.companyAddress"></el-input> -->
-
+						<el-input id='editInput' clearable type="text" v-model="editCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>					
+					</el-form-item>
+					<el-form-item label="营业执照:">
+						<el-image v-if="editCompanyForm.business"  style="width: 100px; height:150px;" :src="editCompanyForm.business"></el-image>
+						<el-upload name="imgFile"  :action="updateBusinessUrl" :auto-upload="true" :on-success="handleEditBusinessSuccess" :show-file-list="false" >
+							<el-button size="small" type="primary" plain>点击上传</el-button>
+						</el-upload>
+					</el-form-item>
+					
+					<el-form-item label="运输许可证:">
+						<el-image v-if="editCompanyForm.transport"  style="width: 100px; height:150px;" :src="editCompanyForm.transport"></el-image>
+						<el-upload name="imgFile"  :action="updateTransportUrl" :auto-upload="true" :on-success="handleEditTransportSuccess" :show-file-list="false" >
+							<el-button size="small" type="primary" plain>点击上传</el-button>
+						</el-upload>
 					</el-form-item>
 				</el-form>
 
@@ -109,6 +147,11 @@
 			</el-dialog>
 
 		</el-card>
+		
+		<!-- 显示大图 -->
+		<el-dialog :visible.sync="showDriverCertificateDriver" width="35%">
+		<el-image  :src="showImageSrc" style="width: 100%;"></el-image>
+		</el-dialog>
 	</div>
 </template>
 
@@ -116,6 +159,10 @@
 	export default {
 		data() {
 			return {
+				// 大图
+				showImageSrc:'',
+				// 图片放大
+				showDriverCertificateDriver:false,
 				// 查询参数对象
 				queryInfo: {
 					pageNo: 1,
@@ -136,8 +183,15 @@
 					companyBusiness: "",
 					companyLegal: "",
 					companyName: "",
-					companyStatus: "运营中"
+					companyStatus: "运营中",
+					business:'',
+					transport:''
 				},
+				// 添加公司营业执照的网址
+				updateBusinessUrl:'http://81.70.151.121:8080/jeecg-boot/base/tBaCompany/uploadbusiness',
+				// 添加运输许可证网址
+				updateTransportUrl:'http://81.70.151.121:8080/jeecg-boot/base/tBaCompany/uploadtransport',
+				
 				// 添加的表单验证规则
 				addCompanyFormRules:{
 					companyName:[
@@ -187,7 +241,7 @@
 				// 编辑公司对话框数据
 				// 编辑公司对话框显示与隐藏
 				editDialogVisible: false,
-				editCompanyForm: {}
+				editCompanyForm: {},
 
 			}
 		},
@@ -228,8 +282,32 @@ console.log(res)
 				this.queryInfo.pageNo = newPage
 				this.getCompanyList()
 			},
-
+			
+			handleClickImage(src){
+				this.showImageSrc = src
+				this.showDriverCertificateDriver=true
+			},
 			// 创建对话框操作
+			
+			// 添加营业执照成功
+			handleBusinessSuccess(response, file, fileList){
+				this.addCompanyForm.business = response.result.businessFileName
+				console.log(this.addCompanyForm.business)
+			},
+			handleTransportSuccess(response, file, fileList){
+				this.addCompanyForm.transport = response.result.transportFileName
+				console.log(this.addCompanyForm.transport)
+			},
+			
+			// 修改营业执照成功
+			handleEditBusinessSuccess(response, file, fileList){
+				this.editCompanyForm.business = response.result.businessFileName
+				console.log(this.addCompanyForm.business)
+			},
+			handleEditTransportSuccess(response, file, fileList){
+				this.editCompanyForm.transport = response.result.transportFileName
+				console.log(this.addCompanyForm.transport)
+			},
 
 			// 点击按钮，展示添加对话框
 			showAddCompanyDialog() {
@@ -273,6 +351,8 @@ console.log(res)
 				// this.addCompanyForm.companyLegal = ""
 				// this.addCompanyForm.companyName = ""
 				this.addCompanyForm.companyStatus = "运营中"
+				this.addCompanyForm.business = ""
+				this.addCompanyForm.transport = ""
 			},
 
 			// 编辑对话框操作	

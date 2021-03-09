@@ -74,6 +74,8 @@
 				</el-table-column>
 				<el-table-column prop="driverName" label="司机名">
 				</el-table-column>
+				<el-table-column prop="driverLicense" label="车牌">
+				</el-table-column>
 				<el-table-column prop="driverModel" label="车型">
 				</el-table-column>
 				<el-table-column prop="driverCarOwner" label="车主名">
