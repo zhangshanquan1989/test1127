@@ -2,22 +2,22 @@
 	<div>
 		<!-- 创建搜索区 -->
 		<el-row :gutter="20">
-		
-		<!-- 创建 -->
-		<el-col :span="2">
-			<el-button type="info" @click="showAddDialog">添加</el-button>
-		</el-col>
-				
+
+			<!-- 创建 -->
+			<el-col :span="2">
+				<el-button type="info" @click="showAddDialog">添加</el-button>
+			</el-col>
+
 		</el-row>
-		
+
 		<!-- 卡片视图 -->
-		<el-card class="box-card">
+		<el-card class="box-card" style="margin-top: 10px;">
 			<el-table :data="pagingList" stripe style="width: 100%">
-				<el-table-column  prop="id" label="ID">
+				<el-table-column prop="id" label="ID">
 				</el-table-column>
-				<el-table-column  prop="employeeId" label="employeeId">
+				<el-table-column prop="employeeId" label="employeeId">
 				</el-table-column>
-				<el-table-column  prop="employeeName" label="用户">
+				<el-table-column prop="employeeName" label="用户">
 				</el-table-column>
 				<el-table-column prop="username" label="账号">
 				</el-table-column>
@@ -37,77 +37,71 @@
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.employeeId)">修改角色</el-button>
 						<!-- 删除按钮 -->
 
-							<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
-								<el-button type="danger" size="mini" slot="reference" >删除</el-button>
-							</el-popconfirm>
+						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
+							<el-button type="danger" size="mini" slot="reference">删除</el-button>
+						</el-popconfirm>
 					</template>
 				</el-table-column>
 			</el-table>
 
 			<!-- 分页区域 -->
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
-			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" style="margin-top: 10px;">
 			</el-pagination>
-			
+
 			<!-- 添加的对话框 -->
 			<el-dialog title="添加" :visible.sync="addDialogVisible" width="60%" @close="addDialogClosed">
 				<!-- 添加的表单 -->
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
 					<el-form-item label="员工姓名/账号:">
-						<el-input v-model="findWorkerInput.name"  style="width: 70%;"></el-input>
+						<el-input v-model="findWorkerInput.name" style="width: 70%;"></el-input>
 						<el-button @click="handleFindWorker">查看</el-button>
 					</el-form-item>
-			</el-form>
-			<el-form :model="addForm" ref="addFormRef" label-width="100px">
+				</el-form>
+				<el-form :model="addForm" ref="addFormRef" label-width="100px">
 					<el-form-item label="员工ID:">
-						<el-input disabled v-model="workerList.Username.id"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Username.id" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="用户:">
-						<el-input disabled v-model="workerList.Records.employeeName"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeName" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="账号:">
-						<el-input disabled v-model="workerList.Username.username"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Username.username" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="岗位:">
-						<el-input disabled v-model="workerList.Records.employeePost"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeePost" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="公司:">
-						<el-input disabled v-model="workerList.Records.employeeCompany"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeCompany" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="角色:">
-						<el-input disabled v-model="workerList.Records.employeeAuthority"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeAuthority" style="width: 70%;"></el-input>
 					</el-form-item>
 					<el-form-item label="变更时间:">
-						<el-input disabled v-model="workerList.Records.employeeUpdateTime"  style="width: 70%;"></el-input>
+						<el-input disabled v-model="workerList.Records.employeeUpdateTime" style="width: 70%;"></el-input>
 					</el-form-item>
-			</el-form>
-					<el-button type="primary" style="margin:auto;"  @click="addInfo(workerList.Username.id)">添加</el-button>
+				</el-form>
+				<el-button type="primary" style="margin:auto;" @click="addInfo(workerList.Username.id)">添加</el-button>
 			</el-dialog>
-			
+
 			<!-- 修改权限的对话框 -->
 			<el-dialog title="修改权限" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
 				<!-- 修改权限的表单 -->
-				<el-form :model="editForm"  ref="editFormRef" label-width="100px">
+				<el-form :model="editForm" ref="editFormRef" label-width="100px">
 					<el-form-item label="权限:">
-						 <el-select v-model="editForm.employeeAuthority" placeholder="请选择" >
-						    <el-option
-						      v-for="item in options"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						  </el-select>
+						<el-select v-model="editForm.employeeAuthority" placeholder="请选择">
+							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
 					</el-form-item>
 				</el-form>
-			
+
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="editDialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="editInfo">确 定</el-button>
 				</span>
 			</el-dialog>
-			
-</el-card>
+
+		</el-card>
 	</div>
 </template>
 
@@ -117,8 +111,8 @@
 			return {
 				// 查询参数对象
 				queryInfo: {
-					permissions:'0',
-					employeeAuthority:'!普通用户',
+					permissions: '0',
+					employeeAuthority: '!普通用户',
 					pageNo: 1,
 					pageSize: 10
 				},
@@ -126,105 +120,104 @@
 				pagingList: [],
 				// 商品总条数
 				total: 0,
-				
+
 				// 编辑对话框
-				 editDialogVisible:false,
-				 editForm:{},
-				 // 修改权限
-				  options: [{
-				           value: '管理员',
-				           label: '管理员'
-				         }, {
-				           value: '全局授权',
-				           label: '全局授权'
-				         }, {
-				           value: '区域授权',
-				           label: '区域授权'
-				         }	          
-								 ],
-				         value: '',
-								 
+				editDialogVisible: false,
+				editForm: {},
+				// 修改权限
+				options: [{
+					value: '管理员',
+					label: '管理员'
+				}, {
+					value: '全局授权',
+					label: '全局授权'
+				}, {
+					value: '区域授权',
+					label: '区域授权'
+				}],
+				value: '',
+
 				// 添加
-				addDialogVisible:false,
-				findWorkerInput:{
-					name:''
+				addDialogVisible: false,
+				findWorkerInput: {
+					name: ''
 				},
-				addForm:{},
-				workerList:{
-					Records:{
-						employeeName:'',
-						employeeAuthority:'',
-						employeeCompany:'',
-						employeeDepartment:'',
-						employeeName:'',
-						employeeNo:'',
-						employeePost:'',
-						employeeStatus:'',
-						employeeTel:'',
-						employeeUpdateTime:'',
+				addForm: {},
+				workerList: {
+					Records: {
+						employeeName: '',
+						employeeAuthority: '',
+						employeeCompany: '',
+						employeeDepartment: '',
+						employeeName: '',
+						employeeNo: '',
+						employeePost: '',
+						employeeStatus: '',
+						employeeTel: '',
+						employeeUpdateTime: '',
 					},
-					Username:{
-						id:'',
-						username:''
+					Username: {
+						id: '',
+						username: ''
 					}
 				},
-		}
+			}
 		},
 		created() {
-		
+
 			this.getPagingList()
 		},
-		methods:{
-			showAddDialog(){
+		methods: {
+			showAddDialog() {
 				this.addDialogVisible = true
 			},
-			async handleFindWorker(){
+			async handleFindWorker() {
 				// console.log(this.findWorkerInput)
 				const {
 					data: res
-				} = await this.$http.get('tPmAuthority/queryname',{
+				} = await this.$http.get('tPmAuthority/queryname', {
 					params: this.findWorkerInput
-				}
-				)
+				})
 				console.log(res)
 				if (res.code !== 200) {
 					return
 				}
 				this.workerList = res.result
 			},
-			
+
 			// 创建对话框
 			async addInfo(id) {
 				console.log(id)
-				let Id = {id:id}
-			const {
-				data: res
-			} = await this.$http.get('tPmAuthority/permissionscreate',{
-				params: Id
-			}
-			)
-			// console.log(res)
-			if (res.code !== 200) {
-				return
-			}
-			this.addDialogVisible = false
-			this.getPagingList()
-			this.$message.success('添加成功')
+				let Id = {
+					id: id
+				}
+				const {
+					data: res
+				} = await this.$http.get('tPmAuthority/permissionscreate', {
+					params: Id
+				})
+				// console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.addDialogVisible = false
+				this.getPagingList()
+				this.$message.success('添加成功')
 			},
-			
+
 			// 监听创建对话框关闭
 			addDialogClosed() {
 				this.$refs.addFormRef.resetFields()
-				this.workerList.Username.id=''
-				this.workerList.Records.employeeName=''
-				this.workerList.Username.username=''
-				this.workerList.Records.employeePost=''
-				this.workerList.Records.employeeCompany=''
-				this.workerList.Records.employeeAuthority=''
-				this.workerList.Records.employeeUpdateTime=''
-this.findWorkerInput.name = ''
+				this.workerList.Username.id = ''
+				this.workerList.Records.employeeName = ''
+				this.workerList.Username.username = ''
+				this.workerList.Records.employeePost = ''
+				this.workerList.Records.employeeCompany = ''
+				this.workerList.Records.employeeAuthority = ''
+				this.workerList.Records.employeeUpdateTime = ''
+				this.findWorkerInput.name = ''
 			},
-			
+
 			// 根据分页查询列表
 			async getPagingList() {
 				const {
@@ -239,28 +232,30 @@ this.findWorkerInput.name = ''
 				console.log(res)
 				var obj1 = res.result.Records.records
 				var obj2 = res.result.UsernameList
-				
-				var obj = obj1.map((item,index) => {
-				    return {...item, ...obj2[index]};
+
+				var obj = obj1.map((item, index) => {
+					return { ...item,
+						...obj2[index]
+					};
 				});
-console.log(obj)
+				console.log(obj)
 				this.pagingList = obj
 				// console.log(obj)
 				this.total = res.result.total
 			},
-			
+
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
 				this.queryInfo.pageSize = newSize
 				this.getPagingList()
 			},
-			
+
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
 				this.getPagingList()
 			},
-			showEditDialog(employeeId){
+			showEditDialog(employeeId) {
 				this.editForm.employeeId = employeeId
 				// 显示对话框
 				this.editDialogVisible = true
@@ -295,7 +290,7 @@ console.log(obj)
 				this.editForm = {}
 				this.value = {}
 			},
-			
+
 			// 修改信息并提交
 			editInfo() {
 				// 验证
@@ -305,7 +300,7 @@ console.log(obj)
 					const {
 						data: res
 					} = await this.$http.post('tPmAuthority/edit', this.editForm)
-			console.log(res)
+					console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -313,21 +308,21 @@ console.log(obj)
 					this.editDialogVisible = false
 					this.getPagingList()
 					this.$message.success('更新信息成功')
-					
+
 					this.editForm = {}
 				})
 			},
-			
+
 			// 删除按钮
 			async removeById(Id) {
 				console.log(Id)
 				var devletId = {
-					id:Id
+					id: Id
 				}
 				console.log(devletId)
 				const {
 					data: res
-				} = await this.$http.get('tPmAuthority/deleteById' , {
+				} = await this.$http.get('tPmAuthority/deleteById', {
 					params: devletId
 				})
 				console.log(res)

@@ -45,7 +45,7 @@
 				</el-table-column>
 				<el-table-column prop="id" label="装配点ID">
 				</el-table-column>
-				<el-table-column prop="clientAddress" label="装配点地址">
+				<el-table-column prop="clientAddress" label="装配点地址" width="200px">
 				</el-table-column>
 				<el-table-column width="30px">
 					<template slot-scope="scope">

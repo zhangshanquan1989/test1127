@@ -2,38 +2,24 @@
 	<!-- 信息页面 -->
 	<div>
 
-		<!-- 创建搜索区 -->
-		<el-row >
-			
+		<!-- 创建搜索区 -->			
 			<!-- 地区查询 -->
-			<el-col :span="1" style="font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>地区：</span></el-col>
-			<el-col :span="3">
-				<div>
-					<el-cascader clearable :options="cityData" v-model="chooseQueryCity" @change="handleClientAddress"></el-cascader>
-				</div>
-<!-- 				<el-input id='queryAddressinput' clearable type="text" v-model="queryInfo.clientAddress" style="width: 80%;" placeholder="高德接口"></el-input> -->
-			</el-col>
+			<span style="font-size: 18px;">地区：</span>
+			
+			<el-cascader clearable :options="cityData" v-model="chooseQueryCity" @change="handleClientAddress"></el-cascader>
 
 			<!-- 等级下拉框 -->
-			<el-col :span="1" style="margin-left: 20px;font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>等级：</span></el-col>
-			<el-col :span="2">
+			<span style="font-size: 18px;margin-left: 20px;">等级：</span>
 				<el-select v-model="queryInfo.clientLevel" placeholder="全部" clearable>
 					<el-option v-for="item in levelSelect" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-			</el-col>
 
 			<!-- 查询按钮 -->
-			<el-col :span="2" style="margin-left: 20px;">
-				<el-button type="info"  @click="handleQueryBtn">查询</el-button>
-			</el-col>
+				<el-button type="info"  @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
 			
 			<!-- 返回按钮 -->
-			<el-col :span="2" style="margin-left: 20px;">
-				<el-button type="info"  @click="handleQueryBackBtn">返回</el-button>
-			</el-col>
-			
-		</el-row>
+				<el-button type="info"  @click="handleQueryBackBtn" style="margin-left: 40px;">返回</el-button>
 
 		<!-- 卡片视图区 -->
 		<el-card class="box-card" style="margin-top: 8px;">

@@ -1,52 +1,41 @@
 <template>
 	<div>
 		<!-- 创建搜索区域 -->
-		<el-row >
 
-			<el-col :span="2">
 				<el-button type="info" @click="showAddDialog">创建</el-button>
-			</el-col>
 
-			<el-col :span="2">
-				<el-input placeholder="运营人" v-model="queryPlistEmployee" clearable></el-input>
-			</el-col>
+				<el-input placeholder="调度" v-model="queryPlistEmployee" clearable style="width: 100px;margin-left: 20px;"></el-input>
 
-			<el-col :span="2" style="margin-left: 20px;">
-				<el-input placeholder="订单号" v-model="queryPlistNo" clearable></el-input>
-			</el-col>
-			<el-col :span="4" style="margin-left: 20px;">
+				<el-input placeholder="订单号" v-model="queryPlistNo" clearable style="width: 100px;margin-left: 20px;"></el-input>
+
 			<el-date-picker v-model="queryPlistCtime" type="daterange" range-separator="至" start-placeholder="开始日期"
-			 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleDataChange">
+			 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" @change="handleDataChange" style="width: 300px;margin-left: 20px;">
 			</el-date-picker>	
 				
-<!-- 				<el-date-picker v-model="queryPlistCtime"  type="date" placeholder="选择日期" value-format="yyyy-MM-dd" >
-				</el-date-picker> -->
-			</el-col>
-			<el-col :span="2" style="margin-left: 95px;">
-				<el-select v-model="queryPlistAclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod" :loading="loading"  >
+				<el-select v-model="queryPlistAclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod" :loading="loading" style="width: 150px;margin-left: 20px;" @change="searchQueryPlist">
 					<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-				
-				<!-- <el-input placeholder="公司" v-model="queryPlistAclient" clearable></el-input> -->
-			</el-col>
-			<el-col :span="2" style="margin-left: 20px;">
-				<el-select v-model="queryInfo.plistState" clearable placeholder="请选择状态">
+
+				<el-select v-model="queryInfo.plistState" clearable placeholder="请选择状态" style="width: 100px;margin-left: 20px;">
 					<el-option v-for="item in plistStateData" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-			</el-col>
 
-			<el-col :span="2" style="margin-left: 20px;">
-				<el-button type="info" @click="handleQueryBtn">查询</el-button>
-			</el-col>
+				<el-button type="info" @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
+
 			
 			<!-- 返回按钮 -->
-			<el-col :span="2" style="margin-left: 20px;">
-				<el-button type="info"  @click="handleQueryBackBtn">返回</el-button>
-			</el-col>
 
-		</el-row>
+				<el-button type="info"  @click="handleQueryBackBtn" style="margin-left: 20px;">返回</el-button>
+
+			
+			<!-- 下载excel -->
+
+				<!-- <a :href="downloadUrl">
+				<el-button type="info" style="margin-left: 20px;">下载</el-button>
+				</a> -->
+
 
 		<!-- 卡片视图区域 -->
 		<el-card class="box-card" style="margin-top: 8px;">
@@ -187,8 +176,7 @@
 </div>
 <div style="display: flex;">
 				<el-form-item label="承运对接人:" prop="searchEmployee">
-					<el-select v-model="addForm.searchEmployee" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseEmployeeName"
-					 :loading="employeeNameLoading"  @change="handleChooseName">
+					<el-select v-model="addForm.searchEmployee" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseEmployeeName" :loading="employeeNameLoading"  @change="handleChooseName">
 						<el-option v-for="item in employeeNameOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -219,13 +207,11 @@
 				
 				<div style="display: flex;">
 				<el-form-item label="车牌号" prop="searchDriver">
-					<el-select v-model="addForm.searchDriver" clearable filterable remote placeholder="请输入对接人姓名" :remote-method="chooseCarLicense"
+					<el-select v-model="addForm.searchDriver" clearable filterable remote placeholder="请输入车牌号" :remote-method="chooseCarLicense"
 					 :loading="carLicenseLoading"  @change="handleChooseCarLicense">
 						<el-option v-for="item in carLicenseOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
-
-					<!-- <el-input v-model="addForm.plistDriverLicense" placeholder="车牌号"></el-input> -->
 				</el-form-item>
 
 				<el-form-item label="司机" prop="plistDriverName">
@@ -290,26 +276,18 @@
 									</el-date-picker>
 								</template>
 							</el-table-column>
-
-							<!-- 					<el-table-column fixed="right" label="操作">
-								<template slot-scope="scope">
-									<el-button @click.native.prevent="deleteApointInfo(scope.$index, addForm.apoints)" size="small"> 移除
-									</el-button>
-								</template>
-							</el-table-column> -->
 						</el-table>
 					</template>
-					<!-- <el-button @click="addApointInfo(addForm.apoints)">添加</el-button> -->
 				</el-form-item>
 
 				<!-- 卸货点 -->
 				<div style="font-size: 28px;margin-bottom: 8px;margin-left: 10px;">送至:</div>
 				<div style="display: flex;">
 				<el-form-item label="配送里程" prop="plistDr">
-					<el-input v-model="addForm.plistDr" placeholder="Km"></el-input>
+					<el-input v-model="addForm.plistDr" placeholder="单位:Km"></el-input>
 				</el-form-item>
 				<el-form-item label="空置里程" prop="plistCr">
-					<el-input v-model="addForm.plistCr" placeholder="Km"></el-input>
+					<el-input v-model="addForm.plistCr" placeholder="单位:Km"></el-input>
 				</el-form-item>
 				</div>
 				<el-form-item label="收单客户" prop="plistUclient">
@@ -344,15 +322,9 @@
 								</template>
 							</el-table-column>
 
-							<!-- 					<el-table-column fixed="right" label="操作">
-							<template slot-scope="scope">
-								<el-button @click.native.prevent="deleteApointInfo(scope.$index, addForm.apoints)" size="small"> 移除
-								</el-button>
-							</template>
-						</el-table-column> -->
 						</el-table>
 					</template>
-					<!-- <el-button @click="addApointInfo(addForm.apoints)">添加</el-button> -->
+
 				</el-form-item>
 
 				<!-- 备注信息 -->
@@ -361,7 +333,7 @@
 						<el-table :data="addForm.notes" style="width: 100%">
 							<el-table-column prop="noteArea" label="备注" style="width:6vw;">
 								<template scope="scope">
-									<el-input  v-model="scope.row.noteArea" placeholder="必填"></el-input>
+									<el-input  v-model="scope.row.noteArea" clearable placeholder="必填"></el-input>
 								</template>
 							</el-table-column>
 
@@ -587,20 +559,21 @@
 	export default {
 		data() {
 			return {
+				// 下载网址
+				downloadUrl:'http://81.70.151.121:8080/jeecg-boot/tPfPlist/exportXls',
 				// 查询数据
 				queryPlistEmployee: '',
 				queryPlistNo: '',
 				queryPlistCtime: [],
 				queryPlistAclient: '',
 				queryInfo: {
-					plistEmployeeId: '',
-					plistEmployeeName: '',
-					plistDriverLicense: '',
-					plistDriverId: '',
-					plistDriverOwner: '',
-					plistCompanyId: '',
+					plistEmployee:'',
+					plistCtime1:'',
+					plistCtime2:'',
+					plistAclient:'',
 					plistState: '',
-					pageNum: 1,
+					plistNo: '',
+					pageNo: 1,
 					pageSize: 10
 				},
 				// 总列表
@@ -632,23 +605,30 @@
 				// 创建对话框数据
 				addDialogVisible: false,
 				addForm: {
-					plistEmployeeName: '',
+					plistState:'',
+					searchEmployee:'',
+					plistEmployee:'',
+					plistEmployeeId:'',
 					plistEmployeeTele: '',
+					searchDriver:'',
+					plistDriverId:'',
 					plistDriverLicense: '',
 					plistDriverName: '',
 					plistDriverTele: '',
 					plistDriverModel: '',
+					plistDeposit:'',
+					plistBp:'',
 					plistPtime: '',
+					plistAclient: '',
+					plistDr:'',
+					plistCr:'',
+					plistUclient:'',
 					apoints: [],
 					upoints: [],
 					notes: [{
 						"noteArea": ""
 					}]
 				},
-				// 
-
-				// 车牌号查询
-				searchDriver: '',
 
 				// 地图icon显示地图
 				locationDialogVisible: false,
@@ -666,8 +646,7 @@
 				employeeNameOptions: [],
 				allEmployeeNameList: [],
 				employeeNameLoading: false,
-				// 员工ID/姓名查询
-				searchEmployee: '',
+
 
 				// 创建页面选择车牌号数据
 				carLicenseOptions: [],
@@ -730,9 +709,45 @@
 
 				// 编辑对话框数据
 				editDialogVisible: false,
-				editForm: {},
-				editAssemblyPointData: [],
-				editUnloadingPointData: [],
+				editForm: {
+					plistState:'',
+					plistNo:'',
+					plistCtime:'',
+					employeeName:'',
+					employeeTel:'',
+					driverLicense:'',
+					driverName:'',
+					driverTel:'',
+					driverModel:'',
+					plistDeposit:'',
+					plistBp:'',
+					plistIncome:'',
+					plistPtime:'',
+					plistAclient:'',
+					
+					plistDr:'',
+					plistCr:'',
+					plistUclient:'',
+					apoints: [],
+					upoints: [],
+					notes: []
+				},
+				editAssemblyPointData: [{
+					clientPointId:'',
+					clientAddress:'',
+					isdisabled:'',
+					choose:'',
+					apointDate:'',
+				}],
+				editUnloadingPointData: [
+					{
+						clientPointId:'',
+						clientAddress:'',
+						isdisabled:'',
+						choose:'',
+						upointDate:'',
+					}
+				],
 				
 				// 详情状态能否选择
 				disabled:false,
@@ -761,29 +776,7 @@
 				console.log(this.editAssemblyPointData)
 				console.log(this.editAssemblyPointData[index].choose)
 			},
-			deleteApointInfo(index, rows) {
-				//删除改行
-				rows.splice(index, 1);
-			},
-			addApointInfo(apointsData, event) {
-				apointsData.push({
-					"apointId": "",
-					"apointAddress": "",
-					"apointDate": "",
-					"hiddenNoteArea":false
-				})
-			},
-			deleteUpointInfo(index, rows) {
-				//删除改行
-				rows.splice(index, 1);
-			},
-			addUpointInfo(upointsData, event) {
-				upointsData.push({
-					"upointId": "",
-					"upointAddress": "",
-					"upointDate": ""
-				})
-			},
+
 			deleteNotesInfo(index, rows) {
 				//删除改行
 				rows.splice(index, 1);
@@ -858,6 +851,10 @@
 					this.companyOptions = this.companyList
 				}
 			},
+			// 选择公司后回复下拉列表
+			searchQueryPlist(){
+				this.companyOptions = this.companyList
+			},
 			// 获取所有员工姓名
 			async findAllEmployeeName() {
 				const {
@@ -891,19 +888,27 @@
 			},
 			// 选择员工后发起查询请求
 			async handleChooseName(name) {
-				const {
-					data: res
-				} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + name)
-				console.log(res)
-				if (res.code !== 200) {
-					this.addForm.searchEmployee = ''
-					return this.$message.error('查询失败失败')
+				if(name !== ''){
+					const {
+						data: res
+					} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + name)
+					console.log(res)
+					if (res.code !== 200) {
+						this.addForm.searchEmployee = ''
+						return this.$message.error('查询失败')
+					}
+					this.employeeNameOptions = this.allEmployeeNameList
+					
+					this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
+					this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
+					this.addForm.plistEmployee = res.result[0].EMPLOYEE_NAME
+				}else{
+					this.employeeNameOptions = this.allEmployeeNameList
+					this.addForm.plistEmployeeId = ''
+					this.addForm.plistEmployeeTele = ''
+					this.addForm.plistEmployee = ''
 				}
-				this.employeeNameOptions = this.allEmployeeNameList
-				
-				this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
-				this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
-				this.addForm.plistEmployee = res.result[0].EMPLOYEE_NAME
+	
 			},
 
 			// 获取所有车牌号
@@ -939,18 +944,27 @@
 			},
 			// 选择车牌号后发起请求
 			async handleChooseCarLicense(carLicense) {
-				const {
-					data: res
-				} = await this.$http.get('tPfPlist/findDriverByLicense?license=' + carLicense)
-				console.log(res)
-				if (res.code !== 200) {
-					return
+				if(carLicense !== ''){
+					const {
+						data: res
+					} = await this.$http.get('tPfPlist/findDriverByLicense?license=' + carLicense)
+					console.log(res)
+					if (res.code !== 200) {
+						return
+					}
+					this.carLicenseOptions = this.allCarLicenseList
+					this.addForm.plistDriverId = res.result.DRIVER_NO
+					this.addForm.plistDriverName = res.result.DRIVER_NAME
+					this.addForm.plistDriverTele = res.result.DRIVER_TEL
+					this.addForm.plistDriverModel = res.result.DRIVER_MODEL
+				}else{
+					this.carLicenseOptions = this.allCarLicenseList
+					this.addForm.plistDriverId = ''
+					this.addForm.plistDriverName = ''
+					this.addForm.plistDriverTele = ''
+					this.addForm.plistDriverModel = ''
 				}
-				this.carLicenseOptions = this.allCarLicenseList
-				this.addForm.plistDriverId = res.result.DRIVER_NO
-				this.addForm.plistDriverName = res.result.DRIVER_NAME
-				this.addForm.plistDriverTele = res.result.DRIVER_TEL
-				this.addForm.plistDriverModel = res.result.DRIVER_MODEL
+				
 			},
 
 			// // 搜索区域
@@ -1023,7 +1037,7 @@
 
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
-				this.queryInfo.pageNum = newPage
+				this.queryInfo.pageNo = newPage
 				this.getPerformanceList()
 			},
 			
@@ -1061,7 +1075,7 @@
 				this.addForm.plistDeposit = parseFloat(this.addForm.plistDeposit).toFixed(2);
 
 				this.addForm.plistBp = parseFloat(this.addForm.plistBp).toFixed(2);
-				this.addForm.plistEmployee = this.addForm.plistEmployeeName
+				// this.addForm.plistEmployee = this.addForm.searchEmployee
 				console.log(this.addForm)
 				this.$refs.addFormRef.validate(async valid => {
 					if (!valid) return
@@ -1083,7 +1097,6 @@
 			addDialogClosed() {
 				this.$refs.addFormRef.resetFields(),
 					this.addForm.plistEmployeeId = '',
-					this.addForm.plistEmployeeName = '',
 					this.addForm.plistEmployeeTele = '',
 					this.addForm.plistDriverLicense = '',
 					this.addForm.plistDriverName = '',
@@ -1092,42 +1105,48 @@
 					this.addForm.upointDate = '',
 					this.addForm.apointDate = '',
 					this.addForm.plistDeposit = '',
-					this.addForm.plistBp = ''
+					this.addForm.plistBp = '',
+					this.addForm.upoints = [],
+					this.addForm.apoints = [],
+					this.addForm.notes = [{"noteArea": ""}],
+					this.allAssemblyPointData = [] ,
+					this.allUnloadingPointData = []
+					
 			},
 
-			// 根据员工编号/姓名查询
-			async handleSearchEmployee() {
-				const {
-					data: res
-				} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + this.searchEmployee)
-				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
-				}
+			// // 根据员工编号/姓名查询
+			// async handleSearchEmployee() {
+			// 	const {
+			// 		data: res
+			// 	} = await this.$http.get('tPfPlist/findEmployeeNameAndTeleByEmployeeName?employeeName=' + this.searchEmployee)
+			// 	if (res.code !== 200) {
+			// 		return this.$message.error('获取信息失败')
+			// 	}
+				 
+			// 	this.$message.success('获取信息成功')
+			// 	this.addForm.plistEmployee = res.result[0].EMPLOYEE_NAME
+			// 	this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
+			// 	this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
+			// },
 
-				this.$message.success('获取信息成功')
-				this.addForm.plistEmployeeName = res.result[0].EMPLOYEE_NAME
-				this.addForm.plistEmployeeTele = res.result[0].EMPLOYEE_TEL
-				this.addForm.plistEmployeeId = res.result[0].EMPLOYEE_NO
-			},
+			// // 根据车牌号查询
+			// async handleSearchDriver() {
 
-			// 根据车牌号查询
-			async handleSearchDriver() {
+			// 	const {
+			// 		data: res
+			// 	} = await this.$http.get('tPfPlist/findDriverByLicense?license=' + this.searchDriver)
+			// 	if (res.code !== 200) {
+			// 		return this.$message.error('获取信息失败')
+			// 	}
 
-				const {
-					data: res
-				} = await this.$http.get('tPfPlist/findDriverByLicense?license=' + this.searchDriver)
-				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
-				}
+			// 	this.$message.success('获取信息成功')
 
-				this.$message.success('获取信息成功')
-
-				this.addForm.plistDriverLicense = this.searchDriver
-				this.addForm.plistDriverName = res.result.DRIVER_NAME
-				this.addForm.plistDriverTele = res.result.DRIVER_TEL
-				this.addForm.plistDriverModel = res.result.DRIVER_MODEL
-				this.addForm.plistDriverId = res.result.DRIVER_NO
-			},
+			// 	this.addForm.plistDriverLicense = this.searchDriver
+			// 	this.addForm.plistDriverName = res.result.DRIVER_NAME
+			// 	this.addForm.plistDriverTele = res.result.DRIVER_TEL
+			// 	this.addForm.plistDriverModel = res.result.DRIVER_MODEL
+			// 	this.addForm.plistDriverId = res.result.DRIVER_NO
+			// },
 
 			// 复制限行规则
 			copyAreaRule() {
@@ -1175,28 +1194,40 @@
 				})
 			},
 			// 根据选择的公司查询装配点
-			async searchAssemblyPoint() {
-				const {
-					data: res
-				} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.addForm.plistAclient)
-				console.log(res)
-				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+			async searchAssemblyPoint(plistAclientName) {
+				if(plistAclientName !== ''){
+					const {
+						data: res
+					} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + plistAclientName)
+					console.log(res)
+					if (res.code !== 200) {
+						return this.$message.error('获取信息失败')
+					}
+					this.companyOptions = this.companyList
+					this.allAssemblyPointData = res.result
+				}else{
+					this.companyOptions = this.companyList
+					this.allAssemblyPointData = []
 				}
-				this.companyOptions = this.companyList
-				this.allAssemblyPointData = res.result
+
 			},
 			// 根据选择的公司查询卸货点
-			async searchUnloadingPoint() {
-				const {
-					data: res
-				} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.addForm.plistUclient)
-				console.log(res)
-				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+			async searchUnloadingPoint(plistUclientName) {
+				if(plistUclientName !== ''){
+					const {
+						data: res
+					} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.addForm.plistUclient)
+					console.log(res)
+					if (res.code !== 200) {
+						return this.$message.error('获取信息失败')
+					}
+					this.companyOptions = this.companyList
+					this.allUnloadingPointData = res.result
+				}else{
+					this.companyOptions = this.companyList
+					this.allUnloadingPointData = []
 				}
-				this.companyOptions = this.companyList
-				this.allUnloadingPointData = res.result
+
 			},
 
 			// 详情对话框操作
@@ -1256,6 +1287,8 @@
 				this.editForm.notes.forEach(v=>{
 					if(v.noteArea !== ""){
 						v.hiddenNoteArea = true
+					}else{
+						v.hiddenNoteArea = false
 					}
 				})
 				
@@ -1272,10 +1305,6 @@
 						v.hiddenNoteArea = true
 					})
 				}
-				
-				
-				// console.log(this.editForm)
-				// console.log(this.editUnloadingPointData)				
 				// 显示对话框
 				this.editDialogVisible = true
 			},
@@ -1284,9 +1313,11 @@
 			// 监听修改用户对话框关闭事件
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
+				this.editForm.apoints = []
+				this.editForm.upoints = []
+				this.editForm.notes = []
 				this.disabled = false
 				this.editDialogVisible = false
-				this.carLicenseLoading = false
 			},
 
 

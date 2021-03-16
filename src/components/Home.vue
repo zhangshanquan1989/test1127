@@ -53,17 +53,21 @@
 					authName:'权限管理',
 					path:'rights'
 					},
-					// {id:5,
-					// authName:'text',
-					// path:'text'
-					// }
+					{id:5,
+					authName:'数据工厂',
+					path:'dataFactory'
+					},
+					{id:6,
+					authName:'text',
+					path:'text'
+					}
 				],
 				iconsObj:{
-					'125':'el-icon-user-solid',
-					'103':'el-icon-s-goods',
-					'101':'el-icon-menu',
-					'102':'el-icon-s-order',
-					'145':'el-icon-s-marketing'
+					'1':'el-icon-user-solid',
+					'2':'el-icon-s-goods',
+					'3':'el-icon-menu',
+					'4':'el-icon-s-order',
+					'5':'el-icon-s-marketing'
 				},
 
 				// 被激活的链接地址

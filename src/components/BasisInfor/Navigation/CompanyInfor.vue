@@ -2,7 +2,10 @@
 	<!-- 公司信息页面 -->
 	<div>
 		<el-button type="info"  @click="showAddCompanyDialog">创建</el-button>
-
+		<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 20px;"></el-input>
+		<el-input v-model="queryInfo.companyLegal" placeholder="法人" clearable style="width: 200px;margin-left: 20px;"></el-input>
+		<el-button type="info"  @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
+		<el-button type="info"  @click="handleQueryBackBtn" style="margin-left: 100px;">返回</el-button>
 		<el-card class="box-card">
 			<el-table :data="companylist" stripe style="width: 100%">
 				<el-table-column v-if="false" prop="companyId" label="序号">
@@ -17,16 +20,16 @@
 				</el-table-column>
 				<el-table-column prop="companyLegal" label="法人" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyAddress" label="办公地址">
+				<el-table-column prop="companyAddress" label="办公地址" width="420px">
 				</el-table-column>
-				<el-table-column label="营业执照">
+				<el-table-column label="营业执照" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 						<el-image style="width: 80px; height: 40px" :src="scope.row.business"   @click="handleClickImage(scope.row.business)" ></el-image>
 						</el-tooltip>						
 					</template>
 				</el-table-column>
-				<el-table-column  label="运输许可证">
+				<el-table-column  label="运输许可证" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 						<el-image style="width: 80px; height: 40px" :src="scope.row.transport"   @click="handleClickImage(scope.row.transport)" ></el-image>
@@ -74,7 +77,7 @@
 					<el-form-item label="法人:" prop="companyLegal">
 						<el-input v-model="addCompanyForm.companyLegal" style="width: 50%;"></el-input>
 					</el-form-item>
-					<el-form-item label="办公地址:" prop="companyAddress">
+					<el-form-item label="办公地址:" prop="companyAddress" >
 						<el-input id='tipinput' clearable type="text" v-model="addCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>
 					</el-form-item>
 					
@@ -280,6 +283,18 @@ console.log(res)
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
+				this.getCompanyList()
+			},
+			// 点击查询按钮
+			handleQueryBtn(){
+				this.getCompanyList()
+			},
+			// 返回按钮
+			handleQueryBackBtn(){
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.companyName = ''
+				this.queryInfo.companyLegal = ''
 				this.getCompanyList()
 			},
 			
