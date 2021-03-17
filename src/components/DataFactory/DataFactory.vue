@@ -2,26 +2,30 @@
 	<div>
 		<!-- 搜索区域 -->
 		<div>
+			<span style="font-size: 18px;">公司名：</span>
 			<el-select v-model="queryCompanyName" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
 			 :loading="companyLoading" style="width: 200px;" @change="queryCompanyNameChange">
 				<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
-
+			
+			<span style="font-size: 18px;margin-left: 20px;">车主：</span>
 			<el-select v-model="queryCarOwner" clearable filterable remote placeholder="请输入车主姓名" :remote-method="remoteCarOwnerMethod"
 			 :loading="carOwnerLoading" style="width: 200px;" @change="queryCarOwnerChange">
 				<el-option v-for="item in carOwnerOptions" :key="item.index" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
-
-			<el-select v-model="queryPlateNumber" clearable filterable remote placeholder="请输入车主姓名" :remote-method="remotePlateNumberMethod"
+			
+			<span style="font-size: 18px;margin-left: 20px;">车牌：</span>
+			<el-select v-model="queryPlateNumber" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"
 			 :loading="plateNumberLoading" style="width: 200px;" @change="queryPlateNumberChange">
 				<el-option v-for="item in plateNumberOptions" :key="item.index" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
 
+			<span style="font-size: 18px;margin-left: 20px;">时间：</span>
 			<el-date-picker v-model="queryPlistCtime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-			 end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" @change="handleDataChange" style="width: 300px;margin-left: 20px;">
+			 end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" @change="handleDataChange" style="width: 300px;">
 			</el-date-picker>
 
 			<el-button type="info" @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
@@ -47,8 +51,10 @@
 			return {
 				queryInfo: {
 					company: '安丘货好多供应链管理有限公司',
-					plistCtime1: '2021-01-01 10:00:00',
-					plistCtime2: '2021-02-01 10:00:00'
+					driver:'',
+					linces:'',
+					plistCtime1: '2021-01-04 10:00:00',
+					plistCtime2: '2021-01-17 10:00:00'
 				},
 				// 公司选择框数据
 				queryCompanyName: '',
@@ -96,7 +102,7 @@
 			// this.creatEchartsMethod()
 			  setTimeout(() => {
 			 this.creatEchartsMethod()
-			 }, 300);			
+			 }, 500);			
 		},
 		methods: {
 			// 获取所有公司名称
@@ -213,7 +219,7 @@
 					const {
 						data: res
 					} = await this.$http.get('/base/tBaDriver/findDrivercompany?company=' + name)
-					// console.log(res)
+					console.log(res)
 					res.result.forEach(v => {
 						this.newCarOwnerStates.push(v.driverCarOwner)
 					})
@@ -226,6 +232,24 @@
 					// console.log(this.newCarOwnerList)
 					this.carOwnerOptions = this.newCarOwnerList
 					this.newCarOwnerStates = []
+					
+					// 根据公司名查车牌号
+					const {
+						data: res1
+					} = await this.$http.get('/base/tBaDriver/findDrivercompanyandlicense?company=' + name)
+					console.log(res1)
+					res1.result.forEach(v => {
+						this.newPlateNumberStates.push(v.driverLicense)
+					})
+					this.newPlateNumberList = this.newPlateNumberStates.map(item => {
+						return {
+							value: `${item}`,
+							label: `${item}`
+						};
+					});
+					// console.log(this.newCarOwnerList)
+					this.plateNumberOptions = this.newPlateNumberList
+					this.newPlateNumberStates = []
 				} else {
 					this.companyOptions = this.companyList
 					this.carOwnerOptions = this.carOwnerList
@@ -234,7 +258,7 @@
 			},
 			// 选择车主姓名
 			async queryCarOwnerChange(owner) {
-			
+
 				if(this.queryCarOwner !== ''){
 					const {
 						data: res
@@ -251,6 +275,7 @@
 					});
 					// console.log(this.newCarOwnerList)
 					this.plateNumberOptions = this.newPlateNumberList
+					this.newPlateNumberStates = []
 				}else{
 					this.plateNumberOptions = this.plateNumberList
 				}
@@ -276,15 +301,34 @@
 				}
 			},
 			handleQueryBtn() {
-				this.queryInfo.company = this.queryCompanyName
+				if(this.queryCompanyName !== ''){
+					this.queryInfo.company = this.queryCompanyName
+				}else{
+					this.queryInfo.company = '安丘货好多供应链管理有限公司'
+				}
+				
 				this.queryInfo.driver = this.queryCarOwner
 				this.queryInfo.linces = this.queryPlateNumber
 				this.getQueryData()
 				setTimeout(() => {
 				this.creatEchartsMethod()
+				}, 500);			
+			},
+			handleQueryBackBtn() {
+				this.queryInfo.company = '安丘货好多供应链管理有限公司'
+				this.queryInfo.driver = ''
+				this.queryInfo.linces = ''
+				this.queryInfo.plistCtime1 = '2021-01-04 10:00:00'
+				this.queryInfo.plistCtime2 = '2021-01-17 10:00:00'
+				this.queryCompanyName = ''
+				this.queryCarOwner = ''
+				this.queryPlateNumber = ''
+				this.queryPlistCtime = ''
+				this.getQueryData()
+				setTimeout(() => {
+				this.creatEchartsMethod()
 				}, 300);			
 			},
-			handleQueryBackBtn() {},
 
 			// 根据查询列表
 			async getQueryData() {
@@ -324,15 +368,22 @@
 					 right:'180px'
 				},
 				xAxis:{
-					name:'日期',
+					name:'时间',
+					nameTextStyle:{
+											 fontWeight:600,
+											 fontSize : 16,
+											 
+					},
 					type:'category',
 					data:this.xDataArr
 				},
 				yAxis:{
-					name:'数据关乎衣柜',
+					name:'数据',
 					 nameTextStyle:{
-						 fontWeight:700,
-						 fontSize : 18
+						 fontWeight:600,
+						 fontSize : 16,
+						 align:'right',
+						 lineHeight: 56,
 					 },
 					type:'value'
 				},
@@ -341,6 +392,7 @@
 						name:'里程',
 						type:'bar',
 						data:this.yDataArr1,
+						color:'#409EFF'
 						// 平均值线
 						// markLine:{
 						// 	data:[
@@ -352,6 +404,7 @@
 						name:'收入',
 						type:'bar',
 						data:this.yDataArr2,
+						color:'#E6AE5C'
 						// 平均值
 						// markLine:{
 						// 	data:[

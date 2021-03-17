@@ -12,7 +12,7 @@
 		</el-row>
 
 
-		<el-card class="box-card">
+		<el-card class="box-card" style="margin-top: 10px;">
 			<el-table :data="pagingList" stripe style="width: 100%">
 				<el-table-column prop="id" label="ID">
 				</el-table-column>

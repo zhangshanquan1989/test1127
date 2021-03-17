@@ -38,16 +38,16 @@
 				// 左侧菜单数据
 				menulist: [
 					{id:1,
-					authName:'装配分布信息',
-					path:'assembly'
+					authName:'基础信息管理',
+					path:'basis'
 					},
 					{id:2,
 					authName:'履约信息管理',
 					path:'performance'
 					},
 					{id:3,
-					authName:'基础信息管理',
-					path:'basis'
+					authName:'装配分布信息',
+					path:'assembly'
 					},
 					{id:4,
 					authName:'权限管理',
@@ -57,10 +57,10 @@
 					authName:'数据工厂',
 					path:'dataFactory'
 					},
-					{id:6,
-					authName:'text',
-					path:'text'
-					}
+					// {id:6,
+					// authName:'text',
+					// path:'text'
+					// }
 				],
 				iconsObj:{
 					'1':'el-icon-user-solid',

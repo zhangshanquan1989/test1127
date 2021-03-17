@@ -1196,6 +1196,7 @@
 			// 根据选择的公司查询装配点
 			async searchAssemblyPoint(plistAclientName) {
 				if(plistAclientName !== ''){
+					this.allAssemblyPointData = []
 					const {
 						data: res
 					} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + plistAclientName)
@@ -1214,6 +1215,7 @@
 			// 根据选择的公司查询卸货点
 			async searchUnloadingPoint(plistUclientName) {
 				if(plistUclientName !== ''){
+					this.allUnloadingPointData = []
 					const {
 						data: res
 					} = await this.$http.get('tPfPlist/findPointByCompanyName?companyName=' + this.addForm.plistUclient)
