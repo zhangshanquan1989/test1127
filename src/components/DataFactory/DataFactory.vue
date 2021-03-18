@@ -8,14 +8,14 @@
 				<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
-			
+
 			<span style="font-size: 18px;margin-left: 20px;">车主：</span>
 			<el-select v-model="queryCarOwner" clearable filterable remote placeholder="请输入车主姓名" :remote-method="remoteCarOwnerMethod"
 			 :loading="carOwnerLoading" style="width: 200px;" @change="queryCarOwnerChange">
 				<el-option v-for="item in carOwnerOptions" :key="item.index" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
-			
+
 			<span style="font-size: 18px;margin-left: 20px;">车牌：</span>
 			<el-select v-model="queryPlateNumber" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"
 			 :loading="plateNumberLoading" style="width: 200px;" @change="queryPlateNumberChange">
@@ -25,7 +25,7 @@
 
 			<span style="font-size: 18px;margin-left: 20px;">时间：</span>
 			<el-date-picker v-model="queryPlistCtime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-			 end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" @change="handleDataChange" style="width: 300px;">
+			 end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="handleDataChange" style="width: 300px;">
 			</el-date-picker>
 
 			<el-button type="info" @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
@@ -36,12 +36,12 @@
 		</div>
 		<!-- 图标展示区域 -->
 		<el-card class="box-card" style="margin-top: 20px;">
-		<div>
-			<!-- echarts图表 -->
-			<div id="main" style="width:100%;height: 600px;"></div>
-		</div>
+			<div>
+				<!-- echarts图表 -->
+				<div id="main" style="width:100%;height: 650px;margin-top: 30px;"></div>
+			</div>
 		</el-card>
-		
+
 	</div>
 </template>
 
@@ -51,10 +51,10 @@
 			return {
 				queryInfo: {
 					company: '安丘货好多供应链管理有限公司',
-					driver:'',
-					linces:'',
-					plistCtime1: '2021-01-04 10:00:00',
-					plistCtime2: '2021-01-17 10:00:00'
+					driver: '',
+					linces: '',
+					plistCtime1: '2021-01-10 10:00:00',
+					plistCtime2: '2021-01-20 10:00:00'
 				},
 				// 公司选择框数据
 				queryCompanyName: '',
@@ -81,10 +81,10 @@
 				// 时间
 				queryPlistCtime: '',
 				// 图表
-				sourceData:[],
-				xDataArr:[],
-				yDataArr1:[],
-				yDataArr2:[],
+				sourceData: [],
+				xDataArr: [],
+				yDataArr1: [],
+				yDataArr2: [],
 			}
 		},
 		created() {
@@ -92,7 +92,7 @@
 			this.getAllCompanyList()
 			this.getAllCarOwnerList()
 			this.getAllPlateNumberList()
-			
+
 		},
 		// updated(){
 		// 	this.creatEchartsMethod()
@@ -100,16 +100,16 @@
 		// mounted中新建图表，created中的数据还没有获取到，展示不成功
 		mounted() {
 			// this.creatEchartsMethod()
-			  setTimeout(() => {
-			 this.creatEchartsMethod()
-			 }, 500);			
+			setTimeout(() => {
+				this.creatEchartsMethod()
+			}, 500);
 		},
 		methods: {
 			// 获取所有公司名称
 			async getAllCompanyList() {
 				const {
 					data: res
-				} = await this.$http.get('/base/tBaCompany/getAllCompanyName')
+				} = await this.$http.get('/data/getAllCompanyName')
 				// console.log(res)
 				if (res.code !== 200) {
 					return
@@ -127,7 +127,7 @@
 			async getAllCarOwnerList() {
 				const {
 					data: res
-				} = await this.$http.get('/base/tBaDriver/findDriverOwner')
+				} = await this.$http.get('/data/findDriverOwner')
 				console.log(res)
 				if (res.code !== 200) {
 					return
@@ -147,7 +147,7 @@
 			async getAllPlateNumberList() {
 				const {
 					data: res
-				} = await this.$http.get('/base/tBaDriver/findDriverLicense')
+				} = await this.$http.get('/data/findDriverLicense')
 				if (res.code !== 200) {
 					return
 				}
@@ -218,7 +218,7 @@
 					this.companyOptions = this.companyList
 					const {
 						data: res
-					} = await this.$http.get('/base/tBaDriver/findDrivercompany?company=' + name)
+					} = await this.$http.get('/data/findDrivercompany?company=' + name)
 					console.log(res)
 					res.result.forEach(v => {
 						this.newCarOwnerStates.push(v.driverCarOwner)
@@ -232,11 +232,11 @@
 					// console.log(this.newCarOwnerList)
 					this.carOwnerOptions = this.newCarOwnerList
 					this.newCarOwnerStates = []
-					
+
 					// 根据公司名查车牌号
 					const {
 						data: res1
-					} = await this.$http.get('/base/tBaDriver/findDrivercompanyandlicense?company=' + name)
+					} = await this.$http.get('/data/findDrivercompanyandlicense?company=' + name)
 					console.log(res1)
 					res1.result.forEach(v => {
 						this.newPlateNumberStates.push(v.driverLicense)
@@ -259,10 +259,10 @@
 			// 选择车主姓名
 			async queryCarOwnerChange(owner) {
 
-				if(this.queryCarOwner !== ''){
+				if (this.queryCarOwner !== '') {
 					const {
 						data: res
-					} = await this.$http.get('/base/tBaDriver/findownerandlicense?Owner=' + owner)
+					} = await this.$http.get('/data/findownerandlicense?Owner=' + owner)
 					// console.log(res)
 					res.result.forEach(v => {
 						this.newPlateNumberStates.push(v.driverLicense)
@@ -276,7 +276,7 @@
 					// console.log(this.newCarOwnerList)
 					this.plateNumberOptions = this.newPlateNumberList
 					this.newPlateNumberStates = []
-				}else{
+				} else {
 					this.plateNumberOptions = this.plateNumberList
 				}
 
@@ -287,32 +287,32 @@
 				// if(this.queryPlateNumber == ''){
 				// 	this.plateNumberOptions = this.plateNumberList
 				// }
-				
+
 			},
 			// 选择时间
 			handleDataChange() {
-				if(this.queryPlistCtime){
+				if (this.queryPlistCtime) {
 
 					this.queryInfo.plistCtime1 = this.queryPlistCtime[0]
 					this.queryInfo.plistCtime2 = this.queryPlistCtime[1]
-				}else{
-					this.queryInfo.plistCtime1 = '2021-01-01 10:00:00'
-					this.queryInfo.plistCtime2 = '2021-02-01 10:00:00'
+				} else {
+					this.queryInfo.plistCtime1 = '2021-01-10 10:00:00'
+					this.queryInfo.plistCtime2 = '2021-01-20 10:00:00'
 				}
 			},
 			handleQueryBtn() {
-				if(this.queryCompanyName !== ''){
+				if (this.queryCompanyName !== '') {
 					this.queryInfo.company = this.queryCompanyName
-				}else{
+				} else {
 					this.queryInfo.company = '安丘货好多供应链管理有限公司'
 				}
-				
+
 				this.queryInfo.driver = this.queryCarOwner
 				this.queryInfo.linces = this.queryPlateNumber
 				this.getQueryData()
 				setTimeout(() => {
-				this.creatEchartsMethod()
-				}, 500);			
+					this.creatEchartsMethod()
+				}, 500);
 			},
 			handleQueryBackBtn() {
 				this.queryInfo.company = '安丘货好多供应链管理有限公司'
@@ -326,8 +326,8 @@
 				this.queryPlistCtime = ''
 				this.getQueryData()
 				setTimeout(() => {
-				this.creatEchartsMethod()
-				}, 300);			
+					this.creatEchartsMethod()
+				}, 300);
 			},
 
 			// 根据查询列表
@@ -340,84 +340,89 @@
 					data: res
 				} = await this.$http.get('data/findIncomeByTimeEveryday', {
 					params: this.queryInfo
-				})		
+				})
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
 				console.log(res.result)
 				this.sourceData = res.result
 
-				this.sourceData.forEach(v =>{
+				this.sourceData.forEach(v => {
 					this.xDataArr.push(v.总日期)
 					this.yDataArr1.push(v.总里程)
 					this.yDataArr2.push(v.总收入)
-				})	
+				})
 			},
 			// 创建图表
-		creatEchartsMethod(){
-			var myChart = this.$echarts.init(document.getElementById('main'));
-			console.log(this.xDataArr)
-			console.log(this.yDataArr1)
-			console.log(this.yDataArr2)
-			var options = {
-				title:{
-					text:'柱状图'
-				},
-				legend:{
-					data:['里程','收入'],
-					 right:'180px'
-				},
-				xAxis:{
-					name:'时间',
-					nameTextStyle:{
-											 fontWeight:600,
-											 fontSize : 16,
-											 
+			creatEchartsMethod() {
+				var myChart = this.$echarts.init(document.getElementById('main'));
+				console.log(this.xDataArr)
+				console.log(this.yDataArr1)
+				console.log(this.yDataArr2)
+				var options = {
+					title: {
+						text: '柱状图'
 					},
-					type:'category',
-					data:this.xDataArr
-				},
-				yAxis:{
-					name:'数据',
-					 nameTextStyle:{
-						 fontWeight:600,
-						 fontSize : 16,
-						 align:'right',
-						 lineHeight: 56,
-					 },
-					type:'value'
-				},
-				series:[
-					{
-						name:'里程',
-						type:'bar',
-						data:this.yDataArr1,
-						color:'#409EFF'
-						// 平均值线
-						// markLine:{
-						// 	data:[
-						// 		{type: 'average'}
-						// 	]
-						// }
+					legend: {
+						data: ['里程', '收入'],
+						right: '180px'
 					},
-					{
-						name:'收入',
-						type:'bar',
-						data:this.yDataArr2,
-						color:'#E6AE5C'
-						// 平均值
-						// markLine:{
-						// 	data:[
-						// 		{type: 'average'}
-						// 	]
-						// }
-					}
-				],
-				
-			}
-			// 使用刚指定的配置项和数据显示图表。
-			 myChart.setOption(options);
-		},
+					xAxis: {
+						name: '时间',
+						nameTextStyle: {
+							fontWeight: 600,
+							fontSize: 16,
+
+						},
+						type: 'category',
+						data: this.xDataArr
+					},
+					yAxis: {
+						name: '数据',
+						nameTextStyle: {
+							fontWeight: 600,
+							fontSize: 16,
+							align: 'right',
+							lineHeight: 56,
+						},
+						type: 'value'
+					},
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: { // 坐标轴指示器，坐标轴触发有效
+							type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+						}
+					},
+					series: [{
+							name: '里程',
+							type: 'bar',
+							data: this.yDataArr1,
+							color: '#409EFF'
+							// 平均值线
+							// markLine:{
+							// 	data:[
+							// 		{type: 'average'}
+							// 	]
+							// }
+						},
+						{
+							name: '收入',
+							type: 'bar',
+							data: this.yDataArr2,
+							color: '#E6AE5C'
+							// 平均值
+							// markLine:{
+							// 	data:[
+							// 		{type: 'average'}
+							// 	]
+							// }
+						}
+					],
+
+				}
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(options);
+			},
 		}
 	}
 </script>

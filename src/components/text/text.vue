@@ -39,6 +39,10 @@
 			<!-- echarts图表 -->
 			 <div id="main" style="width: 600px;height:400px;"></div>
 			 <button @click="dianji">点击</button>
+			 
+			 <div> 
+				 <iframe src="https://www.baidu.com/" width="1200" height="300" frameborder="0" scrolling="auto"></iframe>
+			</div>
   </div>
 	
 	
