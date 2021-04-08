@@ -1,7 +1,12 @@
 <template>
 	<!-- 客户信息页面 -->
 	<div>
-
+		<!-- 面包屑导航区 -->
+		<el-breadcrumb separator-class="el-icon-arrow-right">
+			<el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+			<el-breadcrumb-item>基础信息管理</el-breadcrumb-item>
+			<el-breadcrumb-item>客户信息</el-breadcrumb-item>
+		</el-breadcrumb>
 		<!-- 创建搜索区 -->
 		<el-row>
 			<el-col :span="2">

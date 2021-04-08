@@ -1,147 +1,208 @@
 <template>
 	<!-- 公司信息页面 -->
 	<div>
-		<el-button type="info"  @click="showAddCompanyDialog">创建</el-button>
-		<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 20px;"></el-input>
+		<!-- 面包屑导航区 -->
+		<el-breadcrumb separator-class="el-icon-arrow-right">
+			<el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+			<el-breadcrumb-item>基础信息管理</el-breadcrumb-item>
+			<el-breadcrumb-item>公司信息</el-breadcrumb-item>
+		</el-breadcrumb>
+		
+		<el-button type="info" @click="showAddDialog">创建</el-button>
+<!-- 		<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 20px;"></el-input>
 		<el-input v-model="queryInfo.companyLegal" placeholder="法人" clearable style="width: 200px;margin-left: 20px;"></el-input>
-		<el-button type="info"  @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
-		<el-button type="info"  @click="handleQueryBackBtn" style="margin-left: 100px;">返回</el-button>
+		<el-button type="info" @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
+		<el-button type="info" @click="handleQueryBackBtn" style="margin-left: 100px;">返回</el-button> -->
+		<!-- 卡片视图区 -->
 		<el-card class="box-card">
 			<el-table :data="companylist" stripe style="width: 100%">
-				<el-table-column v-if="false" prop="companyId" label="序号">
+				<el-table-column v-if="false" prop="id" label="id">
 				</el-table-column>
-				<el-table-column prop="companyNo" label="公司ID" width="100px">
+				<el-table-column prop="name" label="公司名称" width="150px">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称" width="250px">
+				<el-table-column prop="personname" label="法人姓名" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyStatus" label="状态" width="100px">
+				<el-table-column prop="phone" label="法人手机号" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyBusiness" label="业务对接人" width="100px">
+				<el-table-column prop="card" label="法人身份证" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyLegal" label="法人" width="100px">
+				<el-table-column prop="head" label="负责人姓名" width="100px">
 				</el-table-column>
-				<el-table-column prop="companyAddress" label="办公地址" width="420px">
+				<el-table-column prop="headphone" label="负责人电话" width="100px">
+				</el-table-column>
+				<el-table-column prop="work" label="行政负责人姓名" width="100px">
+				</el-table-column>
+				<el-table-column prop="workphone" label="行政负责人电话" width="100px">
+				</el-table-column>
+				<el-table-column prop="opentime" label="开业时间" width="100px">
+				</el-table-column>
+				<el-table-column prop="address" label="地区" width="100px">
+				</el-table-column>
+				<el-table-column prop="housenumber" label="详细地址" width="100px">
 				</el-table-column>
 				<el-table-column label="营业执照" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.business"   @click="handleClickImage(scope.row.business)" ></el-image>
-						</el-tooltip>						
+							<el-image style="width: 80px; height: 40px" :src="scope.row.business" @click="handleClickImage(scope.row.business)"></el-image>
+						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column  label="运输许可证" width="150px">
+				<el-table-column label="道路运输许可证" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.transport"   @click="handleClickImage(scope.row.transport)" ></el-image>
-						</el-tooltip>						
+							<el-image style="width: 80px; height: 40px" :src="scope.row.permit" @click="handleClickImage(scope.row.permit)"></el-image>
+						</el-tooltip>
 					</template>
+				</el-table-column>
+				<el-table-column prop="creater" label="创建人" >
+				</el-table-column>
+				<el-table-column prop="creatime" label="创建时间">
+				</el-table-column>
+				<el-table-column prop="nearcreatime" label="最近更新时间">
 				</el-table-column>
 				<el-table-column label="操作" width="200">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
-						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.companyNo)">编辑</el-button>
+						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>
 						<!-- 删除按钮 -->
 
-							<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.companyId)" style="margin-left: 10px;">
-								<el-button type="danger" size="mini" slot="reference" >删除</el-button>
-							</el-popconfirm>
+						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
+							<el-button type="danger" size="mini" slot="reference">删除</el-button>
+						</el-popconfirm>
 					</template>
 				</el-table-column>
 			</el-table>
 
 			<!-- 分页区域 -->
-			<el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
 			 :total="total" style="margin-top: 10px;">
 			</el-pagination>
 
-
-
 			<!-- 创建公司的对话框 -->
-			<el-dialog class="dialog" title="创建公司" :visible.sync="addCompanyDialogVisible" width="50%" @close="addCompanyDialogClosed">
+			<el-dialog class="dialog" title="创建公司" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 				<!-- 添加公司的表单 -->
-				<el-form :model="addCompanyForm" :rules="addCompanyFormRules" ref="addCompanyFormRef" label-width="100px">
-					<el-form-item label="公司名称:" prop="companyName">
-						<el-input v-model="addCompanyForm.companyName" style="width: 50%;"></el-input>
+				<el-form :model="addForm" ref="addFormRef" label-width="100px">
+					<el-form-item label="公司名称:" prop="name">
+						<el-input v-model="addForm.name"></el-input>
 					</el-form-item>
-
-					<el-form-item label="状态:" prop="companyStatus">
-						<el-select v-model="addCompanyForm.companyStatus" placeholder="请选择" style="width: 30%;">
-							<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
+					<el-form-item label="法人姓名:" prop="personname">
+						<el-input v-model="addForm.personname"></el-input>
 					</el-form-item>
-					<el-form-item label="业务对接人:" prop="companyBusiness" >
-						<el-input v-model="addCompanyForm.companyBusiness" style="width: 50%;"></el-input>
+					<el-form-item label="法人手机号:" prop="phone">
+						<el-input v-model="addForm.phone"></el-input>
 					</el-form-item>
-					<el-form-item label="法人:" prop="companyLegal">
-						<el-input v-model="addCompanyForm.companyLegal" style="width: 50%;"></el-input>
+					<el-form-item label="法人身份证号:" prop="card">
+						<el-input v-model="addForm.card"></el-input>
 					</el-form-item>
-					<el-form-item label="办公地址:" prop="companyAddress" >
-						<el-input id='tipinput' clearable type="text" v-model="addCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>
+					<el-form-item label="负责人姓名:" prop="head">
+						<el-input v-model="addForm.head"></el-input>
 					</el-form-item>
-					
+					<el-form-item label="负责人电话:" prop="headphone">
+						<el-input v-model="addForm.headphone"></el-input>
+					</el-form-item>
+					<el-form-item label="行政负责人姓名:" prop="work">
+						<el-input v-model="addForm.work"></el-input>
+					</el-form-item>
+					<el-form-item label="行政负责人电话:" prop="workphone">
+						<el-input v-model="addForm.workphone"></el-input>
+					</el-form-item>
+					<el-form-item label="开业时间" prop="opentime">
+						<el-date-picker v-model="addForm.opentime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="地区:" prop="address">
+						<el-input v-model="addForm.address"></el-input>
+					</el-form-item>
+					<el-form-item label="详细地址:" prop="housenumber">
+						<el-input v-model="addForm.housenumber"></el-input>
+					</el-form-item>
 					<el-form-item label="营业执照:">
-						<el-image v-if="addCompanyForm.business"  style="width: 100px; height:150px;" :src="addCompanyForm.business"></el-image>
-						<el-upload name="imgFile"  :action="updateBusinessUrl" :auto-upload="true" :on-success="handleBusinessSuccess" :show-file-list="false" >
+						<el-image v-if="addForm.business" style="width: 100px; height:150px;" :src="addForm.business"></el-image>
+						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleBusinessSuccess"
+						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
-					
 					<el-form-item label="运输许可证:">
-						<el-image v-if="addCompanyForm.transport"  style="width: 100px; height:150px;" :src="addCompanyForm.transport"></el-image>
-						<el-upload name="imgFile"  :action="updateTransportUrl" :auto-upload="true" :on-success="handleTransportSuccess" :show-file-list="false" >
+						<el-image v-if="addForm.permit" style="width: 100px; height:150px;" :src="addForm.permit"></el-image>
+						<el-upload name="imgFile" :action="updateTransportUrl" :auto-upload="true" :on-success="handleTransportSuccess"
+						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
+					</el-form-item>
+					<el-form-item label="创建人:" prop="creater">
+						<el-input v-model="addForm.creater"></el-input>
 					</el-form-item>
 				</el-form>
-
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="addCompanyDialogVisible = false">取 消</el-button>
+					<el-button @click="addDialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="addCompany">确 定</el-button>
 				</span>
-
 			</el-dialog>
 
 			<!-- 编辑公司的对话框 -->
 			<el-dialog title="编辑公司" :visible.sync="editDialogVisible" width="50%" @close="editCompanyDialogClosed">
 				<!-- 编辑公司的表单 -->
-				<el-form :model="editCompanyForm" :rules="editCompanyFormRules" ref="editCompanyFormRef" label-width="100px">
-					<el-form-item label="公司ID:">{{editCompanyForm.companyNo}}</el-form-item>
-					<el-form-item label="公司名称:" prop="companyName">
-						<el-input clearable v-model="editCompanyForm.companyName"></el-input>
+				<el-form :model="editCompanyForm" ref="editCompanyFormRef" label-width="100px">
+					<el-form-item label="id:">
+						<el-input disabled v-model="editCompanyForm.id"></el-input>
 					</el-form-item>
-
-					<el-form-item label="状态:" prop="companyStatus">
-						<el-select v-model="editCompanyForm.companyStatus" placeholder="请选择">
-							<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
+					<el-form-item label="公司名称:" prop="name">
+						<el-input v-model="editCompanyForm.name"></el-input>
 					</el-form-item>
-					<el-form-item label="业务对接人:" prop="companyBusiness">
-						<el-input clearable v-model="editCompanyForm.companyBusiness"></el-input>
+					<el-form-item label="法人姓名:" prop="personname">
+						<el-input v-model="editCompanyForm.personname"></el-input>
 					</el-form-item>
-					<el-form-item label="法人:" prop="companyLegal">
-						<el-input clearable v-model="editCompanyForm.companyLegal"></el-input>
+					<el-form-item label="法人手机号:" prop="phone">
+						<el-input v-model="editCompanyForm.phone"></el-input>
 					</el-form-item>
-					<el-form-item label="办公地址:" prop="companyAddress">
-						<el-input id='editInput' clearable type="text" v-model="editCompanyForm.companyAddress" style="width: 80%;" placeholder="高德接口"></el-input>					
+					<el-form-item label="法人身份证号:" prop="card">
+						<el-input v-model="editCompanyForm.card"></el-input>
+					</el-form-item>
+					<el-form-item label="负责人姓名:" prop="head">
+						<el-input v-model="editCompanyForm.head"></el-input>
+					</el-form-item>
+					<el-form-item label="负责人电话:" prop="headphone">
+						<el-input v-model="editCompanyForm.headphone"></el-input>
+					</el-form-item>
+					<el-form-item label="行政负责人姓名:" prop="work">
+						<el-input v-model="editCompanyForm.work"></el-input>
+					</el-form-item>
+					<el-form-item label="行政负责人电话:" prop="workphone">
+						<el-input v-model="editCompanyForm.workphone"></el-input>
+					</el-form-item>
+					<el-form-item label="开业时间" prop="opentime">
+						<el-date-picker v-model="editCompanyForm.opentime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="地区:" prop="address">
+						<el-input v-model="editCompanyForm.address"></el-input>
+					</el-form-item>
+					<el-form-item label="详细地址:" prop="housenumber">
+						<el-input v-model="editCompanyForm.housenumber"></el-input>
 					</el-form-item>
 					<el-form-item label="营业执照:">
-						<el-image v-if="editCompanyForm.business"  style="width: 100px; height:150px;" :src="editCompanyForm.business"></el-image>
-						<el-upload name="imgFile"  :action="updateBusinessUrl" :auto-upload="true" :on-success="handleEditBusinessSuccess" :show-file-list="false" >
+						<el-image v-if="editCompanyForm.business" style="width: 100px; height:150px;" :src="editCompanyForm.business"></el-image>
+						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleEditBusinessSuccess"
+						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
-					
 					<el-form-item label="运输许可证:">
-						<el-image v-if="editCompanyForm.transport"  style="width: 100px; height:150px;" :src="editCompanyForm.transport"></el-image>
-						<el-upload name="imgFile"  :action="updateTransportUrl" :auto-upload="true" :on-success="handleEditTransportSuccess" :show-file-list="false" >
+						<el-image v-if="editCompanyForm.permit" style="width: 100px; height:150px;" :src="editCompanyForm.permit"></el-image>
+						<el-upload name="imgFile" :action="updateTransportUrl" :auto-upload="true" :on-success="handleEditTransportSuccess"
+						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
+					</el-form-item>
+					<el-form-item label="创建人:" >
+						<el-input disabled v-model="editCompanyForm.creater"></el-input>
+					</el-form-item>
+					<el-form-item label="创建时间:" >
+						<el-input disabled v-model="editCompanyForm.creatime"></el-input>
 					</el-form-item>
 				</el-form>
-
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="editDialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="editCompanyInfo">确 定</el-button>
@@ -150,10 +211,10 @@
 			</el-dialog>
 
 		</el-card>
-		
+
 		<!-- 显示大图 -->
 		<el-dialog :visible.sync="showDriverCertificateDriver" width="35%">
-		<el-image  :src="showImageSrc" style="width: 100%;"></el-image>
+			<el-image :src="showImageSrc" style="width: 100%;"></el-image>
 		</el-dialog>
 	</div>
 </template>
@@ -163,73 +224,134 @@
 		data() {
 			return {
 				// 大图
-				showImageSrc:'',
+				showImageSrc: '',
 				// 图片放大
-				showDriverCertificateDriver:false,
+				showDriverCertificateDriver: false,
 				// 查询参数对象
 				queryInfo: {
 					pageNo: 1,
 					pageSize: 10
 				},
-				// 商品列表
+				// 公司列表
 				companylist: [],
-				// 商品总条数
+				// 公司总条数
 				total: 0,
 
 				// 添加公司数据
 				// 控制添加公司对话框的显示与隐藏
-				addCompanyDialogVisible: false,
+				addDialogVisible: false,
 
 				// 添加公司的表单数据对象
-				addCompanyForm: {
-					companyAddress: "",
-					companyBusiness: "",
-					companyLegal: "",
-					companyName: "",
-					companyStatus: "运营中",
-					business:'',
-					transport:''
+				addForm: {
+					name: "",
+					personname: "",
+					phone: "",
+					card: "",
+					head: "",
+					headphone: '',
+					work: '',
+					workphone: '',
+					opentime: '',
+					address: '',
+					housenumber: '',
+					business: '',
+					permit: '',
 				},
 				// 添加公司营业执照的网址
-				updateBusinessUrl:'http://81.70.151.121:8080/jeecg-boot/base/tBaCompany/uploadbusiness',
+				updateBusinessUrl: 'http://81.70.151.121:8080/jeecg-boot/base/company/uploadbusiness',
 				// 添加运输许可证网址
-				updateTransportUrl:'http://81.70.151.121:8080/jeecg-boot/base/tBaCompany/uploadtransport',
-				
+				updateTransportUrl: 'http://81.70.151.121:8080/jeecg-boot/base/company/uploadtransport',
+
 				// 添加的表单验证规则
-				addCompanyFormRules:{
-					companyName:[
-						{required:true,message:"请输入公司名",trigger:'blur'}
-					],
-					companyStatus:[
-						{required:true,message:"请选择状态",trigger:'blur'}
-					],
-					companyBusiness:[
-						{required:true,message:"请输入对接人",trigger:'blur'}
-					],
-					companyLegal:[
-						{required:true,message:"请输入法人",trigger:'blur'}
-					],
-					companyAddress:[
-						{required:true,message:"请输入办公地址",trigger:'blur'}
-					],
+				addCompanyFormRules: {
+					name: [{
+						required: true,
+						message: "请输入公司名",
+						trigger: 'blur'
+					}],
+					personname: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					phone: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					card: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					head: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					headphone: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					work: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					workphone: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					opentime: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					address: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					housenumber: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}],
+					creater: [{
+						required: true,
+						message: "必填",
+						trigger: 'blur'
+					}]
 				},
 				// 编辑公司的表单验证规则
-				editCompanyFormRules:{
-					companyName:[
-						{required:true,message:"请输入公司名",trigger:'blur'}
-					],
-					companyStatus:[
-						{required:true,message:"请选择状态",trigger:'blur'}
-					],
-					companyBusiness:[
-						{required:true,message:"请输入对接人",trigger:'blur'}
-					],
-					companyLegal:[
-						{required:true,message:"请输入法人",trigger:'blur'}
-					],
-					companyAddress:[
-						{required:true,message:"请输入办公地址",trigger:'blur'}
-					],
+				editCompanyFormRules: {
+					companyName: [{
+						required: true,
+						message: "请输入公司名",
+						trigger: 'blur'
+					}],
+					companyStatus: [{
+						required: true,
+						message: "请选择状态",
+						trigger: 'blur'
+					}],
+					companyBusiness: [{
+						required: true,
+						message: "请输入对接人",
+						trigger: 'blur'
+					}],
+					companyLegal: [{
+						required: true,
+						message: "请输入法人",
+						trigger: 'blur'
+					}],
+					companyAddress: [{
+						required: true,
+						message: "请输入办公地址",
+						trigger: 'blur'
+					}],
 				},
 
 				// 添加公司表单的状态选项
@@ -263,10 +385,10 @@
 			async getCompanyList() {
 				const {
 					data: res
-				} = await this.$http.get('base/tBaCompany/list', {
+				} = await this.$http.get('base/company/list', {
 					params: this.queryInfo
 				})
-console.log(res)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取公司列表失败')
 				}
@@ -281,118 +403,90 @@ console.log(res)
 			},
 
 			// 页码值改变事件
-			handleCurrentChange(newPage) {
-				this.queryInfo.pageNo = newPage
+			handleCurrentChange(pageNo) {
+				this.queryInfo.pageNo = pageNo
 				this.getCompanyList()
 			},
-			// 点击查询按钮
-			handleQueryBtn(){
-				this.getCompanyList()
-			},
-			// 返回按钮
-			handleQueryBackBtn(){
-				this.queryInfo.pageNo = 1
-				this.queryInfo.pageSize = 10
-				this.queryInfo.companyName = ''
-				this.queryInfo.companyLegal = ''
-				this.getCompanyList()
-			},
-			
-			handleClickImage(src){
+			// // 点击查询按钮
+			// handleQueryBtn() {
+			// 	this.getCompanyList()
+			// },
+			// // 返回按钮
+			// handleQueryBackBtn() {
+			// 	this.queryInfo.pageNo = 1
+			// 	this.queryInfo.pageSize = 10
+			// 	this.queryInfo.companyName = ''
+			// 	this.queryInfo.companyLegal = ''
+			// 	this.getCompanyList()
+			// },
+
+			handleClickImage(src) {
 				this.showImageSrc = src
-				this.showDriverCertificateDriver=true
+				this.showDriverCertificateDriver = true
 			},
 			// 创建对话框操作
-			
+
 			// 添加营业执照成功
-			handleBusinessSuccess(response, file, fileList){
-				this.addCompanyForm.business = response.result.businessFileName
-				console.log(this.addCompanyForm.business)
+			handleBusinessSuccess(response, file, fileList) {
+				console.log(response)
+				this.addForm.business = response.result.businessFileName
+				
 			},
-			handleTransportSuccess(response, file, fileList){
-				this.addCompanyForm.transport = response.result.transportFileName
-				console.log(this.addCompanyForm.transport)
+			handleTransportSuccess(response, file, fileList) {
+				console.log(response)
+				this.addForm.permit = response.result.transportFileName
+				
 			},
-			
+
 			// 修改营业执照成功
-			handleEditBusinessSuccess(response, file, fileList){
+			handleEditBusinessSuccess(response, file, fileList) {
 				this.editCompanyForm.business = response.result.businessFileName
 				console.log(this.addCompanyForm.business)
 			},
-			handleEditTransportSuccess(response, file, fileList){
+			handleEditTransportSuccess(response, file, fileList) {
 				this.editCompanyForm.transport = response.result.transportFileName
 				console.log(this.addCompanyForm.transport)
 			},
 
 			// 点击按钮，展示添加对话框
-			showAddCompanyDialog() {
-				this.addCompanyDialogVisible = true
-				// 因为el-dialog显示时，高德搜索框加载未完成，用它在nextTick回调中加载，就成功了
-				this.$nextTick(() => {
-					let that = this
-					//输入提示
-					var auto = new AMap.Autocomplete({
-						input: "tipinput"
-					});
-					AMap.event.addListener(auto, "select", select); //注册监听，当选中某条记录时会触发
-					function select(e) {
-						that.addCompanyForm.companyAddress = e.poi.district + e.poi.address
-					}
-				})
+			showAddDialog() {
+				this.addDialogVisible = true
 			},
 
 			// 点击确定按钮，添加新的分类
 			addCompany() {
-				this.$refs.addCompanyFormRef.validate(async valid => {
+				this.$refs.addFormRef.validate(async valid => {
 					if (!valid) return
 					const {
 						data: res
-					} = await this.$http.post('base/tBaCompany/add', this.addCompanyForm)
-					// console.log(res)
+					} = await this.$http.post('base/company/add', this.addForm)
+					console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('添加公司失败!')
 					}
 					this.$message.success('添加公司成功！')
 					this.getCompanyList()
-					this.addCompanyDialogVisible = false
+					this.addDialogVisible = false
 				})
 			},
 
 			// 监听对话框的关闭事件，重置表单数据
-			addCompanyDialogClosed() {
-				this.$refs.addCompanyFormRef.resetFields()
-				// this.addCompanyForm.companyAddress = ""
-				// this.addCompanyForm.companyBusiness = ""
-				// this.addCompanyForm.companyLegal = ""
-				// this.addCompanyForm.companyName = ""
-				this.addCompanyForm.companyStatus = "运营中"
-				this.addCompanyForm.business = ""
-				this.addCompanyForm.transport = ""
+			addDialogClosed() {
+				this.$refs.addFormRef.resetFields()
+				this.addForm.business = ''
+				this.addForm.permit = ''
 			},
 
 			// 编辑对话框操作	
 			// 展示编辑公司的对话框
-			async showEditDialog(companyId) {
+			async showEditDialog(id) {
 				const {
 					data: res
-				} = await this.$http.get('base/tBaCompany/selectOne?companyId=' + companyId)
+				} = await this.$http.get('base/company/selectOne?companyId=' + id)
 				if (res.code !== 200) {
 					return this.$message.error('查询公司信息失败！')
 				}
 				this.editCompanyForm = res.result
-				
-				// 因为el-dialog显示时，高德搜索框加载未完成，用它在nextTick回调中加载，就成功了
-				this.$nextTick(() => {
-					let that = this
-					//输入提示
-					var auto = new AMap.Autocomplete({
-						input: "editInput"
-					});
-					AMap.event.addListener(auto, "select", select); //注册监听，当选中某条记录时会触发
-					function select(e) {
-						that.editCompanyForm.companyAddress = e.poi.district + e.poi.address
-					}
-				})
 				// 显示对话框
 				this.editDialogVisible = true
 			},
@@ -407,7 +501,7 @@ console.log(res)
 					// 发起修改用户信息的数据请求
 					const {
 						data: res
-					} = await this.$http.post('base/tBaCompany/edit', this.editCompanyForm)
+					} = await this.$http.post('base/company/edit', this.editCompanyForm)
 
 					if (res.code !== 200) {
 						return this.$message.error('修改公司信息失败')
@@ -420,10 +514,10 @@ console.log(res)
 			},
 
 			// 删除按钮
-			async removeById(companyId) {
+			async removeById(id) {
 				const {
 					data: res
-				} = await this.$http.get('base/tBaCompany/deleteById?companyId=' + companyId)
+				} = await this.$http.get('base/company/deleteById?companyId=' + id)
 				if (res.code !== 200) {
 					return this.$message.error('删除公司失败')
 				}

@@ -8,6 +8,7 @@ import BasisInfor from '../components/BasisInfor/BasisInfor.vue'
 import DataFactory from '../components/DataFactory/DataFactory.vue'
 import PerformanceInfor from '../components/PerformanceInfor/PerformanceInfor.vue'
 import RightsManage from '../components/RightsManage/RightsManage.vue'
+import Welcome from '../components/Welcome/Welcome.vue'
 
 // Home子组件
 import CompanyInfor from '../components/BasisInfor/Navigation/CompanyInfor.vue'
@@ -15,6 +16,8 @@ import WorkerInfor from '../components/BasisInfor/Navigation/WorkerInfor.vue'
 import DriverQuery from '../components/BasisInfor/Navigation/DriverQuery.vue'
 import CustomerInfor from '../components/BasisInfor/Navigation/CustomerInfor.vue'
 import RegionInfor from '../components/BasisInfor/Navigation/RegionInfor.vue'
+import CarInfo from '../components/BasisInfor/Navigation/Car/CarInfo.vue'
+import Illegal from '../components/BasisInfor/Navigation/Car/Illegal.vue'
 
 // 权限子组件
 import AssemblyAuthorized from '../components/RightsManage/Navigation/AssemblyAuthorized.vue'
@@ -31,12 +34,15 @@ Vue.use(VueRouter)
 const routes = [
 	{path:'/',redirect:'/login'},
   {path: '/login',component: Login},
-  {path: '/home',component: Home,redirect:'/basis',
+  {path: '/home',component: Home,redirect:'/welcome',
 	children:[
-	  {path:'/basis', component:BasisInfor,redirect:'/basis/company',
+		{path:'/welcome', component:Welcome},
+	  {path:'/basis', component:BasisInfor,
 			children:[
 				{path: '/basis/company',component: CompanyInfor},
 				{path: '/basis/worker',component: WorkerInfor},
+				{path: '/basis/car/carInfo',component: CarInfo},
+				{path: '/basis/car/illegal',component: Illegal},
 				{path: '/basis/driver',component: DriverQuery},
 				{path: '/basis/customer',component: CustomerInfor},
 				{path: '/basis/region',component: RegionInfor},

@@ -1,7 +1,7 @@
 <template>
 	<!-- 地区信息页面 -->
 	<div>
-
+		
 		<!-- 创建搜索区 -->
 		<el-row >
 			<el-col :span="1" style="font-size: 17px;margin-top: 8px;padding-left: 5px;"><span>地区:</span></el-col>

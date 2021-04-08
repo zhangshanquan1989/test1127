@@ -1,85 +1,185 @@
 <template>
 	<el-container class="home_container">
 		<!-- 头部区域 -->
-	  <el-header >
-		  <div>
-			  <img src="../assets/天康系统3.png" alt="">
-			  <!-- <span>天康系统</span> -->
-		  </div>
-		  <el-button type="info" @click="logout">退出</el-button>
-	  </el-header>
-	  <!-- 页面主体 -->
-	  <el-container>
-			
+		<el-header>
+			<div>
+				<img src="../assets/天康系统3.png" alt="">
+				<!-- <span>天康系统</span> -->
+			</div>
+			<el-button type="info" @click="logout">退出</el-button>
+		</el-header>
+		<!-- 页面主体 -->
+		<el-container>
+
 			<!-- 侧边栏菜单区域 -->
-				<el-menu background-color="#536080" text-color="#fff" active-text-color="#FFFFFF" 
-			 :unique-opened="true" 
-			 :router="true" :default-active="activePath">
-					<!-- <el-submenu > -->
-						<el-menu-item v-for="item in menulist" :index="'/'+item.path" :key="item.id" @click="saveNavState('/'+item.path)">
-							<span>{{item.authName}}</span>
+			<el-menu background-color="#536080" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true" :default-active="activePath" >
+
+				<template v-for="one in menulist">
+					<template v-if="one.children">
+						<el-submenu :index="one.path" :key="one.id">
+							<template slot="title">
+								<i :class="one.icon" ></i>
+								<span style="font-size: 18px;">{{one.authName}}</span>
+							</template>
+							<template v-for="two in one.children">
+								<template v-if="two.children">
+									<el-submenu :key='two.id' :index="two.path">
+										<template slot="title">
+											<i :class="two.icon" ></i>
+											<span style="font-size: 16px;">{{two.authName}}</span>
+										</template>
+										<template v-for="three in two.children">
+											<el-menu-item :key='three.id' :index='three.path' style="font-size: 15px;">
+											<i :class="three.icon" ></i>
+											<span>{{three.authName}}</span></el-menu-item>
+										</template>
+									</el-submenu>
+								</template>
+								<template v-else>									
+										<el-menu-item :index="two.path" style="font-size: 16px ">
+											<i :class="two.icon" ></i>
+											<span>{{two.authName}}</span>
+									  </el-menu-item>									
+								</template>
+							</template>
+						</el-submenu>
+					</template>
+					<template v-else>
+						<el-menu-item :index="one.path" :key="one.id">
+							<template>
+								<i :class="one.icon"></i>
+								<span style="font-size: 18px;">{{one.authName}}</span>
+							</template>
 						</el-menu-item>
-					<!-- </el-submenu> -->
-				</el-menu>
-			
-		<!-- 右侧内容主体 -->
-	    <el-main>
-			<!-- 路由占位符 -->
-			<router-view></router-view>
-		</el-main>
-	  </el-container>
+					</template>
+				</template>
+
+				<!-- <el-submenu > -->
+				<!-- 						<el-menu-item v-for="item in menulist" :index="'/'+item.path" :key="item.id" @click="saveNavState('/'+item.path)">
+							<span>{{item.authName}}</span>
+						</el-menu-item> -->
+				<!-- </el-submenu> -->
+			</el-menu>
+
+			<!-- 右侧内容主体 -->
+			<el-main>
+				<!-- 路由占位符 -->
+				<router-view></router-view>
+			</el-main>
+		</el-container>
 	</el-container>
 </template>
 
 <script>
 	export default {
-		data(){
-			return{
+		data() {
+			return {
 				// 左侧菜单数据
-				menulist: [
-					{id:1,
-					authName:'基础信息管理',
-					path:'basis'
+				menulist: [{
+						id: 0,
+						authName: '首页',
+						path: '/welcome',
+						icon: "el-icon-s-open"
 					},
-					{id:2,
-					authName:'履约信息管理',
-					path:'performance'
+					{
+						id: 1,
+						authName: '基础信息管理',
+						icon: "el-icon-s-order",
+						path:'/',
+						children: [{
+								id: 11,
+								authName: '公司信息',
+								path: '/basis/company',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 12,
+								authName: '员工信息',
+								path: '/basis/worker',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 13,
+								authName: '司机信息',
+								path: '/basis/driver',
+								icon: "el-icon-caret-right"
+							},	
+							{
+								id: 15,
+								authName: '客户信息',
+								path: '/basis/customer',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 16,
+								authName: '地区信息',
+								path: '/basis/region',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 14,
+								authName: '车辆管理',
+								icon: "el-icon-menu",
+								children: [{
+										id: 111,
+										authName: '车辆信息',
+										path: '/basis/car/carInfo',
+										icon: "el-icon-caret-right"
+									},
+									{
+										id: 112,
+										authName: '违章信息',
+										path: '/basis/car/illegal',
+										icon: "el-icon-caret-right"
+									}
+								],
+								path: '/basis/car'
+							},
+						]
+						// path:'basis'
 					},
-					{id:3,
-					authName:'装配分布信息',
-					path:'assembly'
+					{
+						id: 2,
+						authName: '运单管理',
+						path: '/performance',
+						icon: "el-icon-s-claim"
 					},
-					{id:4,
-					authName:'权限管理',
-					path:'rights'
+					{
+						id: 3,
+						authName: '配送管理',
+						path: '/assembly',
+						icon: "el-icon-share",
 					},
-					{id:5,
-					authName:'数据工厂',
-					path:'dataFactory'
+					{
+						id: 4,
+						authName: '权限管理',
+						path: '/rights',
+						icon: "el-icon-unlock",
 					},
-					// {id:6,
-					// authName:'text',
-					// path:'text'
-					// }
+					{
+						id: 5,
+						authName: '数据工厂',
+						path: '/dataFactory',
+						icon: "el-icon-data-line",
+					},
+					{
+						id: 6,
+						authName: 'text',
+						path: '/text',
+						icon: "el-icon-orange",
+					}
 				],
-				iconsObj:{
-					'1':'el-icon-user-solid',
-					'2':'el-icon-s-goods',
-					'3':'el-icon-menu',
-					'4':'el-icon-s-order',
-					'5':'el-icon-s-marketing'
-				},
 
 				// 被激活的链接地址
-				activePath:''
+				activePath: ''
 			}
 		},
 		created() {
 			// this.getMenuList()
 			this.activePath = window.sessionStorage.getItem('activePath')
 		},
-		methods:{
-			logout(){
+		methods: {
+			logout() {
 				window.sessionStorage.clear()
 				this.$router.push('/login')
 			},
@@ -92,8 +192,8 @@
 			// },
 
 			// 保持链接的激活状态
-			saveNavState(activePath){
-				window.sessionStorage.setItem('activePath',activePath)
+			saveNavState(activePath) {
+				window.sessionStorage.setItem('activePath', activePath)
 				this.activePath = activePath
 			}
 		}
@@ -101,50 +201,63 @@
 </script>
 
 <style lang="less" scoped>
-.home_container{
-	height: 100%;
-}
-.el-header{
-	background-color: #536080 ;
-	display: flex;
-	justify-content: space-between;
-	padding-left: 0;
-	align-items: center;
-	color: #FFFFFF;
-	font-size: 20px;
-	height: 75px !important;
-	div{
+	.home_container {
+		height: 100%;
+	}
+
+	.el-header {
+		background-color: #536080;
 		display: flex;
+		justify-content: space-between;
+		padding-left: 0;
 		align-items: center;
-		img{
-			width: 197px;
-			height: 32px;
-			margin-left: 14px;
-			// border-radius: 50%;
-		}
-		span{
-			margin-left: 15px;
+		color: #FFFFFF;
+		font-size: 20px;
+		height: 75px !important;
+
+		div {
+			display: flex;
+			align-items: center;
+
+			img {
+				width: 197px;
+				height: 32px;
+				margin-left: 14px;
+				// border-radius: 50%;
+			}
+
+			span {
+				margin-left: 15px;
+			}
 		}
 	}
-}
-.el-menu{
-	width: 187px;
-}
-.el-aside{
-	background-color: #536080;
-	// border-right: none;
-}
-.el-main{
-	background-color: #eaedf1;
-	font-size: 25px !important;
-}
-.el-menu-item.is-active {
-   background-color: #409eff !important;
-}
 
-.el-menu-item{
-	padding-left: 30px !important;
-	font-size: 18px;
-}
+	.el-menu {
+		width: 200px;
+	}
 
+	.el-aside {
+		background-color: #536080;
+		// border-right: none;
+	}
+
+	.el-main {
+		background-color: #eaedf1;
+		font-size: 25px !important;
+	}
+
+	.el-menu-item.is-active {
+		background-color: #409eff !important;
+	}
+	
+	
+	// .el-submenu {
+	// 	padding-left: 30px !important;
+	// 	font-size: 18px;
+	// }
+
+	// .el-menu-item {
+	// 	padding-left: 30px !important;
+	// 	font-size: 18px;
+	// }
 </style>
