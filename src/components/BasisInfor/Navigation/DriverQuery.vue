@@ -3,53 +3,60 @@
 		<!-- 司机信息页面 -->
 		<!-- 面包屑导航区 -->
 		<el-breadcrumb separator-class="el-icon-arrow-right">
-			<el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+			<el-breadcrumb-item>首页</el-breadcrumb-item>
 			<el-breadcrumb-item>基础信息管理</el-breadcrumb-item>
 			<el-breadcrumb-item>司机信息</el-breadcrumb-item>
 		</el-breadcrumb>
-		<!-- 创建司机 -->
-		<el-button type="info" @click="addDialogVisible = true">创建</el-button>
+		
 		<!-- 卡片视图区 -->
 		<el-card class="box-card">
-			<el-table :data="driverList" stripe style="width: 100%">
-				<el-table-column prop="id" label="id">
+			<!-- 创建司机 -->
+			<el-button type="primary" plain @click="addDialogVisible = true">创建</el-button>
+			<el-table :data="driverList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-table-column prop="id" label="id" v-if="false">
 				</el-table-column>
-				<el-table-column prop="name" label="司机姓名">
+				<el-table-column prop="name" label="司机姓名" width="150px">
 				</el-table-column>
-				<el-table-column prop="phoneno" label="手机号码">
+				<el-table-column prop="phoneno" label="手机号码" width="150px">
 				</el-table-column>
-				<el-table-column prop="company" label="所属分公司">
+				<el-table-column prop="company" label="所属分公司" width="200px">
 				</el-table-column>
-				<el-table-column prop="joinDate" label="加入日期">
+				<el-table-column prop="joinDate" label="加入日期" width="150px">
 				</el-table-column>
-				<el-table-column prop="region" label="地区">
+				<el-table-column prop="region" label="地区" width="200px">
 				</el-table-column>
-				<el-table-column prop="licensePlate" label="对应车辆">
+				<el-table-column prop="licensePlate" label="对应车辆" width="150px">
 				</el-table-column>
-				<el-table-column prop="userid" label="身份证">
+				<el-table-column prop="userid" label="身份证" width="150px">
 					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.userid"></el-image>
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+						<el-image style="width: 80px; height: 40px" :src="scope.row.userid" :preview-src-list="srcList" @click="handleClickImage(scope.row.userid)"></el-image>
+						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column prop="drivingLicense" label="驾驶证">
+				<el-table-column prop="drivingLicense" label="驾驶证" width="150px">
 					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.drivingLicense"></el-image>
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+						<el-image style="width: 80px; height: 40px" :src="scope.row.drivingLicense" :preview-src-list="srcList" @click="handleClickImage(scope.row.drivingLicense)"></el-image>
+						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column prop="drivingLicenseTime" label="驾驶证有效期">
+				<el-table-column prop="drivingLicenseTime" label="驾驶证有效期" width="150px">
 				</el-table-column>
-				<el-table-column prop="workLicense" label="上岗证" width="100px">
+				<el-table-column prop="workLicense" label="上岗证" width="150px">
 					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.workLicense"></el-image>
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+						<el-image style="width: 80px; height: 40px" :src="scope.row.workLicense" :preview-src-list="srcList" @click="handleClickImage(scope.row.workLicense)"></el-image>
+						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column prop="worklicensedate" label="上岗证有效期">
+				<el-table-column prop="worklicensedate" label="上岗证有效期" width="150px">
 					</el-table-column>
-				<el-table-column prop="createuser" label="创建人">
+				<el-table-column prop="createuser" label="创建人" width="150px">
 				</el-table-column>
-				<el-table-column prop="ctTime" label="创建时间">
+				<el-table-column prop="ctTime" label="创建时间" width="150px">
 				</el-table-column>
-				<el-table-column prop="utTime" label="最近更新时间">
+				<el-table-column prop="utTime" label="最近更新时间" width="150px">
 				</el-table-column>
 				<el-table-column label="操作" width="200px">
 					<template slot-scope="scope">
@@ -163,14 +170,14 @@
 				</el-form-item>
 				<el-form-item label="身份证" prop="userid">
 					<el-image v-if="editForm.userid" style="width: 100px; height: 50px;" :src="editForm.userid"></el-image>
-					<el-upload name="imgFile" :action="updateUserIdUrl" :auto-upload="true" :on-success="handleUserIdUrlSuccess"
+					<el-upload name="imgFile" :action="updateUserIdUrl" :auto-upload="true" :on-success="handleEditUserIdUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证" prop="drivingLicense">
 					<el-image v-if="editForm.drivingLicense" style="width: 100px; height: 50px;" :src="editForm.drivingLicense"></el-image>
-					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :auto-upload="true" :on-success="handleDrivingLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :auto-upload="true" :on-success="handleEditDrivingLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
 					</el-upload>
@@ -181,7 +188,7 @@
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
 					<el-image v-if="editForm.workLicense" style="width: 100px; height: 50px;" :src="editForm.workLicense"></el-image>
-					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :auto-upload="true" :on-success="handleWorkLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :auto-upload="true" :on-success="handleEditWorkLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
 					</el-upload>
@@ -208,6 +215,8 @@
 	export default {
 		data() {
 			return {
+				// 大图列表
+				srcList:[],
 				// 创建对话框显示
 				addDialogVisible: false,
 				// 创建
@@ -273,6 +282,12 @@
 				this.queryInfo.pageNo = newPage
 				this.getDriverList()
 			},
+			
+			//点击查看放大图片
+			handleClickImage(src) {
+				this.srcList= []
+				this.srcList.push(src)
+			},
 
 			// 创建图片上传成功的回调
 			handleUserIdUrlSuccess(response, file, fileList) {
@@ -330,6 +345,20 @@
 				// console.log(this.editContractData)
 				// 显示对话框
 				this.editDialogVisible = true
+			},
+			
+			// 编辑图片上传成功的回调
+			handleEditUserIdUrlSuccess(response, file, fileList) {
+				console.log(response)
+				this.editForm.userid = response.result.UseridFileName
+			},
+			handleEditDrivingLicenseUrlSuccess(response, file, fileList) {
+				console.log(response)
+				this.editForm.drivingLicense = response.result.DriverFileName
+			},
+			handleEditWorkLicenseUrlSuccess(response, file, fileList) {
+				console.log(response)
+				this.editForm.workLicense = response.result.PostCardFileName
 			},
 
 			// 监听修改用户对话框关闭事件

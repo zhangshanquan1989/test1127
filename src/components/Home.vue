@@ -16,27 +16,27 @@
 
 				<template v-for="one in menulist">
 					<template v-if="one.children">
-						<el-submenu :index="one.path" :key="one.id">
+						<el-submenu :index="one.path" :key="one.id" @click="saveNavState(one.path)">
 							<template slot="title">
 								<i :class="one.icon" ></i>
 								<span style="font-size: 18px;">{{one.authName}}</span>
 							</template>
 							<template v-for="two in one.children">
 								<template v-if="two.children">
-									<el-submenu :key='two.id' :index="two.path">
+									<el-submenu :key='two.id' :index="two.path" @click="saveNavState(two.path)">
 										<template slot="title">
 											<i :class="two.icon" ></i>
 											<span style="font-size: 16px;">{{two.authName}}</span>
 										</template>
 										<template v-for="three in two.children">
-											<el-menu-item :key='three.id' :index='three.path' style="font-size: 15px;">
+											<el-menu-item :key='three.id' :index='three.path' style="font-size: 15px;" @click="saveNavState(three.path)">
 											<i :class="three.icon" ></i>
 											<span>{{three.authName}}</span></el-menu-item>
 										</template>
 									</el-submenu>
 								</template>
 								<template v-else>									
-										<el-menu-item :index="two.path" style="font-size: 16px ">
+										<el-menu-item :index="two.path" style="font-size: 16px " @click="saveNavState(two.path)">
 											<i :class="two.icon" ></i>
 											<span>{{two.authName}}</span>
 									  </el-menu-item>									
@@ -45,7 +45,7 @@
 						</el-submenu>
 					</template>
 					<template v-else>
-						<el-menu-item :index="one.path" :key="one.id">
+						<el-menu-item :index="one.path" :key="one.id" @click="saveNavState(one.path)">
 							<template>
 								<i :class="one.icon"></i>
 								<span style="font-size: 18px;">{{one.authName}}</span>
@@ -53,12 +53,6 @@
 						</el-menu-item>
 					</template>
 				</template>
-
-				<!-- <el-submenu > -->
-				<!-- 						<el-menu-item v-for="item in menulist" :index="'/'+item.path" :key="item.id" @click="saveNavState('/'+item.path)">
-							<span>{{item.authName}}</span>
-						</el-menu-item> -->
-				<!-- </el-submenu> -->
 			</el-menu>
 
 			<!-- 右侧内容主体 -->
@@ -75,7 +69,8 @@
 		data() {
 			return {
 				// 左侧菜单数据
-				menulist: [{
+				menulist: [
+					{
 						id: 0,
 						authName: '首页',
 						path: '/welcome',
@@ -92,12 +87,12 @@
 								path: '/basis/company',
 								icon: "el-icon-caret-right"
 							},
-							{
-								id: 12,
-								authName: '员工信息',
-								path: '/basis/worker',
-								icon: "el-icon-caret-right"
-							},
+							// {
+							// 	id: 12,
+							// 	authName: '员工信息',
+							// 	path: '/basis/worker',
+							// 	icon: "el-icon-caret-right"
+							// },
 							{
 								id: 13,
 								authName: '司机信息',
@@ -110,12 +105,12 @@
 								path: '/basis/customer',
 								icon: "el-icon-caret-right"
 							},
-							{
-								id: 16,
-								authName: '地区信息',
-								path: '/basis/region',
-								icon: "el-icon-caret-right"
-							},
+							// {
+							// 	id: 16,
+							// 	authName: '地区信息',
+							// 	path: '/basis/region',
+							// 	icon: "el-icon-caret-right"
+							// },
 							{
 								id: 14,
 								authName: '车辆管理',
@@ -126,12 +121,12 @@
 										path: '/basis/car/carInfo',
 										icon: "el-icon-caret-right"
 									},
-									{
-										id: 112,
-										authName: '违章信息',
-										path: '/basis/car/illegal',
-										icon: "el-icon-caret-right"
-									}
+									// {
+									// 	id: 112,
+									// 	authName: '违章信息',
+									// 	path: '/basis/car/illegal',
+									// 	icon: "el-icon-caret-right"
+									// }
 								],
 								path: '/basis/car'
 							},
@@ -150,24 +145,24 @@
 						path: '/assembly',
 						icon: "el-icon-share",
 					},
-					{
-						id: 4,
-						authName: '权限管理',
-						path: '/rights',
-						icon: "el-icon-unlock",
-					},
-					{
-						id: 5,
-						authName: '数据工厂',
-						path: '/dataFactory',
-						icon: "el-icon-data-line",
-					},
-					{
-						id: 6,
-						authName: 'text',
-						path: '/text',
-						icon: "el-icon-orange",
-					}
+					// {
+					// 	id: 4,
+					// 	authName: '权限管理',
+					// 	path: '/rights',
+					// 	icon: "el-icon-unlock",
+					// },
+					// {
+					// 	id: 5,
+					// 	authName: '数据工厂',
+					// 	path: '/dataFactory',
+					// 	icon: "el-icon-data-line",
+					// },
+					// {
+					// 	id: 6,
+					// 	authName: 'text',
+					// 	path: '/text',
+					// 	icon: "el-icon-orange",
+					// }
 				],
 
 				// 被激活的链接地址
@@ -233,7 +228,7 @@
 	}
 
 	.el-menu {
-		width: 200px;
+		width: 200px !important;
 	}
 
 	.el-aside {

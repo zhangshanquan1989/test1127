@@ -3,62 +3,63 @@
 	<div>
 		<!-- 面包屑导航区 -->
 		<el-breadcrumb separator-class="el-icon-arrow-right">
-			<el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+			<el-breadcrumb-item >首页</el-breadcrumb-item>
 			<el-breadcrumb-item>基础信息管理</el-breadcrumb-item>
 			<el-breadcrumb-item>公司信息</el-breadcrumb-item>
 		</el-breadcrumb>
 		
-		<el-button type="info" @click="showAddDialog">创建</el-button>
+		
 <!-- 		<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 20px;"></el-input>
 		<el-input v-model="queryInfo.companyLegal" placeholder="法人" clearable style="width: 200px;margin-left: 20px;"></el-input>
 		<el-button type="info" @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
 		<el-button type="info" @click="handleQueryBackBtn" style="margin-left: 100px;">返回</el-button> -->
 		<!-- 卡片视图区 -->
 		<el-card class="box-card">
-			<el-table :data="companylist" stripe style="width: 100%">
+			<el-button type="primary" plain  @click="showAddDialog">创建</el-button>
+			<el-table :data="companylist" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column v-if="false" prop="id" label="id">
 				</el-table-column>
 				<el-table-column prop="name" label="公司名称" width="150px">
 				</el-table-column>
-				<el-table-column prop="personname" label="法人姓名" width="100px">
+				<el-table-column prop="personname" label="法人姓名" width="150px">
 				</el-table-column>
-				<el-table-column prop="phone" label="法人手机号" width="100px">
+				<el-table-column prop="phone" label="法人手机号" width="150px">
 				</el-table-column>
-				<el-table-column prop="card" label="法人身份证" width="100px">
+				<el-table-column prop="card" label="法人身份证" width="200px" >
 				</el-table-column>
-				<el-table-column prop="head" label="负责人姓名" width="100px">
+				<el-table-column prop="head" label="负责人姓名" width="150px">
 				</el-table-column>
-				<el-table-column prop="headphone" label="负责人电话" width="100px">
+				<el-table-column prop="headphone" label="负责人电话" width="150px">
 				</el-table-column>
-				<el-table-column prop="work" label="行政负责人姓名" width="100px">
+				<el-table-column prop="work" label="行政负责人" width="150px">
 				</el-table-column>
-				<el-table-column prop="workphone" label="行政负责人电话" width="100px">
+				<el-table-column prop="workphone" label="行政负责人电话" width="150px">
 				</el-table-column>
-				<el-table-column prop="opentime" label="开业时间" width="100px">
+				<el-table-column prop="opentime" label="开业时间" width="200px" show-overflow-tooltip>
 				</el-table-column>
-				<el-table-column prop="address" label="地区" width="100px">
+				<el-table-column prop="address" label="地区" width="150px">
 				</el-table-column>
-				<el-table-column prop="housenumber" label="详细地址" width="100px">
+				<el-table-column prop="housenumber" label="详细地址" width="150px">
 				</el-table-column>
 				<el-table-column label="营业执照" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
-							<el-image style="width: 80px; height: 40px" :src="scope.row.business" @click="handleClickImage(scope.row.business)"></el-image>
+							<el-image style="width: 80px; height: 40px" :src="scope.row.business":preview-src-list="srcList" @click="handleClickImage(scope.row.business)"></el-image>
 						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column label="道路运输许可证" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
-							<el-image style="width: 80px; height: 40px" :src="scope.row.permit" @click="handleClickImage(scope.row.permit)"></el-image>
+						<el-image style="width: 80px; height: 40px" :src="scope.row.permit" :preview-src-list="srcList" @click="handleClickImage(scope.row.permit)"></el-image>
 						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column prop="creater" label="创建人" >
+				<el-table-column prop="creater" label="创建人" width="150px">
 				</el-table-column>
-				<el-table-column prop="creatime" label="创建时间">
+				<el-table-column prop="creatime" label="创建时间" width="200px" show-overflow-tooltip>
 				</el-table-column>
-				<el-table-column prop="nearcreatime" label="最近更新时间">
+				<el-table-column prop="nearcreatime" label="最近更新时间"  width="200px" show-overflow-tooltip>
 				</el-table-column>
 				<el-table-column label="操作" width="200">
 					<template slot-scope="scope">
@@ -133,6 +134,10 @@
 					</el-form-item>
 					<el-form-item label="创建人:" prop="creater">
 						<el-input v-model="addForm.creater"></el-input>
+					</el-form-item>
+					<el-form-item label="创建时间:" prop="creatime">
+						<el-date-picker v-model="addForm.creatime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+							</el-date-picker>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -211,11 +216,6 @@
 			</el-dialog>
 
 		</el-card>
-
-		<!-- 显示大图 -->
-		<el-dialog :visible.sync="showDriverCertificateDriver" width="35%">
-			<el-image :src="showImageSrc" style="width: 100%;"></el-image>
-		</el-dialog>
 	</div>
 </template>
 
@@ -223,10 +223,8 @@
 	export default {
 		data() {
 			return {
-				// 大图
-				showImageSrc: '',
-				// 图片放大
-				showDriverCertificateDriver: false,
+				// 放大图片的列表
+				srcList:[],
 				// 查询参数对象
 				queryInfo: {
 					pageNo: 1,
@@ -407,6 +405,12 @@
 				this.queryInfo.pageNo = pageNo
 				this.getCompanyList()
 			},
+			
+			//点击查看放大图片
+			handleClickImage(src) {
+				this.srcList= []
+				this.srcList.push(src)
+			},
 			// // 点击查询按钮
 			// handleQueryBtn() {
 			// 	this.getCompanyList()
@@ -420,10 +424,6 @@
 			// 	this.getCompanyList()
 			// },
 
-			handleClickImage(src) {
-				this.showImageSrc = src
-				this.showDriverCertificateDriver = true
-			},
 			// 创建对话框操作
 
 			// 添加营业执照成功

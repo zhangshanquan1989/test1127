@@ -2,7 +2,7 @@
 	<div>
 		<!-- 面包屑导航区 -->
 		<el-breadcrumb separator-class="el-icon-arrow-right">
-			<el-breadcrumb-item :to="{ path: '/home' }" @click="click">首页</el-breadcrumb-item>
+			<el-breadcrumb-item >首页</el-breadcrumb-item>
 			<el-breadcrumb-item>基础信息管理</el-breadcrumb-item>
 			<el-breadcrumb-item>车辆管理</el-breadcrumb-item>
 			<el-breadcrumb-item>车辆信息</el-breadcrumb-item>
@@ -16,74 +16,84 @@
 		<!-- 卡片视图区 -->
 		<el-card class="box-card">
 			<!-- 创建按钮 -->
-			<el-button type="info" @click="addDialogVisible = true">创建</el-button>
-			<el-table :data="carList" stripe style="width: 100%">
-				<el-table-column prop="id" label="ID">
+			<el-button type="primary" plain @click="addDialogVisible = true">创建</el-button>
+			<el-table :data="carList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-table-column prop="id" label="ID" v-if="false">
 				</el-table-column>
-				<el-table-column prop="licensePlate" label="车牌号">
+				<el-table-column prop="licensePlate" label="车牌号" width="100px">
 				</el-table-column>
-				<el-table-column prop="carstate" label="车辆状态">
+				<el-table-column prop="carstate" label="车辆状态" width="100px">
 				</el-table-column>
-				<el-table-column prop="name" label="车主姓名">
+				<el-table-column prop="name" label="车主姓名" width="100px">
 				</el-table-column>
-				<el-table-column prop="phoneno" label="车主手机号">
+				<el-table-column prop="phoneno" label="车主手机号" width="150px">
 				</el-table-column>
-				<el-table-column prop="companyl" label="所属分公司">
+				<el-table-column prop="companyl" label="所属分公司" width="150px">
 				</el-table-column>
-				<el-table-column prop="driver" label="对应司机">
+				<el-table-column prop="driver" label="对应司机" width="100px">
 				</el-table-column>
-				<el-table-column prop="driverphone" label="司机电话">
+				<el-table-column prop="driverphone" label="司机电话" width="150px">
 				</el-table-column>
-				<el-table-column prop="vehicleLicense" label="行驶证">
-					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.vehicleLicense"></el-image>
-					</template>
-				</el-table-column>
-				<el-table-column prop="vehiclelicensedate" label="行驶证有效期">
-				</el-table-column>
-				<el-table-column prop="checkDate" label="年检有效期">
-				</el-table-column>
-				<el-table-column  prop="insurance" label="保险单据">
-					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.insurance"></el-image>
-					</template>
-				</el-table-column>
-				<el-table-column prop="insuranceDate" label="保险起止日期">
-				</el-table-column>
-				<el-table-column  prop="caroperating" label="车辆营运证">
-					<template slot-scope="scope">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.caroperating"></el-image>
-					</template>
-				</el-table-column>
-				<el-table-column prop="operatingdate" label="营运证到期时间">
-				</el-table-column>
-				<el-table-column prop="carmargin" label="车辆保证金">
-				</el-table-column>
-				<el-table-column prop="fine" label="罚款金额">
-				</el-table-column>
-				<el-table-column prop="finedate" label="罚款时间">
-				</el-table-column>
-				<el-table-column prop="finewhy" label="管理费">
-				</el-table-column>
-				<el-table-column prop="finewhy" label="管理费截止日期">
-				</el-table-column>
-				<el-table-column  prop="payFee" label="缴费单据">
+				<el-table-column prop="vehicleLicense" label="行驶证" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
-						<el-image style="width: 80px; height: 40px" :src="scope.row.payFee" ></el-image>
-						<!-- <el-image style="width: 80px; height: 40px" :src="scope.row.driverCertificateDriving" :preview-src-list="srcList" @click="handleClickImage(scope.row.driverCertificateDriving)"></el-image> -->
+							<el-image style="width: 80px; height: 40px" :src="scope.row.vehicleLicense" :preview-src-list="srcList" @click="handleClickImage(scope.row.vehicleLicense)"></el-image>
+						</el-tooltip>						
+					</template>
+				</el-table-column>
+				<el-table-column prop="vehiclelicensedate" label="行驶证有效期" width="150px">
+				</el-table-column>
+				<el-table-column prop="checkDate" label="年检有效期" width="150px">
+				</el-table-column>
+				<el-table-column  prop="insurance" label="保险单据" width="150px">
+					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top" width="150px">
+							<el-image style="width: 80px; height: 40px" :src="scope.row.insurance" :preview-src-list="srcList" @click="handleClickImage(scope.row.insurance)"></el-image>
+						</el-tooltip>
+						
+					</template>
+				</el-table-column>
+				<el-table-column prop="insuranceDate" label="保险起止日期" width="150px">
+				</el-table-column>
+				<el-table-column  prop="caroperating" label="车辆营运证" width="150px">
+					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+							<el-image style="width: 80px; height: 40px" :src="scope.row.caroperating" :preview-src-list="srcList" @click="handleClickImage(scope.row.caroperating)"></el-image>
+						</el-tooltip>
+						
+					</template>
+				</el-table-column>
+				<el-table-column prop="operatingdate" label="营运证到期时间" width="150px">
+				</el-table-column>
+				<el-table-column prop="carmargin" label="车辆保证金" width="100px">
+				</el-table-column>
+				<el-table-column prop="fine" label="罚款金额" width="100px">
+				</el-table-column>
+				<el-table-column prop="finedate" label="罚款时间" width="100px">
+				</el-table-column>
+				<el-table-column prop="finewhy" label="管理费" width="100px">
+				</el-table-column>
+				<el-table-column prop="finewhy" label="管理费截止日期" width="150px">
+				</el-table-column>
+				<el-table-column  prop="payFee" label="缴费单据" width="150px">
+					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
+						<!-- <el-image style="width: 80px; height: 40px" :src="scope.row.payFee" ></el-image> -->
+						<el-image style="width: 80px; height: 40px" :src="scope.row.payFee" :preview-src-list="srcList" @click="handleClickImage(scope.row.payFee)"></el-image>
 						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="200px">
+				<el-table-column label="操作" width="300px">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>
 						<!-- 删除按钮 -->
-
 						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
 							<el-button type="danger" size="mini" slot="reference">删除</el-button>
 						</el-popconfirm>
+						<!-- 查违章按钮 -->
+						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showQueryViolationDialog(scope.row.licensePlate)">查违章</el-button>
+						
 
 					</template>
 				</el-table-column>
@@ -322,8 +332,31 @@
 		<el-dialog :visible.sync="showDriverCertificateDriver" width="35%">
 			<el-image :src="showImageSrc" style="width: 100%;"></el-image>
 		</el-dialog>
-
-
+		
+		<!-- 查询违章 -->
+		<el-dialog title="违章记录" :visible.sync="queryViolationDialog" width="50%" >
+			<el-form :model="queryViolationForm"  label-width="100px">	
+			<el-form-item label="车牌号:" prop="carNumber">
+				{{queryViolationForm.carNumber}}
+				<!-- <el-input v-model="queryViolationForm.carNumber"></el-input> -->
+			</el-form-item>
+			<el-form-item label="违章行为:" prop="illegalAct">
+				<el-input v-model="queryViolationForm.illegalAct"></el-input>
+			</el-form-item>
+			<el-form-item label="违章位置:" prop="illegalArea">
+				<el-input v-model="queryViolationForm.illegalArea"></el-input>
+			</el-form-item>
+			<el-form-item label="扣分:" prop="illegalFen">
+				<el-input v-model="queryViolationForm.illegalFen"></el-input>
+			</el-form-item>
+			<el-form-item label="违章时间:" prop="illegalDate">
+				<el-input v-model="queryViolationForm.illegalDate"></el-input>
+			</el-form-item>
+			<el-form-item label="罚款:" prop="illegalMoney">
+				<el-input v-model="queryViolationForm.illegalMoney"></el-input>
+			</el-form-item>
+			</el-form>
+		</el-dialog>
 	</div>
 </template>
 
@@ -544,7 +577,10 @@
 				updatePayFeeUrl: "http://81.70.151.121:8080/jeecg-boot/kCarinformation/uploadImagepayFee",
 
 				// 图片放大
-				showDriverCertificateDriver: false
+				showDriverCertificateDriver: false,
+				// 查询违章数据
+				queryViolationDialog:false,
+				queryViolationForm:{},
 			}
 		},
 
@@ -624,12 +660,11 @@
 				this.carList = res.result.records
 				this.total = res.result.total
 			},
-
+			
+			//点击查看放大图片 
 			handleClickImage(src) {
 				this.srcList= []
 				this.srcList.push(src)
-				// this.showImageSrc = src
-				// this.showDriverCertificateDriver = true
 			},
 
 			// 点击查询按钮
@@ -801,6 +836,24 @@
 				this.getDriverList()
 				// this.getAllDriverList()
 				this.$message.success('删除成功')
+			},
+			
+			// 查询违章
+			async showQueryViolationDialog(carNumber) {
+				const {
+					data: res
+				} = await this.$http.get('killegal/list?carNumber=' + carNumber)
+				console.log(res)
+				if (res.code !== 200) {
+					return this.$message.error('查询信息失败')
+				}
+				if(res.result.records.length == 0){
+					return this.$message.warning('未查询到违章')
+					
+				}
+				this.queryViolationForm = res.result.records[0]
+				// 显示对话框
+				this.queryViolationDialog = true
 			},
 
 		}

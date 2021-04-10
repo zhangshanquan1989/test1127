@@ -1,8 +1,18 @@
 <template>
   <div style="padding:20px">
 		<div>
-			<el-card class="box-card" style="width: 380px;height: 110px;">
-			  
+			<el-button @click="toStringButton">转换</el-button>
+			<el-card class="box-card">
+			  <el-table :data="tableData7"  border >
+			    <el-table-column prop="id" label="ID" width="180"></el-table-column>
+					<el-table-column prop="name" label="name" width="180">
+						<template slot-scope="scope" style="display: flex;">
+							<!-- <div v-for="item in scope.row.name" > -->
+								<span>{{scope.row.name[0]}} {{scope.row.name[1]}} {{scope.row.name[2]}}</span>
+							<!-- </div> -->
+						</template>
+					</el-table-column>
+			  </el-table>
 			</el-card>
 		</div>
     <el-table :data="tableData6" :span-method="objectSpanMethod" border >
@@ -71,6 +81,16 @@
 export default {
   data() {
     return {
+			tableData7:[{
+				id:"1",
+				name:["1.9米","6米","13米"]
+			},{
+				id:"2",
+				name:["3米","5米"]
+			}],
+			bababa:'',
+			ababab:["1.9米","6米","13米及以上"],
+			
 			downloadUrl:'http://81.70.151.121:8080/jeecg-boot/tPfPlist/exportXls',
 			 userName: '',
 			        password: '',
@@ -135,6 +155,10 @@ export default {
 		this.creatEchartsMethod();
   },
   methods: {
+		toStringButton(){
+			this.bababa = this.ababab.toString()
+			console.log(this.bababa)
+		},
 		getEchartsData(){
 			this.xDataArr = ['1号','2号','3号','4号','5号','6号','7号','8号','9号']
 			this.yDataArr1 = ['80','90','95','100','110','130','120','105','95']
