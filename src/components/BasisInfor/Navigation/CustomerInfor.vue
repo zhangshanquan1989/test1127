@@ -12,6 +12,10 @@
 		<el-card class="box-card">
 			<!-- 创建 -->
 			<el-button type="primary" plain @click="addDialogVisible = true">创建</el-button>
+			<el-input v-model="queryInfo.customerName" placeholder="客户名称" clearable style="width: 200px;margin-left: 100px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
+			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+			
 			<el-table :data="customerList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column v-if="false" prop="id" label="id">
 				</el-table-column>
@@ -47,6 +51,12 @@
 				</el-table-column>
 				<el-table-column prop="schedul" label="调度负责人" width="150px">
 				</el-table-column>
+				<el-table-column prop="creater" label="创建人" width="150px">
+				</el-table-column>
+				<el-table-column prop="creatime" label="创建时间" width="180px">
+				</el-table-column>
+				<el-table-column prop="neartime" label="最近更新时间" width="180px">
+				</el-table-column>
 				<el-table-column label="操作" width="200px">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
@@ -65,7 +75,7 @@
 		<el-col>
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total">
+			 :total="total" style="margin-top: 5px;">
 			</el-pagination>
 		</el-col>
 
@@ -144,8 +154,8 @@
 			</span>
 		</el-dialog>
 		
-		<!-- 编辑地区的对话框 -->
-		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
+		<!-- 编辑的对话框 -->
+		<el-dialog title="编辑客户信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<el-form-item label="客户名称:" prop="company">
@@ -407,6 +417,21 @@
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
+				this.getList()
+			},
+			
+			// 点击查询按钮
+			handleQueryBtn() {
+				this.queryInfo.company = "*" + this.queryInfo.customerName + "*"
+				console.log(this.queryInfo)
+				this.getList()
+			},
+			// 返回按钮
+			handleQueryBackBtn() {
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.customerName = ''
+				this.queryInfo.company = ''
 				this.getList()
 			},
 

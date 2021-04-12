@@ -8,14 +8,13 @@
 			<el-breadcrumb-item>公司信息</el-breadcrumb-item>
 		</el-breadcrumb>
 		
-		
-<!-- 		<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 20px;"></el-input>
-		<el-input v-model="queryInfo.companyLegal" placeholder="法人" clearable style="width: 200px;margin-left: 20px;"></el-input>
-		<el-button type="info" @click="handleQueryBtn" style="margin-left: 20px;">查询</el-button>
-		<el-button type="info" @click="handleQueryBackBtn" style="margin-left: 100px;">返回</el-button> -->
 		<!-- 卡片视图区 -->
 		<el-card class="box-card">
 			<el-button type="primary" plain  @click="showAddDialog">创建</el-button>
+			<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 100px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
+			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+						
 			<el-table :data="companylist" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column v-if="false" prop="id" label="id">
 				</el-table-column>
@@ -73,15 +72,15 @@
 					</template>
 				</el-table-column>
 			</el-table>
-
+</el-card>
 			<!-- 分页区域 -->
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total" style="margin-top: 10px;">
+			 :total="total" style="margin-top: 5px;">
 			</el-pagination>
 
 			<!-- 创建公司的对话框 -->
-			<el-dialog class="dialog" title="创建公司" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+			<el-dialog class="dialog" title="创建公司信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 				<!-- 添加公司的表单 -->
 				<el-form :model="addForm" ref="addFormRef" label-width="100px">
 					<el-form-item label="公司名称:" prop="name">
@@ -119,25 +118,18 @@
 						<el-input v-model="addForm.housenumber"></el-input>
 					</el-form-item>
 					<el-form-item label="营业执照:">
-						<el-image v-if="addForm.business" style="width: 100px; height:150px;" :src="addForm.business"></el-image>
+						<el-image v-if="addForm.business" style="width: 150px; " :src="addForm.business"></el-image>
 						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleBusinessSuccess"
 						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
 					<el-form-item label="运输许可证:">
-						<el-image v-if="addForm.permit" style="width: 100px; height:150px;" :src="addForm.permit"></el-image>
+						<el-image v-if="addForm.permit" style="width: 150px;" :src="addForm.permit"></el-image>
 						<el-upload name="imgFile" :action="updateTransportUrl" :auto-upload="true" :on-success="handleTransportSuccess"
 						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
-					</el-form-item>
-					<el-form-item label="创建人:" prop="creater">
-						<el-input v-model="addForm.creater"></el-input>
-					</el-form-item>
-					<el-form-item label="创建时间:" prop="creatime">
-						<el-date-picker v-model="addForm.creatime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-							</el-date-picker>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -147,7 +139,7 @@
 			</el-dialog>
 
 			<!-- 编辑公司的对话框 -->
-			<el-dialog title="编辑公司" :visible.sync="editDialogVisible" width="50%" @close="editCompanyDialogClosed">
+			<el-dialog title="编辑公司信息" :visible.sync="editDialogVisible" width="50%" @close="editCompanyDialogClosed">
 				<!-- 编辑公司的表单 -->
 				<el-form :model="editCompanyForm" ref="editCompanyFormRef" label-width="100px">
 					<el-form-item label="id:">
@@ -188,24 +180,18 @@
 						<el-input v-model="editCompanyForm.housenumber"></el-input>
 					</el-form-item>
 					<el-form-item label="营业执照:">
-						<el-image v-if="editCompanyForm.business" style="width: 100px; height:150px;" :src="editCompanyForm.business"></el-image>
+						<el-image v-if="editCompanyForm.business" style="width: 150px; " :src="editCompanyForm.business"></el-image>
 						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleEditBusinessSuccess"
 						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
 					<el-form-item label="运输许可证:">
-						<el-image v-if="editCompanyForm.permit" style="width: 100px; height:150px;" :src="editCompanyForm.permit"></el-image>
+						<el-image v-if="editCompanyForm.permit" style="width: 150px; " :src="editCompanyForm.permit"></el-image>
 						<el-upload name="imgFile" :action="updateTransportUrl" :auto-upload="true" :on-success="handleEditTransportSuccess"
 						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
-					</el-form-item>
-					<el-form-item label="创建人:" >
-						<el-input disabled v-model="editCompanyForm.creater"></el-input>
-					</el-form-item>
-					<el-form-item label="创建时间:" >
-						<el-input disabled v-model="editCompanyForm.creatime"></el-input>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -215,7 +201,7 @@
 
 			</el-dialog>
 
-		</el-card>
+		
 	</div>
 </template>
 
@@ -411,18 +397,19 @@
 				this.srcList= []
 				this.srcList.push(src)
 			},
-			// // 点击查询按钮
-			// handleQueryBtn() {
-			// 	this.getCompanyList()
-			// },
-			// // 返回按钮
-			// handleQueryBackBtn() {
-			// 	this.queryInfo.pageNo = 1
-			// 	this.queryInfo.pageSize = 10
-			// 	this.queryInfo.companyName = ''
-			// 	this.queryInfo.companyLegal = ''
-			// 	this.getCompanyList()
-			// },
+			// 点击查询按钮
+			handleQueryBtn() {
+				this.queryInfo.name = "*" + this.queryInfo.companyName + "*"
+				this.getCompanyList()
+			},
+			// 返回按钮
+			handleQueryBackBtn() {
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.companyName = ''
+				this.queryInfo.name = ''
+				this.getCompanyList()
+			},
 
 			// 创建对话框操作
 

@@ -17,6 +17,10 @@
 		<el-card class="box-card">
 			<!-- 创建按钮 -->
 			<el-button type="primary" plain @click="addDialogVisible = true">创建</el-button>
+			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;margin-left: 100px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
+			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+			
 			<el-table :data="carList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="id" label="ID" v-if="false">
 				</el-table-column>
@@ -71,9 +75,11 @@
 				</el-table-column>
 				<el-table-column prop="finedate" label="罚款时间" width="100px">
 				</el-table-column>
-				<el-table-column prop="finewhy" label="管理费" width="100px">
+				<el-table-column prop="finewhy" label="罚款原因" width="100px">
 				</el-table-column>
-				<el-table-column prop="finewhy" label="管理费截止日期" width="150px">
+				<el-table-column prop="management" label="管理费" width="100px">
+				</el-table-column>
+				<el-table-column prop="managementDate" label="管理费截止日期" width="150px">
 				</el-table-column>
 				<el-table-column  prop="payFee" label="缴费单据" width="150px">
 					<template slot-scope="scope">
@@ -82,6 +88,12 @@
 						<el-image style="width: 80px; height: 40px" :src="scope.row.payFee" :preview-src-list="srcList" @click="handleClickImage(scope.row.payFee)"></el-image>
 						</el-tooltip>
 					</template>
+				</el-table-column>
+				<el-table-column prop="createuser" label="创建人" width="150px">
+				</el-table-column>
+				<el-table-column prop="ctTime" label="创建时间" width="150px">
+				</el-table-column>
+				<el-table-column prop="utTime" label="最近更新时间" width="150px">
 				</el-table-column>
 				<el-table-column label="操作" width="300px">
 					<template slot-scope="scope">
@@ -104,14 +116,14 @@
 		<el-col>
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
 			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total">
+			 :total="total" style="margin-top: 5px;">
 			</el-pagination>
 		</el-col>
 
 		<!-- 创建的对话框 -->
 		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
-			<el-form :model="addForm"  ref="addFormRef" label-width="100px">				
+			<el-form :model="addForm"  ref="addFormRef" label-width="120px">				
 					<el-form-item label="车牌号:" prop="licensePlate">
 						<el-input v-model="addForm.licensePlate"></el-input>
 					</el-form-item>
@@ -136,14 +148,8 @@
 					<el-form-item label="所属分公司:" prop="companyl">
 						<el-input v-model="addForm.companyl"></el-input>
 					</el-form-item>
-					<el-form-item label="对应司机:" prop="driver">
-						<el-input v-model="addForm.driver"></el-input>
-					</el-form-item>
-					<el-form-item label="司机电话:" prop="driverphone">
-						<el-input v-model="addForm.driverphone"></el-input>
-					</el-form-item>
 					<el-form-item label="行驶证:" prop="vehicleLicense">
-						<el-image v-if="addForm.vehicleLicense" style="width: 100px; height: 50px;" :src="addForm.vehicleLicense"></el-image>
+						<el-image v-if="addForm.vehicleLicense" style="width: 150px;" :src="addForm.vehicleLicense"></el-image>
 						<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleVehicleLicenseUrlSuccess" :show-file-list="false">
 							<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 						</el-upload>
@@ -157,7 +163,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="保险单据:" prop="insurance">
-						<el-image v-if="addForm.insurance" style="width: 100px; height: 50px;" :src="addForm.insurance"></el-image>
+						<el-image v-if="addForm.insurance" style="width: 150px;" :src="addForm.insurance"></el-image>
 						<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleInsuranceUrlSuccess" :show-file-list="false">
 							<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 						</el-upload>
@@ -167,7 +173,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="车辆营运证:" prop="caroperating">
-						<el-image v-if="addForm.caroperating" style="width: 100px; height: 50px;" :src="addForm.caroperating"></el-image>
+						<el-image v-if="addForm.caroperating" style="width: 150px;" :src="addForm.caroperating"></el-image>
 						<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleCaroperatingUrlSuccess" :show-file-list="false">
 							<el-button size="small" type="primary" plain>上传营运证照片</el-button>
 						</el-upload>
@@ -197,17 +203,10 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="缴费单据:" prop="payFee">
-						<el-image v-if="addForm.payFee" style="width: 100px; height: 50px;" :src="addForm.payFee"></el-image>
+						<el-image v-if="addForm.payFee" style="width: 150px;" :src="addForm.payFee"></el-image>
 						<el-upload name="imgFile" :action="updatePayFeeUrl" :auto-upload="true" :on-success="handlePayFeeUrlSuccess" :show-file-list="false">
 							<el-button size="small" type="primary" plain>上传缴费单据</el-button>
 						</el-upload>
-					</el-form-item>
-					<el-form-item label="创建人:" prop="createuser">
-						<el-input v-model="addForm.createuser"></el-input>
-					</el-form-item>
-					<el-form-item label="创建时间:" prop="ctTime">
-						<el-date-picker v-model="addForm.ctTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
 					</el-form-item>
 			</el-form>
 
@@ -219,9 +218,9 @@
 		</el-dialog>
 
 
-		<!-- 编辑地区的对话框 -->
+		<!-- 编辑的对话框 -->
 		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
-			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+			<el-form :model="editForm" ref="editFormRef" label-width="120px">
 				<el-form-item label="车牌号:" prop="licensePlate">
 					<el-input v-model="editForm.licensePlate"></el-input>
 				</el-form-item>
@@ -246,14 +245,8 @@
 				<el-form-item label="所属分公司:" prop="companyl">
 					<el-input v-model="editForm.companyl"></el-input>
 				</el-form-item>
-				<el-form-item label="对应司机:" prop="driver">
-					<el-input v-model="editForm.driver"></el-input>
-				</el-form-item>
-				<el-form-item label="司机电话:" prop="driverphone">
-					<el-input v-model="editForm.driverphone"></el-input>
-				</el-form-item>
 				<el-form-item label="行驶证:" prop="vehicleLicense">
-					<el-image v-if="editForm.vehicleLicense" style="width: 100px; height: 50px;" :src="editForm.vehicleLicense"></el-image>
+					<el-image v-if="editForm.vehicleLicense" style="width: 150px;" :src="editForm.vehicleLicense"></el-image>
 					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleEditVehicleLicenseUrlSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
@@ -267,7 +260,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="保险单据:" prop="insurance">
-					<el-image v-if="editForm.insurance" style="width: 100px; height: 50px;" :src="editForm.insurance"></el-image>
+					<el-image v-if="editForm.insurance" style="width: 150px;" :src="editForm.insurance"></el-image>
 					<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleEditInsuranceUrlSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
@@ -277,7 +270,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="车辆营运证:" prop="caroperating">
-					<el-image v-if="editForm.caroperating" style="width: 100px; height: 50px;" :src="editForm.caroperating"></el-image>
+					<el-image v-if="editForm.caroperating" style="width: 150px;" :src="editForm.caroperating"></el-image>
 					<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleEditCaroperatingUrlSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传营运证照片</el-button>
 					</el-upload>
@@ -307,19 +300,11 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="缴费单据:" prop="payFee">
-					<el-image v-if="editForm.payFee" style="width: 100px; height: 50px;" :src="editForm.payFee"></el-image>
+					<el-image v-if="editForm.payFee" style="width: 150px;" :src="editForm.payFee"></el-image>
 					<el-upload name="imgFile" :action="updatePayFeeUrl" :auto-upload="true" :on-success="handleEditPayFeeUrlSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传缴费单据</el-button>
 					</el-upload>
-				</el-form-item>
-				<el-form-item label="创建人:" prop="createuser">
-					<el-input v-model="editForm.createuser"></el-input>
-				</el-form-item>
-				<el-form-item label="创建时间:" prop="ctTime">
-					<el-date-picker v-model="editForm.ctTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-					</el-date-picker>
-				</el-form-item>
-			
+				</el-form-item>			
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="editDialogVisible = false">取 消</el-button>
@@ -327,35 +312,23 @@
 			</span>
 
 		</el-dialog>
-
-		<!-- 显示大图 -->
-		<el-dialog :visible.sync="showDriverCertificateDriver" width="35%">
-			<el-image :src="showImageSrc" style="width: 100%;"></el-image>
-		</el-dialog>
 		
 		<!-- 查询违章 -->
-		<el-dialog title="违章记录" :visible.sync="queryViolationDialog" width="50%" >
-			<el-form :model="queryViolationForm"  label-width="100px">	
-			<el-form-item label="车牌号:" prop="carNumber">
-				{{queryViolationForm.carNumber}}
-				<!-- <el-input v-model="queryViolationForm.carNumber"></el-input> -->
-			</el-form-item>
-			<el-form-item label="违章行为:" prop="illegalAct">
-				<el-input v-model="queryViolationForm.illegalAct"></el-input>
-			</el-form-item>
-			<el-form-item label="违章位置:" prop="illegalArea">
-				<el-input v-model="queryViolationForm.illegalArea"></el-input>
-			</el-form-item>
-			<el-form-item label="扣分:" prop="illegalFen">
-				<el-input v-model="queryViolationForm.illegalFen"></el-input>
-			</el-form-item>
-			<el-form-item label="违章时间:" prop="illegalDate">
-				<el-input v-model="queryViolationForm.illegalDate"></el-input>
-			</el-form-item>
-			<el-form-item label="罚款:" prop="illegalMoney">
-				<el-input v-model="queryViolationForm.illegalMoney"></el-input>
-			</el-form-item>
-			</el-form>
+		<el-dialog title="违章记录" :visible.sync="queryViolationDialog" width="80%" >
+			<el-table :data="queryViolationList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-table-column prop="carNumber" label="车牌号">
+				</el-table-column>
+				<el-table-column prop="illegalAct" label="违章行为">
+				</el-table-column>
+				<el-table-column prop="illegalArea" label="违章位置">
+				</el-table-column>
+				<el-table-column prop="illegalDate" label="违章时间">
+				</el-table-column>
+				<el-table-column prop="illegalFen" label="扣分">
+				</el-table-column>
+				<el-table-column prop="illegalMoney" label="罚款">
+				</el-table-column>
+			</el-table>
 		</el-dialog>
 	</div>
 </template>
@@ -418,8 +391,6 @@
 					name:"",
 					phoneno:"",
 					companyl:"",
-					driver:"",
-					driverphone:"",
 					vehicleLicense:"",
 					vehiclelicensedate:"",
 					checkDate:"",
@@ -433,10 +404,7 @@
 					finewhy:"",
 					management:"",
 					managementDate:"",
-					payFee:"",
-					createuser:"",
-					ctTime:"",
-					
+					payFee:"",				
 
 				},
 				// 创建表单验证规则
@@ -580,12 +548,12 @@
 				showDriverCertificateDriver: false,
 				// 查询违章数据
 				queryViolationDialog:false,
-				queryViolationForm:{},
+				queryViolationList:[]
 			}
 		},
 
 		created() {
-			this.getDriverList()
+			this.getCarList()
 			// this.getAllDriverList()
 			this.getAllCompanyList()
 		},
@@ -646,7 +614,7 @@
 
 			//分页区域 
 			// 根据分页查询列表
-			async getDriverList() {
+			async getCarList() {
 				const {
 					data: res
 				} = await this.$http.get('kCarinformation/list', {
@@ -668,34 +636,29 @@
 			},
 
 			// 点击查询按钮
-			async handleQueryBtn() {
-				this.getDriverList()
-				// this.getAllDriverList()
+			handleQueryBtn() {
+				this.queryInfo.licensePlate = "*" + this.queryInfo.carName + "*"
+				this.getCarList()
 			},
-
-			// // 点击返回按钮
-			// handleQueryBackBtn() {
-			// 	this.queryInfo.driverName = ''
-			// 	this.queryInfo.driverCarOwner = ''
-			// 	this.queryInfo.driverLicense = ''
-			// 	this.queryInfo.driverCompany = ''
-			// 	this.queryInfo.driverStatus = ''
-			// 	this.queryInfo.driverLoadClass = ''
-			// 	this.queryInfo.pageNo = 1
-			// 	this.queryInfo.pageSize = 10
-
-			// 	this.getDriverList()
-			// },
+			// 返回按钮
+			handleQueryBackBtn() {
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.licensePlate = ''
+				this.queryInfo.carName = ''
+				this.getCarList()
+			},
+			
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
 				this.queryInfo.pageSize = newSize
-				this.getDriverList()
+				this.getCarList()
 			},
 
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
-				this.getDriverList()
+				this.getCarList()
 			},
 
 			// //上传时，判断文件的类型及大小是否符合规则
@@ -749,7 +712,7 @@
 					}
 					// 添加成功，关闭对话框，刷新数据列表，提示添加成功
 					this.addDialogVisible = false
-					this.getDriverList()
+					this.getCarList()
 					// this.getAllDriverList()
 					this.$message.success('添加信息成功')
 				})
@@ -817,7 +780,7 @@
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
-					this.getDriverList()
+					this.getCarList()
 					// this.getAllDriverList()
 					this.$message.success('更新信息成功')
 				})
@@ -833,7 +796,7 @@
 					return this.$message.error('删除失败')
 				}
 				// 删除成功，刷新数据列表，提示删除成功
-				this.getDriverList()
+				this.getCarList()
 				// this.getAllDriverList()
 				this.$message.success('删除成功')
 			},
@@ -851,7 +814,7 @@
 					return this.$message.warning('未查询到违章')
 					
 				}
-				this.queryViolationForm = res.result.records[0]
+				this.queryViolationList = res.result.records
 				// 显示对话框
 				this.queryViolationDialog = true
 			},

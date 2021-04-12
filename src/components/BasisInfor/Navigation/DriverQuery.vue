@@ -12,6 +12,10 @@
 		<el-card class="box-card">
 			<!-- 创建司机 -->
 			<el-button type="primary" plain @click="addDialogVisible = true">创建</el-button>
+			<el-input v-model="queryInfo.driverName" placeholder="司机名" clearable style="width: 200px;margin-left: 100px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
+			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+			
 			<el-table :data="driverList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="id" label="id" v-if="false">
 				</el-table-column>
@@ -74,14 +78,12 @@
 
 		<!-- 分页区域 -->
 		<el-col>
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
-			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" style="margin-top: 5px;">
 			</el-pagination>
 		</el-col>
 
 		<!-- 创建的对话框 -->
-		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+		<el-dialog title="创建司机信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" ref="addFormRef" label-width="100px">
 				<el-form-item label="司机姓名:" prop="name">
@@ -91,7 +93,11 @@
 					<el-input v-model="addForm.phoneno"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司" prop="company">
-					<el-input v-model="addForm.company"></el-input>
+					<el-select v-model="addForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
+					 :loading="companyLoading" style="width: 200px;">
+						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="加入日期" prop="joinDate">
 					<el-date-picker v-model="addForm.joinDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
@@ -101,17 +107,21 @@
 					<el-input v-model="addForm.region"></el-input>
 				</el-form-item>
 				<el-form-item label="对应车辆" prop="licensePlate">
-					<el-input v-model="addForm.licensePlate"></el-input>
+					<el-select v-model="addForm.licensePlate" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"
+					 :loading="plateNumberLoading" style="width: 200px;" @change="queryPlateNumberChange">
+						<el-option v-for="item in plateNumberOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="身份证" prop="userid">
-					<el-image v-if="addForm.userid" style="width: 100px; height: 50px;" :src="addForm.userid"></el-image>
+					<el-image v-if="addForm.userid" style="width: 150px;" :src="addForm.userid"></el-image>
 					<el-upload name="imgFile" :action="updateUserIdUrl" :auto-upload="true" :on-success="handleUserIdUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证" prop="drivingLicense">
-					<el-image v-if="addForm.drivingLicense" style="width: 100px; height: 50px;" :src="addForm.drivingLicense"></el-image>
+					<el-image v-if="addForm.drivingLicense" style="width: 150px;" :src="addForm.drivingLicense"></el-image>
 					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :auto-upload="true" :on-success="handleDrivingLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
@@ -123,7 +133,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
-					<el-image v-if="addForm.workLicense" style="width: 100px; height: 50px;" :src="addForm.workLicense"></el-image>
+					<el-image v-if="addForm.workLicense" style="width: 150px;" :src="addForm.workLicense"></el-image>
 					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :auto-upload="true" :on-success="handleWorkLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
@@ -134,9 +144,6 @@
 					 value-format="yyyy-MM-dd">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="创建人" prop="createuser">
-					<el-input v-model="addForm.createuser"></el-input>
-				</el-form-item>
 			</el-form>
 			<!-- 操作区域 -->
 			<span slot="footer" class="dialog-footer">
@@ -145,8 +152,8 @@
 			</span>
 		</el-dialog>
 		
-		<!-- 编辑地区的对话框 -->
-		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
+		<!-- 编辑的对话框 -->
+		<el-dialog title="编辑司机信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
 				<el-form-item label="司机姓名:" prop="name">
@@ -156,7 +163,11 @@
 					<el-input v-model="editForm.phoneno"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司" prop="company">
-					<el-input v-model="editForm.company"></el-input>
+					<el-select v-model="editForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
+					 :loading="companyLoading" style="width: 200px;">
+						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="加入日期" prop="joinDate">
 					<el-date-picker v-model="editForm.joinDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
@@ -166,17 +177,21 @@
 					<el-input v-model="editForm.region"></el-input>
 				</el-form-item>
 				<el-form-item label="对应车辆" prop="licensePlate">
-					<el-input v-model="editForm.licensePlate"></el-input>
+					<el-select v-model="editForm.licensePlate" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"
+					 :loading="plateNumberLoading" style="width: 200px;" @change="queryPlateNumberChange">
+						<el-option v-for="item in plateNumberOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="身份证" prop="userid">
-					<el-image v-if="editForm.userid" style="width: 100px; height: 50px;" :src="editForm.userid"></el-image>
+					<el-image v-if="editForm.userid" style="width: 150px;" :src="editForm.userid"></el-image>
 					<el-upload name="imgFile" :action="updateUserIdUrl" :auto-upload="true" :on-success="handleEditUserIdUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证" prop="drivingLicense">
-					<el-image v-if="editForm.drivingLicense" style="width: 100px; height: 50px;" :src="editForm.drivingLicense"></el-image>
+					<el-image v-if="editForm.drivingLicense" style="width: 150px;" :src="editForm.drivingLicense"></el-image>
 					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :auto-upload="true" :on-success="handleEditDrivingLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
@@ -187,7 +202,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
-					<el-image v-if="editForm.workLicense" style="width: 100px; height: 50px;" :src="editForm.workLicense"></el-image>
+					<el-image v-if="editForm.workLicense" style="width: 150px;" :src="editForm.workLicense"></el-image>
 					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :auto-upload="true" :on-success="handleEditWorkLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
@@ -196,9 +211,6 @@
 				<el-form-item label="上岗证有效期" prop="drivingLicenseTime">
 					<el-date-picker v-model="editForm.worklicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
 					</el-date-picker>
-				</el-form-item>
-				<el-form-item label="创建人" prop="createuser">
-					<el-input v-model="editForm.createuser"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -231,7 +243,6 @@
 					drivingLicense: "",
 					drivingLicenseTime: "",
 					workLicense: "",
-					createuser: "",
 				},
 				// 分页查询数据
 				queryInfo: {
@@ -248,12 +259,110 @@
 				// 编辑数据
 				editDialogVisible:false,
 				editForm:{},
+				
+				// 公司选择框数据
+				queryCompanyName: '',
+				companyOptions: [],
+				companyList: [],
+				companyLoading: false,
+				companyStates: [],
+				
+				// 选择车牌数据
+				queryPlateNumber: '',
+				plateNumberLoading: false,
+				plateNumberOptions: [],
+				plateNumberStates: [],
+				plateNumberList: [],
+				newPlateNumberList: [],
+				newPlateNumberStates: [],
 			}
 		},
 		created() {
 			this.getDriverList()
+			this.getAllCompanyList()
+			this.getAllPlateNumberList()
 		},
 		methods: {
+			// 获取所有公司名称
+			async getAllCompanyList() {
+				const {
+					data: res
+				} = await this.$http.get('base/company/getAllCompanyName')
+				// console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.companyStates = res.result
+				this.companyList = this.companyStates.map(item => {
+					return {
+						value: `${item}`,
+						label: `${item}`
+					};
+				});
+				this.companyOptions = this.companyList
+			},
+			
+			// 选择公司方法
+			remoteCompanyMethod(query) {
+				if (query !== '') {
+					this.companyLoading = true;
+					setTimeout(() => {
+						this.companyLoading = false;
+						this.companyOptions = this.companyList.filter(item => {
+							return item.value.indexOf(query) > -1;
+						});
+					}, 300)
+				} else {
+					this.companyOptions = this.companyList
+				}
+			},
+			
+			// 获取所有车牌号
+			async getAllPlateNumberList() {
+				const {
+					data: res
+				} = await this.$http.get('kCarinformation/findplate')
+				if (res.code !== 200) {
+					return
+				}
+				console.log(res)
+				// res.result.forEach(v => {
+				// 	this.plateNumberStates.push(v.driverLicense)
+				// })
+				this.plateNumberList = res.result.map(item => {
+					return {
+						value: `${item}`,
+						label: `${item}`
+					};
+				});
+				this.plateNumberOptions = this.plateNumberList
+			},
+			
+			// 选择车牌的方法
+			remotePlateNumberMethod(query) {
+				if (query !== '') {
+					this.plateNumberLoading = true;
+					setTimeout(() => {
+						this.plateNumberLoading = false;
+						this.plateNumberOptions = this.plateNumberList.filter(item => {
+							return item.value.indexOf(query) > -1;
+						});
+					}, 300)
+				} else {
+					this.plateNumberOptions = this.plateNumberList
+				}
+			},
+			
+			// 选择车牌号
+			queryPlateNumberChange() {
+				// console.log(this.queryPlateNumber)
+				// if(this.queryPlateNumber == ''){
+				// 	this.plateNumberOptions = this.plateNumberList
+				// }
+				
+			},
+			
+			
 			// 根据分页查询列表
 			async getDriverList() {
 				const {
@@ -280,6 +389,20 @@
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
+				this.getDriverList()
+			},
+			
+			// 点击查询按钮
+			handleQueryBtn() {
+				this.queryInfo.name = "*" + this.queryInfo.driverName + "*"
+				this.getDriverList()
+			},
+			// 返回按钮
+			handleQueryBackBtn() {
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.driverName = ''
+				this.queryInfo.name = ''
 				this.getDriverList()
 			},
 			
