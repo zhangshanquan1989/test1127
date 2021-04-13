@@ -12,7 +12,7 @@
 		<el-container>
 
 			<!-- 侧边栏菜单区域 -->
-			<el-menu background-color="#536080" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true" :default-active="activePath" >
+			<el-menu background-color="#0f4f7d" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true" :default-active="activePath" >
 
 				<template v-for="one in menulist">
 					<template v-if="one.children">
@@ -121,8 +121,20 @@
 										path: '/basis/car/carInfo',
 										icon: "el-icon-caret-right"
 									},
+									{
+											id: 112,
+											authName: '车辆保证金',
+											path: '/basis/car/earnestMoney',
+											icon: "el-icon-caret-right"
+										},
+										{
+												id: 113,
+												authName: '车辆管理费',
+												path: '/basis/car/managementFee',
+												icon: "el-icon-caret-right"
+											},
 									// {
-									// 	id: 112,
+									// 	id: 114,
 									// 	authName: '违章信息',
 									// 	path: '/basis/car/illegal',
 									// 	icon: "el-icon-caret-right"
@@ -201,7 +213,7 @@
 	}
 
 	.el-header {
-		background-color: #536080;
+		background-color: #03395f;
 		display: flex;
 		justify-content: space-between;
 		padding-left: 0;
@@ -215,9 +227,9 @@
 			align-items: center;
 
 			img {
-				width: 197px;
+				width: 190px;
 				height: 32px;
-				margin-left: 14px;
+				margin-left: 10px;
 				// border-radius: 50%;
 			}
 
@@ -242,7 +254,7 @@
 	}
 
 	.el-menu-item.is-active {
-		background-color: #409eff !important;
+		background-color: #03395f !important;
 	}
 	
 	

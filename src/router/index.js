@@ -18,6 +18,8 @@ import CustomerInfor from '../components/BasisInfor/Navigation/CustomerInfor.vue
 import RegionInfor from '../components/BasisInfor/Navigation/RegionInfor.vue'
 import CarInfo from '../components/BasisInfor/Navigation/Car/CarInfo.vue'
 import Illegal from '../components/BasisInfor/Navigation/Car/Illegal.vue'
+import EarnestMoney  from '../components/BasisInfor/Navigation/Car/EarnestMoney .vue'
+import ManagementFee from '../components/BasisInfor/Navigation/Car/ManagementFee.vue'
 
 // 权限子组件
 import AssemblyAuthorized from '../components/RightsManage/Navigation/AssemblyAuthorized.vue'
@@ -43,6 +45,8 @@ const routes = [
 				{path: '/basis/worker',component: WorkerInfor},
 				{path: '/basis/car/carInfo',component: CarInfo},
 				{path: '/basis/car/illegal',component: Illegal},
+				{path: '/basis/car/earnestMoney',component: EarnestMoney},
+				{path: '/basis/car/managementFee',component: ManagementFee},
 				{path: '/basis/driver',component: DriverQuery},
 				{path: '/basis/customer',component: CustomerInfor},
 				{path: '/basis/region',component: RegionInfor},

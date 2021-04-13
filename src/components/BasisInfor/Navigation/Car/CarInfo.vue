@@ -53,8 +53,7 @@
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top" width="150px">
 							<el-image style="width: 80px; height: 40px" :src="scope.row.insurance" :preview-src-list="srcList" @click="handleClickImage(scope.row.insurance)"></el-image>
-						</el-tooltip>
-						
+						</el-tooltip>					
 					</template>
 				</el-table-column>
 				<el-table-column prop="insuranceDate" label="保险起止日期" width="150px">
@@ -69,26 +68,11 @@
 				</el-table-column>
 				<el-table-column prop="operatingdate" label="营运证到期时间" width="150px">
 				</el-table-column>
-				<el-table-column prop="carmargin" label="车辆保证金" width="100px">
-				</el-table-column>
-				<el-table-column prop="fine" label="罚款金额" width="100px">
-				</el-table-column>
-				<el-table-column prop="finedate" label="罚款时间" width="100px">
-				</el-table-column>
-				<el-table-column prop="finewhy" label="罚款原因" width="100px">
-				</el-table-column>
-				<el-table-column prop="management" label="管理费" width="100px">
-				</el-table-column>
-				<el-table-column prop="managementDate" label="管理费截止日期" width="150px">
-				</el-table-column>
-				<el-table-column  prop="payFee" label="缴费单据" width="150px">
+				<!-- <el-table-column prop="carmargin" label="车辆保证金" width="100px">
 					<template slot-scope="scope">
-						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
-						<!-- <el-image style="width: 80px; height: 40px" :src="scope.row.payFee" ></el-image> -->
-						<el-image style="width: 80px; height: 40px" :src="scope.row.payFee" :preview-src-list="srcList" @click="handleClickImage(scope.row.payFee)"></el-image>
-						</el-tooltip>
+						<span :style="{'color':scope.row.carmargin < 500?'red':'black'}">{{scope.row.carmargin}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 				<el-table-column prop="createuser" label="创建人" width="150px">
 				</el-table-column>
 				<el-table-column prop="ctTime" label="创建时间" width="150px">
@@ -146,7 +130,11 @@
 						<el-input v-model="addForm.phoneno"></el-input>
 					</el-form-item>
 					<el-form-item label="所属分公司:" prop="companyl">
-						<el-input v-model="addForm.companyl"></el-input>
+						<el-select v-model="addForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
+						 :loading="companyLoading" style="width: 200px;">
+							<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="行驶证:" prop="vehicleLicense">
 						<el-image v-if="addForm.vehicleLicense" style="width: 150px;" :src="addForm.vehicleLicense"></el-image>
@@ -181,32 +169,6 @@
 					<el-form-item label="营运证到期时间:" prop="operatingdate">
 						<el-date-picker v-model="addForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
 						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="车辆保证金:" prop="carmargin">
-						<el-input v-model="addForm.carmargin"></el-input>
-					</el-form-item>
-					<el-form-item label="罚款金额:" prop="fine">
-						<el-input v-model="addForm.fine"></el-input>
-					</el-form-item>
-					<el-form-item label="罚款时间:" prop="finedate">
-						<el-date-picker v-model="addForm.finedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="罚款事项:" prop="finewhy">
-						<el-input v-model="addForm.finewhy"></el-input>
-					</el-form-item>
-					<el-form-item label="管理费:" prop="management">
-						<el-input v-model="addForm.management"></el-input>
-					</el-form-item>
-					<el-form-item label="管理费截止日期:" prop="managementDate">
-						<el-date-picker v-model="addForm.managementDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="缴费单据:" prop="payFee">
-						<el-image v-if="addForm.payFee" style="width: 150px;" :src="addForm.payFee"></el-image>
-						<el-upload name="imgFile" :action="updatePayFeeUrl" :auto-upload="true" :on-success="handlePayFeeUrlSuccess" :show-file-list="false">
-							<el-button size="small" type="primary" plain>上传缴费单据</el-button>
-						</el-upload>
 					</el-form-item>
 			</el-form>
 
@@ -279,32 +241,6 @@
 					<el-date-picker v-model="editForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="车辆保证金:" prop="carmargin">
-					<el-input v-model="editForm.carmargin"></el-input>
-				</el-form-item>
-				<el-form-item label="罚款金额:" prop="fine">
-					<el-input v-model="editForm.fine"></el-input>
-				</el-form-item>
-				<el-form-item label="罚款时间:" prop="finedate">
-					<el-date-picker v-model="editForm.finedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-					</el-date-picker>
-				</el-form-item>
-				<el-form-item label="罚款事项:" prop="finewhy">
-					<el-input v-model="editForm.finewhy"></el-input>
-				</el-form-item>
-				<el-form-item label="管理费:" prop="management">
-					<el-input v-model="editForm.management"></el-input>
-				</el-form-item>
-				<el-form-item label="管理费截止日期:" prop="managementDate">
-					<el-date-picker v-model="editForm.managementDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-					</el-date-picker>
-				</el-form-item>
-				<el-form-item label="缴费单据:" prop="payFee">
-					<el-image v-if="editForm.payFee" style="width: 150px;" :src="editForm.payFee"></el-image>
-					<el-upload name="imgFile" :action="updatePayFeeUrl" :auto-upload="true" :on-success="handleEditPayFeeUrlSuccess" :show-file-list="false">
-						<el-button size="small" type="primary" plain>上传缴费单据</el-button>
-					</el-upload>
-				</el-form-item>			
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="editDialogVisible = false">取 消</el-button>
@@ -349,38 +285,8 @@
 				carList: [],
 				// 总条数
 				total: 0,
-				srcList: ['https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg'],
-				// 状态选项
-				driverStatusSelect: [{
-					value: '在职',
-					label: '在职'
-				}, {
-					value: '离职',
-					label: '离职'
-				}, {
-					value: '休假',
-					label: '休假'
-				}],
-				// 载重选项
-				driverLoadSelect: [{
-					value: 'A',
-					label: '5-10吨'
-				}, {
-					value: 'B',
-					label: '11-20吨'
-				}, {
-					value: 'C',
-					label: '21-30吨'
-				}, {
-					value: 'D',
-					label: '31-40吨'
-				}, {
-					value: 'E',
-					label: '41-50吨'
-				}, {
-					value: 'F',
-					label: '51吨以上'
-				}],
+				srcList: [],
+	
 				// 创建对话框数据
 				addDialogVisible: false,
 				addForm: {
@@ -548,69 +454,56 @@
 				showDriverCertificateDriver: false,
 				// 查询违章数据
 				queryViolationDialog:false,
-				queryViolationList:[]
+				queryViolationList:[],
+				
+				// 公司选择框数据
+				queryCompanyName: '',
+				companyOptions: [],
+				companyList: [],
+				companyLoading: false,
+				companyStates: [],
 			}
 		},
 
 		created() {
 			this.getCarList()
-			// this.getAllDriverList()
 			this.getAllCompanyList()
 		},
 
 		methods: {
-			click(){
-				console.log("click")
-			},
-
 			// 获取所有公司名称
 			async getAllCompanyList() {
 				const {
 					data: res
-				} = await this.$http.get('base/tBaCompany/getAllCompanyName')
-
+				} = await this.$http.get('base/company/getAllCompanyName')
+				// console.log(res)
 				if (res.code !== 200) {
 					return
 				}
-				this.states = res.result
-				this.companyList = this.states.map(item => {
+				this.companyStates = res.result
+				this.companyList = this.companyStates.map(item => {
 					return {
 						value: `${item}`,
 						label: `${item}`
 					};
 				});
-				this.options = this.companyList
+				this.companyOptions = this.companyList
 			},
-
-			// 创建页面选择公司方法
-			remoteMethod(query) {
+			
+			// 选择公司方法
+			remoteCompanyMethod(query) {
 				if (query !== '') {
-					this.loading = true;
+					this.companyLoading = true;
 					setTimeout(() => {
-						this.loading = false;
-						this.options = this.companyList.filter(item => {
+						this.companyLoading = false;
+						this.companyOptions = this.companyList.filter(item => {
 							return item.value.indexOf(query) > -1;
 						});
 					}, 300)
 				} else {
-					this.options = this.companyList
+					this.companyOptions = this.companyList
 				}
 			},
-			// 选择公司后重置
-			handleSelectCompany() {
-				this.options = this.companyList
-			},
-
-			// // 查询总数据
-			// async getAllDriverList() {
-			// 	const {
-			// 		data: res
-			// 	} = await this.$http.get('base/tBaDriver/list')
-			// 	if (res.code !== 200) {
-			// 		return
-			// 	}
-			// 	this.allDriverList = res.result.records
-			// },
 
 			//分页区域 
 			// 根据分页查询列表
