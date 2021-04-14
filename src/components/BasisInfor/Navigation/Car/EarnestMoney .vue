@@ -9,6 +9,10 @@
 		</el-breadcrumb>
 
 		<el-card class="box-card">
+			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
+			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+			
 			<el-table :data="pageList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="id" label="id" v-if="false">
@@ -27,9 +31,9 @@
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<!-- 充值按钮 -->
-						<el-button type="primary" size="mini" @click="showRechargeDialog(scope.row.id)">充值</el-button>
+						<el-button type="primary" size="mini" @click="showRechargeDialog(scope.row.id,scope.row.license)">充值</el-button>
 						<!-- 罚款按钮 -->
-						<el-button type="warning" size="mini" @click="showFineDialog(scope.row.id)">罚款</el-button>
+						<el-button type="warning" size="mini" @click="showFineDialog(scope.row.id,scope.row.license)">罚款</el-button>
 						<!-- 修改按钮 -->
 						<!-- <el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">记录</el-button> -->
 					</template>
@@ -51,6 +55,9 @@
 			<el-form :model="addRechargeForm" ref="addRechargeFormRef" label-width="100px">
 				<el-form-item v-if="false" label="充值id:" prop="parentid">
 					<el-input v-model="addRechargeForm.parentid"></el-input>
+				</el-form-item>
+				<el-form-item label="车牌号:" prop="license">
+					{{addRechargeForm.license}}
 				</el-form-item>
 				<el-form-item label="充值金额:" prop="amountS">
 					<el-input v-model="addRechargeForm.amountS"></el-input>
@@ -85,6 +92,9 @@
 			<el-form :model="fineForm" ref="fineFormFormRef" label-width="100px">
 				<el-form-item v-if="false" label="充值id:" prop="parentid">
 					<el-input v-model="fineForm.parentid"></el-input>
+				</el-form-item>
+				<el-form-item label="车牌号:" prop="license">
+					{{fineForm.license}}
 				</el-form-item>
 				<el-form-item label="罚款金额:" prop="fine">
 					<el-input v-model="fineForm.fine"></el-input>
@@ -182,9 +192,25 @@
 				this.queryInfo.pageNo = newPage
 				this.getPageList()
 			},
+			
+			// 点击查询按钮
+			handleQueryBtn() {
+				this.queryInfo.license = "*" + this.queryInfo.carName + "*"
+				this.getPageList()
+			},
+			// 返回按钮
+			handleQueryBackBtn() {
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.order = "desc"
+				this.queryInfo.column = "id"
+				this.queryInfo.license = ''
+				this.queryInfo.carName = ''
+				this.getPageList()
+			},
 
 			// 显示充值页面
-			async showRechargeDialog(id) {
+			async showRechargeDialog(id,license) {
 				const {
 					data: res
 				} = await this.$http.get('base/margin/selecttop?id=' + id)
@@ -193,6 +219,7 @@
 				}
 				this.rechargeRecordList = res.result
 				this.addRechargeForm.parentid = id
+				this.addRechargeForm.license = license
 				this.rechargeDialogVisible = true
 			},
 			// 充值
@@ -222,7 +249,7 @@
 			},
 
 			// 显示罚款页面
-			async showFineDialog(id) {
+			async showFineDialog(id,license) {
 				const {
 					data: res
 				} = await this.$http.get('base/margin/selectdown?id=' + id)
@@ -231,6 +258,7 @@
 				}
 				this.fineRecordList = res.result
 				this.fineForm.parentid = id
+				this.fineForm.license = license
 				this.fineDialogVisible = true
 			},
 			// 罚款

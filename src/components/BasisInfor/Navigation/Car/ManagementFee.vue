@@ -9,6 +9,10 @@
 		</el-breadcrumb>
 
 		<el-card class="box-card">
+			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
+			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+			
 			<el-table :data="pageList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="id" label="id" v-if="false">
@@ -50,6 +54,9 @@
 		<el-dialog title="缴费页面" :visible.sync="payCostDialogVisible" width="40%" @close="payCostDialogClosed">
 			<!-- 缴费的表单 -->
 			<el-form :model="payCostForm" ref="payCostFormRef" label-width="100px">
+				<el-form-item label="车牌号:" prop="asoftime">
+					 {{payCostForm.licensePlate}}
+				</el-form-item>
 				<el-form-item label="缴费周期:" prop="managementcycle">
 					<el-select v-model="payCostForm.managementcycle" placeholder="请选择">
 						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -157,6 +164,22 @@
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
+				this.getPageList()
+			},
+			
+			// 点击查询按钮
+			handleQueryBtn() {
+				this.queryInfo.licensePlate = "*" + this.queryInfo.carName + "*"
+				this.getPageList()
+			},
+			// 返回按钮order: 
+			handleQueryBackBtn() {
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.queryInfo.order = "desc"
+				this.queryInfo.column = "id"
+				this.queryInfo.licensePlate = ''
+				this.queryInfo.carName = ''
 				this.getPageList()
 			},
 

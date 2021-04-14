@@ -247,7 +247,10 @@
 				// 分页查询数据
 				queryInfo: {
 					pageNo: 1,
-					pageSize: 10
+					pageSize: 10,
+					// 倒叙必填
+					order: "desc",
+					column: "id"
 				},
 				// 分页列表
 				driverList: [],

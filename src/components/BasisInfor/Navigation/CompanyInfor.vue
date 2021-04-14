@@ -214,7 +214,10 @@
 				// 查询参数对象
 				queryInfo: {
 					pageNo: 1,
-					pageSize: 10
+					pageSize: 10,
+					// 倒叙必填
+					order: "desc",
+					column: "id"
 				},
 				// 公司列表
 				companylist: [],
