@@ -10,7 +10,7 @@
 		</el-header>
 		<!-- 页面主体 -->
 		<el-container>
-
+			<el-aside width="200px" style="background-color: #0f4f7d;">
 			<!-- 侧边栏菜单区域 -->
 			<el-menu background-color="#0f4f7d" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true" :default-active="activePath" >
 
@@ -54,7 +54,7 @@
 					</template>
 				</template>
 			</el-menu>
-
+</el-aside>
 			<!-- 右侧内容主体 -->
 			<el-main>
 				<!-- 路由占位符 -->
@@ -133,6 +133,12 @@
 												path: '/basis/car/managementFee',
 												icon: "el-icon-caret-right"
 											},
+											// {
+											// 		id: 114,
+											// 		authName: '实时监控',
+											// 		path: '/basis/car/CarMonitoring',
+											// 		icon: "el-icon-caret-right"
+											// 	},
 									// {
 									// 	id: 114,
 									// 	authName: '违章信息',
@@ -148,13 +154,13 @@
 					{
 						id: 2,
 						authName: '运单管理',
-						path: '/performance',
+						path: '/waybillManage',
 						icon: "el-icon-s-claim"
 					},
 					{
 						id: 3,
 						authName: '配送管理',
-						path: '/assembly',
+						path: '/distributionManage',
 						icon: "el-icon-share",
 					},
 					// {
@@ -240,7 +246,7 @@
 	}
 
 	.el-menu {
-		width: 200px !important;
+		width: 200px;
 	}
 
 	.el-aside {

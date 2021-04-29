@@ -2,7 +2,7 @@
 	<div>
 		<!-- 面包屑导航区 -->
 		<el-breadcrumb separator-class="el-icon-arrow-right">
-			<el-breadcrumb-item >首页</el-breadcrumb-item>
+			<el-breadcrumb-item>首页</el-breadcrumb-item>
 			<el-breadcrumb-item>基础信息管理</el-breadcrumb-item>
 			<el-breadcrumb-item>车辆管理</el-breadcrumb-item>
 			<el-breadcrumb-item>车辆信息</el-breadcrumb-item>
@@ -20,8 +20,9 @@
 			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;margin-left: 100px;"></el-input>
 			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
 			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
-			
-			<el-table :data="carList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+
+			<el-table :data="carList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
+			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="id" label="ID" v-if="false">
 				</el-table-column>
 				<el-table-column prop="licensePlate" label="车牌号" width="100px">
@@ -42,28 +43,28 @@
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 							<el-image style="width: 80px; height: 40px" :src="scope.row.vehicleLicense" :preview-src-list="srcList" @click="handleClickImage(scope.row.vehicleLicense)"></el-image>
-						</el-tooltip>						
+						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column prop="vehiclelicensedate" label="行驶证有效期" width="150px">
 				</el-table-column>
 				<el-table-column prop="checkDate" label="年检有效期" width="150px">
 				</el-table-column>
-				<el-table-column  prop="insurance" label="保险单据" width="150px">
+				<el-table-column prop="insurance" label="保险单据" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top" width="150px">
 							<el-image style="width: 80px; height: 40px" :src="scope.row.insurance" :preview-src-list="srcList" @click="handleClickImage(scope.row.insurance)"></el-image>
-						</el-tooltip>					
+						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column prop="insuranceDate" label="保险起止日期" width="150px">
 				</el-table-column>
-				<el-table-column  prop="caroperating" label="车辆营运证" width="150px">
+				<el-table-column prop="caroperating" label="车辆营运证" width="150px">
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="点击查看大图" placement="top">
 							<el-image style="width: 80px; height: 40px" :src="scope.row.caroperating" :preview-src-list="srcList" @click="handleClickImage(scope.row.caroperating)"></el-image>
 						</el-tooltip>
-						
+
 					</template>
 				</el-table-column>
 				<el-table-column prop="operatingdate" label="营运证到期时间" width="150px">
@@ -79,7 +80,7 @@
 				</el-table-column>
 				<el-table-column prop="utTime" label="最近更新时间" width="150px">
 				</el-table-column>
-				<el-table-column label="操作" width="300px">
+				<el-table-column label="操作" width="300px" fixed="right">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>
@@ -89,7 +90,9 @@
 						</el-popconfirm>
 						<!-- 查违章按钮 -->
 						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showQueryViolationDialog(scope.row.licensePlate)">查违章</el-button>
-						
+						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showLocationDialog(scope.row.licensePlate)">位置</el-button>
+						<!-- <el-button type="warning" size="mini" style="margin-left: 10px;" @click="showHistoryDialog(scope.row.licensePlate)">历史轨迹</el-button> -->
+
 
 					</template>
 				</el-table-column>
@@ -107,69 +110,75 @@
 		<!-- 创建的对话框 -->
 		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
-			<el-form :model="addForm"  ref="addFormRef" label-width="120px">				
-					<el-form-item label="车牌号:" prop="licensePlate">
-						<el-input v-model="addForm.licensePlate"></el-input>
-					</el-form-item>
-					<el-form-item label="车辆状态:" prop="carstate">
-						<el-select v-model="addForm.carstate" placeholder="全部" clearable>
-							<el-option v-for="item in carstateList" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="车架号:" prop="frame">
-						<el-input v-model="addForm.frame"></el-input>
-					</el-form-item>
-					<el-form-item label="发动机号:" prop="engine">
-						<el-input v-model="addForm.engine"></el-input>
-					</el-form-item>
-					<el-form-item label="车主姓名:" prop="name">
-						<el-input v-model="addForm.name"></el-input>
-					</el-form-item>
-					<el-form-item label="车主手机号:" prop="phoneno">
-						<el-input v-model="addForm.phoneno"></el-input>
-					</el-form-item>
-					<el-form-item label="所属分公司:" prop="companyl">
-						<el-select v-model="addForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
-						 :loading="companyLoading" style="width: 200px;">
-							<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="行驶证:" prop="vehicleLicense">
-						<el-image v-if="addForm.vehicleLicense" style="width: 150px;" :src="addForm.vehicleLicense"></el-image>
-						<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleVehicleLicenseUrlSuccess" :show-file-list="false">
-							<el-button size="small" type="primary" plain>上传保险单照片</el-button>
-						</el-upload>
-					</el-form-item>
-					<el-form-item label="行驶证有效期:" prop="vehiclelicensedate">
-						<el-date-picker v-model="addForm.vehiclelicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="年检有效期:" prop="checkDate">
-						<el-date-picker v-model="addForm.checkDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="保险单据:" prop="insurance">
-						<el-image v-if="addForm.insurance" style="width: 150px;" :src="addForm.insurance"></el-image>
-						<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleInsuranceUrlSuccess" :show-file-list="false">
-							<el-button size="small" type="primary" plain>上传保险单照片</el-button>
-						</el-upload>
-					</el-form-item>
-					<el-form-item label="保险到期时间:" prop="insuranceDate">
-						<el-date-picker v-model="addForm.insuranceDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="车辆营运证:" prop="caroperating">
-						<el-image v-if="addForm.caroperating" style="width: 150px;" :src="addForm.caroperating"></el-image>
-						<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleCaroperatingUrlSuccess" :show-file-list="false">
-							<el-button size="small" type="primary" plain>上传营运证照片</el-button>
-						</el-upload>
-					</el-form-item>
-					<el-form-item label="营运证到期时间:" prop="operatingdate">
-						<el-date-picker v-model="addForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-						</el-date-picker>
-					</el-form-item>
+			<el-form :model="addForm" ref="addFormRef" label-width="120px">
+				<el-form-item label="车牌号:" prop="licensePlate">
+					<el-input v-model="addForm.licensePlate"></el-input>
+				</el-form-item>
+				<el-form-item label="车辆状态:" prop="carstate">
+					<el-select v-model="addForm.carstate" placeholder="全部" clearable>
+						<el-option v-for="item in carstateList" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="车架号:" prop="frame">
+					<el-input v-model="addForm.frame"></el-input>
+				</el-form-item>
+				<el-form-item label="发动机号:" prop="engine">
+					<el-input v-model="addForm.engine"></el-input>
+				</el-form-item>
+				<el-form-item label="车主姓名:" prop="name">
+					<el-input v-model="addForm.name"></el-input>
+				</el-form-item>
+				<el-form-item label="车主手机号:" prop="phoneno">
+					<el-input v-model="addForm.phoneno"></el-input>
+				</el-form-item>
+				<el-form-item label="所属分公司:" prop="companyl">
+					<el-select v-model="addForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
+					 :loading="companyLoading" style="width: 200px;">
+						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="行驶证:" prop="vehicleLicense">
+					<el-image v-if="addForm.vehicleLicense" style="width: 150px;" :src="addForm.vehicleLicense"></el-image>
+					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleVehicleLicenseUrlSuccess"
+					 :show-file-list="false">
+						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
+					</el-upload>
+				</el-form-item>
+				<el-form-item label="行驶证有效期:" prop="vehiclelicensedate">
+					<el-date-picker v-model="addForm.vehiclelicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
+					 value-format="yyyy-MM-dd">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="年检有效期:" prop="checkDate">
+					<el-date-picker v-model="addForm.checkDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="保险单据:" prop="insurance">
+					<el-image v-if="addForm.insurance" style="width: 150px;" :src="addForm.insurance"></el-image>
+					<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleInsuranceUrlSuccess"
+					 :show-file-list="false">
+						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
+					</el-upload>
+				</el-form-item>
+				<el-form-item label="保险到期时间:" prop="insuranceDate">
+					<el-date-picker v-model="addForm.insuranceDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
+					 value-format="yyyy-MM-dd">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="车辆营运证:" prop="caroperating">
+					<el-image v-if="addForm.caroperating" style="width: 150px;" :src="addForm.caroperating"></el-image>
+					<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleCaroperatingUrlSuccess"
+					 :show-file-list="false">
+						<el-button size="small" type="primary" plain>上传营运证照片</el-button>
+					</el-upload>
+				</el-form-item>
+				<el-form-item label="营运证到期时间:" prop="operatingdate">
+					<el-date-picker v-model="addForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
+					 value-format="yyyy-MM-dd">
+					</el-date-picker>
+				</el-form-item>
 			</el-form>
 
 			<span slot="footer" class="dialog-footer">
@@ -209,12 +218,14 @@
 				</el-form-item>
 				<el-form-item label="行驶证:" prop="vehicleLicense">
 					<el-image v-if="editForm.vehicleLicense" style="width: 150px;" :src="editForm.vehicleLicense"></el-image>
-					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleEditVehicleLicenseUrlSuccess" :show-file-list="false">
+					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleEditVehicleLicenseUrlSuccess"
+					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="行驶证有效期:" prop="vehiclelicensedate">
-					<el-date-picker v-model="editForm.vehiclelicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.vehiclelicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
+					 value-format="yyyy-MM-dd">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="年检有效期:" prop="checkDate">
@@ -223,22 +234,26 @@
 				</el-form-item>
 				<el-form-item label="保险单据:" prop="insurance">
 					<el-image v-if="editForm.insurance" style="width: 150px;" :src="editForm.insurance"></el-image>
-					<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleEditInsuranceUrlSuccess" :show-file-list="false">
+					<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleEditInsuranceUrlSuccess"
+					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="保险到期时间:" prop="insuranceDate">
-					<el-date-picker v-model="editForm.insuranceDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.insuranceDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
+					 value-format="yyyy-MM-dd">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="车辆营运证:" prop="caroperating">
 					<el-image v-if="editForm.caroperating" style="width: 150px;" :src="editForm.caroperating"></el-image>
-					<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleEditCaroperatingUrlSuccess" :show-file-list="false">
+					<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleEditCaroperatingUrlSuccess"
+					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传营运证照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="营运证到期时间:" prop="operatingdate">
-					<el-date-picker v-model="editForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
+					 value-format="yyyy-MM-dd">
 					</el-date-picker>
 				</el-form-item>
 			</el-form>
@@ -248,10 +263,11 @@
 			</span>
 
 		</el-dialog>
-		
+
 		<!-- 查询违章 -->
-		<el-dialog title="违章记录" :visible.sync="queryViolationDialog" width="80%" >
-			<el-table :data="queryViolationList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+		<el-dialog title="违章记录" :visible.sync="queryViolationDialog" width="80%">
+			<el-table :data="queryViolationList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
+			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="carNumber" label="车牌号">
 				</el-table-column>
 				<el-table-column prop="illegalAct" label="违章行为">
@@ -265,6 +281,22 @@
 				<el-table-column prop="illegalMoney" label="罚款">
 				</el-table-column>
 			</el-table>
+		</el-dialog>
+
+		<!-- 位置 -->
+		<el-dialog title="位置" :visible.sync="locationDialog" width="50%">
+
+			<div id="locition" style="width: 100%;height: 500px;"></div>
+
+		</el-dialog>
+
+		<!-- 历史轨迹 -->
+		<el-dialog title="历史轨迹" :visible.sync="historyDialog" width="80%">
+			<div id="container" style="width: 100%;height: 500px;"></div>
+			<div class="input-card">
+				<h4>轨迹回放控制</h4>
+					<el-button @click="startAnimation">开始</el-button>
+				</div>
 		</el-dialog>
 	</div>
 </template>
@@ -282,38 +314,36 @@
 					order: "desc",
 					column: "id"
 				},
-				// 总列表
-				allDriverList: [],
 				// 分页列表
 				carList: [],
 				// 总条数
 				total: 0,
 				srcList: [],
-	
+
 				// 创建对话框数据
 				addDialogVisible: false,
 				addForm: {
-					licensePlate:"",
-					carstate:"",
-					frame:"",
-					engine:"",
-					name:"",
-					phoneno:"",
-					companyl:"",
-					vehicleLicense:"",
-					vehiclelicensedate:"",
-					checkDate:"",
-					insurance:"",
-					insuranceDate:"",
-					caroperating:"",
-					operatingdate:"",
-					carmargin:"",
-					fine:"",
-					finedate:"",
-					finewhy:"",
-					management:"",
-					managementDate:"",
-					payFee:"",				
+					licensePlate: "",
+					carstate: "",
+					frame: "",
+					engine: "",
+					name: "",
+					phoneno: "",
+					companyl: "",
+					vehicleLicense: "",
+					vehiclelicensedate: "",
+					checkDate: "",
+					insurance: "",
+					insuranceDate: "",
+					caroperating: "",
+					operatingdate: "",
+					carmargin: "",
+					fine: "",
+					finedate: "",
+					finewhy: "",
+					management: "",
+					managementDate: "",
+					payFee: "",
 
 				},
 				// 创建表单验证规则
@@ -423,14 +453,11 @@
 					value: '停车',
 					label: '停车'
 				}],
-				// 创建时间选择器
-				chooseContractData: [],
+
 				// 编辑对话框数据
 				// 编辑对话框显示与隐藏
 				editDialogVisible: false,
 				editForm: {},
-				// 编辑时间选择器
-				editContractData: [],
 
 				// 创建页面选择框数据
 				options: [],
@@ -456,21 +483,52 @@
 				// 图片放大
 				showDriverCertificateDriver: false,
 				// 查询违章数据
-				queryViolationDialog:false,
-				queryViolationList:[],
-				
+				queryViolationDialog: false,
+				queryViolationList: [],
+
 				// 公司选择框数据
 				queryCompanyName: '',
 				companyOptions: [],
 				companyList: [],
 				companyLoading: false,
 				companyStates: [],
+
+				// 位置
+				locationDialog: false,
+				// 历史轨迹数据
+				historyDialog: false,
+				firstArr: [116.478935, 39.997761],
+				lineArr: [
+					[116.478935, 39.997761],
+					[116.478939, 39.997825],
+					[116.478912, 39.998549],
+					[116.478912, 39.998549],
+					[116.478998, 39.998555],
+					[116.478998, 39.998555],
+					[116.479282, 39.99856],
+					[116.479658, 39.998528],
+					[116.480151, 39.998453],
+					[116.480784, 39.998302],
+					[116.480784, 39.998302],
+					[116.481149, 39.998184],
+					[116.481573, 39.997997],
+					[116.481863, 39.997846],
+					[116.482072, 39.997718],
+					[116.482362, 39.997718],
+					[116.483633, 39.998935],
+					[116.48367, 39.998968],
+					[116.484648, 39.999861]
+				],
 			}
 		},
 
 		created() {
 			this.getCarList()
 			this.getAllCompanyList()
+		},
+		mounted() {
+
+
 		},
 
 		methods: {
@@ -483,7 +541,9 @@
 				if (res.code !== 200) {
 					return
 				}
-				this.companyStates = res.result
+				res.result.forEach(v => {
+				    this.companyStates.push(v.name)
+				})
 				this.companyList = this.companyStates.map(item => {
 					return {
 						value: `${item}`,
@@ -492,7 +552,7 @@
 				});
 				this.companyOptions = this.companyList
 			},
-			
+
 			// 选择公司方法
 			remoteCompanyMethod(query) {
 				if (query !== '') {
@@ -524,10 +584,10 @@
 				this.carList = res.result.records
 				this.total = res.result.total
 			},
-			
+
 			//点击查看放大图片 
 			handleClickImage(src) {
-				this.srcList= []
+				this.srcList = []
 				this.srcList.push(src)
 			},
 
@@ -544,7 +604,7 @@
 				this.queryInfo.carName = ''
 				this.getCarList()
 			},
-			
+
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
 				this.queryInfo.pageSize = newSize
@@ -696,7 +756,7 @@
 				// this.getAllDriverList()
 				this.$message.success('删除成功')
 			},
-			
+
 			// 查询违章
 			async showQueryViolationDialog(carNumber) {
 				const {
@@ -706,13 +766,108 @@
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
-				if(res.result.records.length == 0){
+				if (res.result.records.length == 0) {
 					return this.$message.warning('未查询到违章')
-					
+
 				}
 				this.queryViolationList = res.result.records
 				// 显示对话框
 				this.queryViolationDialog = true
+			},
+
+			// 位置
+			showLocationDialog() {
+				this.locationDialog = true
+				setTimeout(() => {
+					var map1 = new AMap.Map("locition", {
+						resizeEnable: true, //窗口大小调整
+						center: [116.397428, 39.90923], //中心 firstArr: [116.478935, 39.997761],
+						zoom: 10
+					});
+
+					var marker1 = new AMap.Marker({
+						icon: "https://webapi.amap.com/images/car.png",
+						position: [116.406315, 39.908775],
+						offset: new AMap.Pixel(-13, -30)
+					});
+					marker1.setMap(map1);
+				}, 200)
+
+
+			},
+			// 历史轨迹
+			showHistoryDialog() {
+				this.historyDialog = true
+				setTimeout(() => {
+					this.initMap();
+					this.initroad();
+				}, 200);
+			},
+
+			//初始化地图
+			initMap() {
+				this.map = new AMap.Map("container", {
+					resizeEnable: true, //窗口大小调整
+					center: this.firstArr, //中心 firstArr: [116.478935, 39.997761],
+					zoom: 12
+				});
+				this.marker = new AMap.Marker({
+					map: this.map,
+					position: this.firstArr,
+					icon: "https://webapi.amap.com/images/car.png",
+					offset: new AMap.Pixel(-26, -13), //调整图片偏移
+					autoRotation: true, //自动旋转
+					angle: -90 //图片旋转角度
+				});
+				
+				// 设置label标签
+				// label默认蓝框白底左上角显示，样式className为：amap-marker-label
+				this.marker.setLabel({
+				    offset: new AMap.Pixel(20, 20),  //设置文本标注偏移量
+				    content: "<div class='info'>速度是100KM</div>", //设置文本标注内容
+				    direction: 'right' //设置文本标注方位
+				});
+			},
+
+			//初始化轨迹
+			initroad() {
+				//绘制还未经过的路线
+				this.polyline = new AMap.Polyline({
+					map: this.map,
+					path: this.lineArr,
+					showDir: true,
+					strokeColor: "#28F", //线颜色--蓝色
+					// strokeOpacity: 1,     //线透明度
+					strokeWeight: 6 //线宽
+					// strokeStyle: "solid"  //线样式
+				});
+				//绘制路过了的轨迹
+				var passedPolyline = new AMap.Polyline({
+					map: this.map,
+					strokeColor: "#AF5", //线颜色-绿色
+					//path: this.lineArr,
+					// strokeOpacity: 1,     //线透明度
+					strokeWeight: 6 //线宽
+					// strokeStyle: "solid"  //线样式
+				});
+				this.marker.on("moving", e => {
+
+					passedPolyline.setPath(e.passedPath);
+				});
+				this.map.setFitView(); //合适的视口
+			},
+
+			startAnimation() {
+				this.marker.moveAlong(this.lineArr, 200);
+			},
+			pauseAnimation() {
+				this.marker.pauseMove();
+			},
+			resumeAnimation() {
+				this.marker.resumeMove();
+			},
+			stopAnimation() {
+				this.marker.stopMove();
 			},
 
 		}

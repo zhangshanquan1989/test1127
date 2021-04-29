@@ -295,7 +295,10 @@
 				if (res.code !== 200) {
 					return
 				}
-				this.companyStates = res.result
+				res.result.forEach(v => {
+			      this.companyStates.push(v.name)
+				})
+				console.log(this.companyStates)
 				this.companyList = this.companyStates.map(item => {
 					return {
 						value: `${item}`,

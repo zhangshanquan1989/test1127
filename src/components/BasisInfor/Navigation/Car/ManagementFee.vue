@@ -9,7 +9,8 @@
 		</el-breadcrumb>
 
 		<el-card class="box-card">
-			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;"></el-input>
+			<el-button type="primary" plain @click="handleQueryNearBtn">显示快到期车辆</el-button>
+			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;margin-left: 100px;"></el-input>
 			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
 			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
 			
@@ -36,7 +37,7 @@
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<!-- 缴费按钮 -->
-						<el-button type="primary" size="mini" @click="payCostDialog(scope.row.licensePlate,scope.row.id)">缴费</el-button>
+						<el-button type="primary" size="mini" @click="payCostDialog(scope.row)">缴费</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -172,6 +173,10 @@
 				this.queryInfo.licensePlate = "*" + this.queryInfo.carName + "*"
 				this.getPageList()
 			},
+			handleQueryNearBtn(){
+				this.queryInfo.owe = "*是*"
+				this.getPageList()
+			},
 			// 返回按钮order: 
 			handleQueryBackBtn() {
 				this.queryInfo.pageNo = 1
@@ -180,23 +185,22 @@
 				this.queryInfo.column = "id"
 				this.queryInfo.licensePlate = ''
 				this.queryInfo.carName = ''
+				this.queryInfo.owe = ""
 				this.getPageList()
 			},
 
 			// 显示缴费页面
-			async payCostDialog(licensePlate,id) {
-				console.log(licensePlate)
-				console.log(id)
+			async payCostDialog(row) {
+				console.log(row)
 				const {
 					data: res
-				} = await this.$http.get('kmanagementRecords/list?licensePlate=' + licensePlate)
+				} = await this.$http.get('kmanagementRecords/list?licensePlate=' + row.licensePlate)
 				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
 				this.payCostList = res.result.records
-				this.payCostForm.licensePlate = licensePlate
-				this.payCostForm.id = id
+				this.payCostForm = row
 				this.payCostDialogVisible = true
 			},
 			// 充值

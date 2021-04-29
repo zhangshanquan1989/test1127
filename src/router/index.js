@@ -9,8 +9,10 @@ import DataFactory from '../components/DataFactory/DataFactory.vue'
 import PerformanceInfor from '../components/PerformanceInfor/PerformanceInfor.vue'
 import RightsManage from '../components/RightsManage/RightsManage.vue'
 import Welcome from '../components/Welcome/Welcome.vue'
+import WaybillManage from '../components/WaybillManage/WaybillManage.vue'
+import DistributionManage from '../components/DistributionManage/DistributionManage.vue'
 
-// Home子组件
+// Basis子组件
 import CompanyInfor from '../components/BasisInfor/Navigation/CompanyInfor.vue'
 import WorkerInfor from '../components/BasisInfor/Navigation/WorkerInfor.vue'
 import DriverQuery from '../components/BasisInfor/Navigation/DriverQuery.vue'
@@ -20,6 +22,7 @@ import CarInfo from '../components/BasisInfor/Navigation/Car/CarInfo.vue'
 import Illegal from '../components/BasisInfor/Navigation/Car/Illegal.vue'
 import EarnestMoney  from '../components/BasisInfor/Navigation/Car/EarnestMoney .vue'
 import ManagementFee from '../components/BasisInfor/Navigation/Car/ManagementFee.vue'
+import CarMonitoring from '../components/BasisInfor/Navigation/Car/CarMonitoring.vue'
 
 // 权限子组件
 import AssemblyAuthorized from '../components/RightsManage/Navigation/AssemblyAuthorized.vue'
@@ -45,6 +48,7 @@ const routes = [
 				{path: '/basis/worker',component: WorkerInfor},
 				{path: '/basis/car/carInfo',component: CarInfo},
 				{path: '/basis/car/illegal',component: Illegal},
+				{path: '/basis/car/carMonitoring',component: CarMonitoring},
 				{path: '/basis/car/earnestMoney',component: EarnestMoney},
 				{path: '/basis/car/managementFee',component: ManagementFee},
 				{path: '/basis/driver',component: DriverQuery},
@@ -54,11 +58,15 @@ const routes = [
 		{path:'/assembly', component:Assembly},
 		{path:'/dataFactory', component:DataFactory},
 		{path:'/performance', component:PerformanceInfor},
+		{path:'/distributionManage', component:DistributionManage},
+		{path:'/waybillManage', component:WaybillManage},
+		
 		{path:'/rights', component:RightsManage,redirect:'/manageLimit',
 		children:[
 			{path: '/assemblyAuthorized',component: AssemblyAuthorized},
 			{path: '/basisAuthorized',component: BasisAuthorized},
 			{path: '/manageLimit',component: ManageLimit},
+			
 			{path: '/performanceAuthorized',component: PerformanceAuthorized},
 			]},
 		{path:'/text', component:Text}

@@ -1,7 +1,7 @@
 <template>
 	<div class="login_container">
 		<div class="background">
-			<img src="../assets/login/背景.jpg" alt="">
+			<img src="../assets/login/登陆背景图S.jpg" alt="">
 		</div>
 
 		<div class="login_box" >
@@ -10,7 +10,7 @@
 				<img src="../assets/login/天康系统@2x.png" alt="">
 			</div>
 			<div class="acatar_box">
-				<img src="../assets/login/未标题-1@2x.png" alt="">
+				<img src="../assets/login/登录侧边图S.png" alt="">
 			</div>
 			<div class="form_box">
 				<!-- 登录表单区域 -->
@@ -38,12 +38,8 @@
 						<!-- <el-button size="mini"  @click="handleChangeRandomImage" style="position: absolute;">换一张</el-button> -->
 					</el-form-item>
 					
-					<!-- 				<span>账号：zhangsan </span>
-								<span>密码：zhangsan </span> -->
 					<!-- 按钮 -->
 					<el-form-item class="btns">
-						<!-- <button @click="login"></button> -->
-
 						<el-button type="primary" round @click="login" style="width: 335px;margin-top: 30px;height: 56px;border-radius: 28px;font-size:22px ;">登录</el-button>
 						<el-button plain type="info" round @click="resetLoginForm" style="display: block;margin-top: 20px;width: 335px;height: 56px;border-radius: 28px;font-size:22px ;margin-left: 0;">重置</el-button>
 					</el-form-item>
@@ -65,7 +61,8 @@
 				loginForm: {
 					username: 'zhangsan',
 					password: 'zhangsan',
-					checkKey: 'abc'
+					checkKey: 'abc',
+					captcha:''
 				},
 				//表单验证规则
 				loginFormRules: {
@@ -92,7 +89,7 @@
 			// 获取登录验证码
 			async getRandomImage(){
 				const {data:res} = await this.$http.get('tPmAuthority/randomImage/abc')
-				console.log(res)
+				// console.log(res)
 				if(res.code !== 0) return
 				this.randomImage = res.result
 				
@@ -101,7 +98,7 @@
 			// 重新生成验证码
 			 async handleChangeRandomImage(){
 				const {data:res} = await this.$http.get('tPmAuthority/randomImage/abc')
-				console.log(res)
+				// console.log(res)
 				if(res.code !== 0) return
 				this.randomImage = res.result
 			},
@@ -119,9 +116,11 @@
 					console.log(res)
 					if (res.code !== 200) return this.$message.error(res.message)
 					console.log(res.result.satoken)
+					console.log('用户ID',res.result.用户ID)
 					this.$message.success("登录成功")
 					// 1.登录成功后，将返回的token值，保存到客户端的 sessionStorage 中
 					window.sessionStorage.setItem("satoken", res.result.satoken)
+					window.sessionStorage.setItem("userID", res.result.用户ID)
 					// 2.登录成功后，跳转到主页
 					this.$router.push("home")
 				})
