@@ -403,7 +403,6 @@
 					// 倒叙必填
 					order: "desc",
 					column: "id",
-					no:'',
 				},
 				// 分页列表
 				pageList: [],
@@ -495,7 +494,7 @@
 			}
 		},
 		created() {
-			this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
+			this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
 			this.getPageList()
 		},
 		methods:{
