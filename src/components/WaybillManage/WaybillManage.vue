@@ -741,11 +741,11 @@
 			}
 		},
 		created() {
+			this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
 			this.getWaybillList()
 			this.getAllCompanyList()
 			this.findAllCarLicense()
 			this.findAllSprovince()
-			this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
 		},
 		methods: {
 			deleteApoints(index, rows) {
