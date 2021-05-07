@@ -175,12 +175,12 @@
 					// 	path: '/dataFactory',
 					// 	icon: "el-icon-data-line",
 					// },
-					{
-						id: 6,
-						authName: 'text',
-						path: '/text',
-						icon: "el-icon-orange",
-					}
+					// {
+					// 	id: 6,
+					// 	authName: 'text',
+					// 	path: '/text',
+					// 	icon: "el-icon-orange",
+					// }
 				],
 
 				// 被激活的链接地址
