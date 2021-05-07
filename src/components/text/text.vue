@@ -2,6 +2,8 @@
 	<div style="padding:20px">
 		<div>
 			<el-button @click="toStringButton">转换</el-button>
+			<el-button type="primary" class="toshareUrl"  :data-clipboard-text="shareUrl" @click="clickShareUrl">点击分享
+			  </el-button>
 			<el-card class="box-card">
 				<el-table :data="tableData7" border>
 					<el-table-column prop="id" label="ID" width="180"></el-table-column>
@@ -98,6 +100,10 @@
 	export default {
 		data() {
 			return {
+				// 复制链接
+				 shareUrl: '',
+				 carid:'0000045',
+				 
 				tableData7: [{
 					id: "1",
 					name: ["1.9米", "6米", "13米"]
@@ -163,6 +169,8 @@
 			}
 		},
 		computed: {
+			
+
 			btnText() {
 				if (this.isBtnLoading) return '登录中...';
 				return '登录';
@@ -181,6 +189,18 @@
 
 		},
 		methods: {
+			// 复制链接
+			clickShareUrl() {
+			      this.shareUrl = 'http://81.70.151.121:8080/jeecg-boot/phonePage/'+this.carid
+			let clipboard = new this.Clipboard(".toshareUrl");
+			clipboard.on("success", e => {
+				// 释放内存
+				this.$message.success('已成功复制')
+				clipboard.destroy();
+			});
+			},
+			    
+			
 			toStringButton() {
 				this.bababa = this.ababab.toString()
 				console.log(this.bababa)

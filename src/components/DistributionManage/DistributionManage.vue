@@ -295,6 +295,9 @@
 			</el-form>
 			<span v-if="showSelectArea" slot="footer" class="dialog-footer" >				
 				<el-button @click="editDialogVisible = false">关 闭</el-button>
+				<el-button @click="repeat">转 发</el-button>
+				<el-button type="primary" class="toshareUrl"  :data-clipboard-text="shareUrl" @click="clickShareUrl">点击分享
+				  </el-button>
 				<el-popconfirm title="确定驳回？" @confirm="selectRejected" style="margin-left: 10px;">
 					<el-button  type="primary" slot="reference">驳 回</el-button>
 				</el-popconfirm>
@@ -317,8 +320,8 @@
 		
 		<el-divider v-if="showApproved">请完善以下内容</el-divider>
 		<el-form v-if="showApproved" :model="approvedForm" ref="approvedFormRef" label-width="100px">
-			<el-form-item  label="运单管理ID:" prop="id" class="rt-input">
-				<el-input v-model="approvedForm.id" ></el-input>
+			<el-form-item  v-if="false" label="运单管理ID:" prop="id" class="rt-input" >
+				<el-input v-model="approvedForm.id"  v-if="false"></el-input>
 			</el-form-item>
 			<el-form-item  label="司机已交订单:" prop="depositis" class="rt-input">
 				<el-select v-model="approvedForm.depositis"  clearable>
@@ -396,6 +399,8 @@
 	export default {
 		data(){
 			return{
+				// 复制的链接
+				shareUrl:'',
 				// 查询数据
 				queryInfo: {
 					pageNo: 1,
@@ -488,6 +493,8 @@
 					value: '未结单',
 					label: '未结单'
 				}],
+				// 转发的订单编号
+				repeatPlistNo:'',
 				
 				updateReturnUrl:"http://81.70.151.121:8080/jeecg-boot/distribution/uploadreturnpicture",
 				updateRiskUrl:"http://81.70.151.121:8080/jeecg-boot/distribution/uploadriskpicture",
@@ -498,6 +505,23 @@
 			this.getPageList()
 		},
 		methods:{
+			// 复制链接
+			clickShareUrl() {
+			      this.shareUrl = 'http://81.70.151.121/#/phonePage/'+this.repeatPlistNo
+			let clipboard = new this.Clipboard(".toshareUrl");
+			clipboard.on("success", e => {
+				// 释放内存
+				this.$message.success('已成功复制')
+				clipboard.destroy();
+			});
+			},
+			
+			// 点击跳转
+			repeat(e){
+				this.$router.push({path:'/phonePage/'+this.repeatPlistNo})
+				console.log(this.repeatPlistNo)
+			},
+			
 			//分页区域
 			// 根据分页查询列表
 			async getPageList() {
@@ -572,6 +596,7 @@
 				this.editForm.dispatch = this.editForm.liensess.dispatch
 				this.rejectedForm.id = res.result[0].id
 				this.approvedForm.id = res.result[0].id
+				this.repeatPlistNo = res.result[0].no
 				if(res.result[0].state == 0){
 					this.showOnlyClose = true
 				}else if(res.result[0].state == 1){

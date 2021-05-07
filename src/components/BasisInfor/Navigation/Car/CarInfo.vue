@@ -80,7 +80,7 @@
 				</el-table-column>
 				<el-table-column prop="utTime" label="最近更新时间" width="150px">
 				</el-table-column>
-				<el-table-column label="操作" width="300px" fixed="right">
+				<el-table-column label="操作" width="380px" fixed="right">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>
@@ -91,7 +91,7 @@
 						<!-- 查违章按钮 -->
 						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showQueryViolationDialog(scope.row.licensePlate)">查违章</el-button>
 						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showLocationDialog(scope.row.licensePlate)">位置</el-button>
-						<!-- <el-button type="warning" size="mini" style="margin-left: 10px;" @click="showHistoryDialog(scope.row.licensePlate)">历史轨迹</el-button> -->
+						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showHistoryDialog(scope.row.licensePlate)">历史轨迹</el-button>
 
 
 					</template>
@@ -296,6 +296,7 @@
 			<div class="input-card">
 				<h4>轨迹回放控制</h4>
 					<el-button @click="startAnimation">开始</el-button>
+					<el-button @click="stopAnimation">停止</el-button>
 				</div>
 		</el-dialog>
 	</div>
@@ -497,6 +498,11 @@
 				locationDialog: false,
 				// 历史轨迹数据
 				historyDialog: false,
+				historyQueryInfo:{
+					string:'鲁AG6870',
+					begintime:'2021-04-14 10:30:10',
+					endtime:'2021-04-14 11:30:10'
+				},
 				firstArr: [116.478935, 39.997761],
 				lineArr: [
 					[116.478935, 39.997761],
@@ -776,27 +782,51 @@
 			},
 
 			// 位置
-			showLocationDialog() {
-				this.locationDialog = true
-				setTimeout(() => {
-					var map1 = new AMap.Map("locition", {
-						resizeEnable: true, //窗口大小调整
-						center: [116.397428, 39.90923], //中心 firstArr: [116.478935, 39.997761],
-						zoom: 10
-					});
-
-					var marker1 = new AMap.Marker({
-						icon: "https://webapi.amap.com/images/car.png",
-						position: [116.406315, 39.908775],
-						offset: new AMap.Pixel(-13, -30)
-					});
-					marker1.setMap(map1);
-				}, 200)
+			async showLocationDialog(licensePlate) {
+				const {data:res} = await this.$http.get('kCarinformation/GetCarCurrent?string=' + licensePlate)
+				if (res.code !== 200) {
+					return this.$message.error('查询信息失败')
+				}
+				console.log(res)
+				if(res.result.anyType.GPSPoint){
+					const carInfo = res.result.anyType.GPSPoint
+					const {last_lon} = res.result.anyType.GPSPoint
+					const {last_lat} = res.result.anyType.GPSPoint
+					this.locationDialog = true
+					setTimeout(() => {
+						var map1 = new AMap.Map("locition", {
+							resizeEnable: true, //窗口大小调整
+							center: [last_lon, last_lat], //中心 firstArr: [116.478935, 39.997761],
+							zoom: 10
+						});
+					
+						var marker1 = new AMap.Marker({
+							icon: "https://webapi.amap.com/images/car.png",
+							position: [last_lon, last_lat],
+							offset: new AMap.Pixel(-13, -30)
+						});
+						marker1.setTitle(carInfo.carMark +":"+ carInfo.location)
+						// marker1.setMap(map1);
+						map1.add(marker1)
+					}, 200)
+				}else{
+					this.$message.warning('暂无数据')
+				}
+				
 
 
 			},
 			// 历史轨迹
-			showHistoryDialog() {
+			async showHistoryDialog() {
+				const {data:res} = await this.$http.get('kCarinformation/GetHistoryTrackBycarMark',{params:this.historyQueryInfo})
+				console.log(res)
+				if (res.code !== 200) {
+					return this.$message.error('查询信息失败')
+				}
+				this.lineArr = res.result.anyType.HistoryTrack.map( item =>{
+					return [item.last_lon, item.last_lat]
+				})
+				this.firstArr = this.lineArr[0]
 				this.historyDialog = true
 				setTimeout(() => {
 					this.initMap();
@@ -822,11 +852,11 @@
 				
 				// 设置label标签
 				// label默认蓝框白底左上角显示，样式className为：amap-marker-label
-				this.marker.setLabel({
-				    offset: new AMap.Pixel(20, 20),  //设置文本标注偏移量
-				    content: "<div class='info'>速度是100KM</div>", //设置文本标注内容
-				    direction: 'right' //设置文本标注方位
-				});
+				// this.marker.setLabel({
+				//     offset: new AMap.Pixel(20, 20),  //设置文本标注偏移量
+				//     content: "<div class='info'>速度是100KM</div>", //设置文本标注内容
+				//     direction: 'right' //设置文本标注方位
+				// });
 			},
 
 			//初始化轨迹
@@ -858,7 +888,7 @@
 			},
 
 			startAnimation() {
-				this.marker.moveAlong(this.lineArr, 200);
+				this.marker.moveAlong(this.lineArr, 500);
 			},
 			pauseAnimation() {
 				this.marker.pauseMove();

@@ -49,8 +49,7 @@
 
 					<template slot-scope="scope">
 						<el-tooltip class="item" effect="dark" content="复制" placement="top">
-						<i class="el-icon-document-copy" :data-clipboard-text=" scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel"
-						 @click="copyAreaRule"></i>
+						<i class="el-icon-document-copy" :data-clipboard-text=" scope.row.clientAddress+ '  ' + scope.row.clientFirstPerson+ ':' + scope.row.clientFirstTel+ '  ' + scope.row.clientSecondPerson+ ':' + scope.row.clientSecondTel+ '  ' + scope.row.clientThirdPerson+ ':' + scope.row.clientThirdTel" @click="copyAreaRule"></i>
 						</el-tooltip>
 						
 					</template>

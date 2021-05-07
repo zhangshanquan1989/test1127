@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
+import PhonePage from '../components/PhonePage.vue'
+
 import Assembly from '../components/Assembly/Assembly.vue'
 import BasisInfor from '../components/BasisInfor/BasisInfor.vue'
 import DataFactory from '../components/DataFactory/DataFactory.vue'
@@ -39,6 +41,7 @@ Vue.use(VueRouter)
 const routes = [
 	{path:'/',redirect:'/login'},
   {path: '/login',component: Login},
+  {path: '/phonePage/:id',component: PhonePage},
   {path: '/home',component: Home,redirect:'/welcome',
 	children:[
 		{path:'/welcome', component:Welcome},

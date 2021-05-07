@@ -133,12 +133,12 @@
 												path: '/basis/car/managementFee',
 												icon: "el-icon-caret-right"
 											},
-											// {
-											// 		id: 114,
-											// 		authName: '实时监控',
-											// 		path: '/basis/car/CarMonitoring',
-											// 		icon: "el-icon-caret-right"
-											// 	},
+											{
+													id: 114,
+													authName: '实时监控',
+													path: '/basis/car/CarMonitoring',
+													icon: "el-icon-caret-right"
+												},
 									// {
 									// 	id: 114,
 									// 	authName: '违章信息',
@@ -175,12 +175,12 @@
 					// 	path: '/dataFactory',
 					// 	icon: "el-icon-data-line",
 					// },
-					// {
-					// 	id: 6,
-					// 	authName: 'text',
-					// 	path: '/text',
-					// 	icon: "el-icon-orange",
-					// }
+					{
+						id: 6,
+						authName: 'text',
+						path: '/text',
+						icon: "el-icon-orange",
+					}
 				],
 
 				// 被激活的链接地址

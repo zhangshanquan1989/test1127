@@ -434,7 +434,7 @@
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
 								<template scope="scope">
-									<el-input :disabled="canEdit" v-model="scope.row.sarea"></el-input class="rt-input">
+									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input >
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
