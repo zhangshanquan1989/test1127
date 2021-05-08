@@ -1,37 +1,136 @@
 <template>
 	<div>
-		手机页面
+		<el-container>
+			<el-header class="header">
+				<div>订单详情</div>
+			</el-header>
+			<el-main>
+				<el-card class="box-card">
+					<!-- <el-form  ref="form" :model="phoneInfo">
+						<el-form-item>
+							<div style="font-size: 3.75rem;">装驾驶员：{{phoneInfo.liensess.driver}}</div>
+						</el-form-item>
+						<el-form-item>
+							<div style="font-size: 3.75rem;">发车时间：{{phoneInfo.apoints[0].stime}}</div>
+						</el-form-item>
+						<el-form-item class="form1">
+							<div style="font-size: 3.75rem;">提醒您：长途主意安全，雨季切记封好篷布，有问题找我不可与现场发生矛盾冲突，注意货物三不超！行车过程中注意安全，谨慎驾驶！杜绝疲劳驾驶！</div>
+						</el-form-item>
+					</el-form>
+ -->
+
+					<div>装驾驶员：{{phoneInfo.liensess.driver}}</div>
+					<div>发车时间：{{phoneInfo.apoints[0].stime}}</div>
+					<div>装货地址：{{phoneInfo.apoints[0].scity}}{{phoneInfo.apoints[0].sarea}}{{phoneInfo.apoints[0].saddress}}</div>
+					<div>联系电话：{{phoneInfo.apoints[0].spointphone}}</div>
+					<div>卸货地址：{{phoneInfo.upoints[0].dprovince}}{{phoneInfo.upoints[0].dcity}}{{phoneInfo.upoints[0].darea}}</div>
+					<div>吨 位：{{phoneInfo.goodsweight}}吨</div>
+					<div>货 物：{{phoneInfo.goodsname}}</div>
+					<div>运输距离：高速{{phoneInfo.highspeed}}下道{{phoneInfo.estimatedistance}}</div>
+					<div>放空距离：{{phoneInfo.emptydistance}}</div>
+					<div>建议运输方式：一半高速一半下道</div>
+					<div>建议到达装货地时间：电话联系装货</div>
+					<div>到车运费：{{phoneInfo.car}}</div>
+					<div>定金：{{phoneInfo.deposit}}</div>
+					<div>付款方式及金额：到付{{phoneInfo.pay}}</div>
+					<div>装卸货是否禁行：{{phoneInfo.ban}}</div>
+					<div>卸车时间：{{phoneInfo.upoints[0].dtime}}</div>
+					<div>卸货方式：叉车</div>
+					<div style="height: 18.75rem;border-bottom: 0;">提醒您：长途主意安全，雨季切记封好篷布，有问题找我不可与现场发生矛盾冲突，注意货物三不超！行车过程中注意安全，谨慎驾驶！杜绝疲劳驾驶！</div>
+				</el-card>
+			</el-main>
+		</el-container>
+
+
+
 	</div>
 </template>
 
 <script>
 	export default {
-		data(){
-			return{
-				
+		data() {
+			return {
+				phoneInfo: {
+					goodsweight:'',
+					goodsname:'',
+					emptydistance:'',
+					car:'',
+					highspeed:'',
+					estimatedistance:'',
+					deposit:'',
+					pay:'',
+					ban:'',
+					
+					liensess: {
+						driver: ''
+					},
+					apoints: [{
+						stime: '',
+						scity: '',
+						sarea: '',
+						saddress: '',
+						spointphone: '',
+					}],
+					upoints:[{
+						dprovince:'',
+						dcity:'',
+						darea:'',
+						dtime:'',
+					}]
+				},
 			}
 		},
 		created() {
-			console.log("url--info",this.$route.path);
-			
+			console.log("url--info", this.$route.path);
+
 			this.getInfo()
 		},
-		methods:{
-			async getInfo(){
+		methods: {
+			async getInfo() {
 				let noList = this.$route.path.split("/")
 				// console.log(noList)
-				let no = noList[noList.length-1]
+				let no = noList[noList.length - 1]
 				// console.log(no)
 				// console.log(this.$route.params)
 				// let id = this.$route.params.id;
 				// console.log('id'+id)
-				const {data:res} = await this.$http.get('waybill/lianjie?plistNo=' + no)
+				const {
+					data: res
+				} = await this.$http.get('waybill/lianjie?plistNo=' + no)
 				console.log(res)
+				this.phoneInfo = res.result
 			},
 		}
 	}
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+	.header {
+		width: 100%;
+		height: 12.5rem !important;
+		background-color: #0f4f7d;
+		font-size: 4.6875rem;
+		text-align: center;
 
+		div {
+			margin-top: 1.875rem;
+		}
+
+		color: #FFFFFF;
+	}
+
+	.box-card {
+		width: 100%;
+		height: 100%;
+		font-size: 3.75rem;
+
+		div {
+			width: 100%;
+			height: 6.25rem;
+			margin-left: 1.25rem;
+			margin-top: 1.875rem;
+			border-bottom: 0.0625rem solid;
+		}
+	}
+	
 </style>
