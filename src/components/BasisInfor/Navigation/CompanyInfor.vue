@@ -434,8 +434,8 @@
 				console.log(this.addCompanyForm.business)
 			},
 			handleEditTransportSuccess(response, file, fileList) {
-				this.editCompanyForm.transport = response.result.transportFileName
-				console.log(this.addCompanyForm.transport)
+				this.editCompanyForm.permit = response.result.transportFileName
+				console.log(this.addCompanyForm.permit)
 			},
 
 			// 点击按钮，展示添加对话框
@@ -473,6 +473,7 @@
 				const {
 					data: res
 				} = await this.$http.get('base/company/selectOne?companyId=' + id)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询公司信息失败！')
 				}

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width: 46.875rem;">
 		<el-container>
 			<el-header class="header">
 				<div>订单详情</div>
@@ -24,7 +24,7 @@
 					<div>装货地址：{{phoneInfo.apoints[0].scity}}{{phoneInfo.apoints[0].sarea}}{{phoneInfo.apoints[0].saddress}}</div>
 					<div>联系电话：{{phoneInfo.apoints[0].spointphone}}</div>
 					<div>卸货地址：{{phoneInfo.upoints[0].dprovince}}{{phoneInfo.upoints[0].dcity}}{{phoneInfo.upoints[0].darea}}</div>
-					<div>吨 位：{{phoneInfo.goodsweight}}吨</div>
+					<div>吨 位：{{phoneInfo.goodsweight}}吨（三不超）</div>
 					<div>货 物：{{phoneInfo.goodsname}}</div>
 					<div>运输距离：高速{{phoneInfo.highspeed}}下道{{phoneInfo.estimatedistance}}</div>
 					<div>放空距离：{{phoneInfo.emptydistance}}</div>

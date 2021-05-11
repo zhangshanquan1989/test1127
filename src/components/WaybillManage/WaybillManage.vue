@@ -1120,13 +1120,12 @@
 				this.wybillList.forEach(v => {
 					if (v.state == 0) {
 						v.stateText = "驳回"
-
 					} else if (v.state == 1) {
 						v.stateText = "审核中"
-
-					} else {
+					} else if (v.state == 2){
 						v.stateText = "审核完成"
-
+					} else if (v.state == 3){
+						v.stateText = "已下单"
 					}
 				})
 			},
@@ -1261,6 +1260,8 @@
 				} else if (res.result[0].state == 2) {
 					this.canClickEdit = true
 					this.showDisDetails = true
+				} else if (res.result[0].state == 3) {
+					this.canClickEdit = true
 				}
 
 				// 显示对话框

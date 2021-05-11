@@ -296,7 +296,7 @@
 			<span v-if="showSelectArea" slot="footer" class="dialog-footer" >				
 				<el-button @click="editDialogVisible = false">关 闭</el-button>
 				<el-button @click="repeat">转 发</el-button>
-				<el-button type="primary" class="toshareUrl"  :data-clipboard-text="shareUrl" @click="clickShareUrl">点击分享
+				<el-button type="primary" class="el-icon-share" :data-clipboard-text="shareUrl" @click="clickShareUrl">点击分享
 				  </el-button>
 				<el-popconfirm title="确定驳回？" @confirm="selectRejected" style="margin-left: 10px;">
 					<el-button  type="primary" slot="reference">驳 回</el-button>
@@ -507,8 +507,8 @@
 		methods:{
 			// 复制链接
 			clickShareUrl() {
-			      this.shareUrl = 'http://81.70.151.121/#/phonePage/'+this.repeatPlistNo
-			let clipboard = new this.Clipboard(".toshareUrl");
+			      this.shareUrl = 'http://81.70.151.121/#/phonePage/'+ this.repeatPlistNo*100
+			let clipboard = new this.Clipboard(".el-icon-share");
 			clipboard.on("success", e => {
 				// 释放内存
 				this.$message.success('已成功复制')
@@ -518,7 +518,7 @@
 			
 			// 点击跳转
 			repeat(e){
-				this.$router.push({path:'/phonePage/'+this.repeatPlistNo})
+				this.$router.push({path:'/phonePage/'+this.repeatPlistNo*100})
 				console.log(this.repeatPlistNo)
 			},
 			
