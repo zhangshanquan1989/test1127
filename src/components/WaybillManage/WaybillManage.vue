@@ -95,7 +95,7 @@
 		</el-col>
 
 		<!-- 创建的对话框 -->
-		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="85%" @close="addDialogClosed">
+		<el-dialog title="创建运单信息" :visible.sync="addDialogVisible" width="85%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" ref="addFormRef" label-width="120px">
 				<el-form-item label="运单编号:" prop="no" >
@@ -1125,7 +1125,9 @@
 					} else if (v.state == 2){
 						v.stateText = "审核完成"
 					} else if (v.state == 3){
-						v.stateText = "已下单"
+						v.stateText = "司机已接单"
+					} else if (v.state == 4){
+						v.stateText = "司机已拒单"
 					}
 				})
 			},
@@ -1240,6 +1242,7 @@
 			// 详情对话框操作
 			// 展示详情的对话框
 			async showEditDialog(plistNo) {
+				console.log(plistNo)
 				this.canClickEdit = true
 				this.showDisDetails = false
 				const {
@@ -1261,6 +1264,8 @@
 					this.canClickEdit = true
 					this.showDisDetails = true
 				} else if (res.result[0].state == 3) {
+					this.canClickEdit = true
+				}else if (res.result[0].state == 4) {
 					this.canClickEdit = true
 				}
 

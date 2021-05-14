@@ -35,6 +35,7 @@ import PerformanceAuthorized from '../components/RightsManage/Navigation/Perform
 
 
 import Text from '../components/text/text.vue'
+import Test2 from '../components/text/test2.vue'
 
 Vue.use(VueRouter)
 
@@ -72,7 +73,8 @@ const routes = [
 			
 			{path: '/performanceAuthorized',component: PerformanceAuthorized},
 			]},
-		{path:'/text', component:Text}
+		{path:'/text', component:Text},
+		{path:'/test2', component:Test2}
 		]
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

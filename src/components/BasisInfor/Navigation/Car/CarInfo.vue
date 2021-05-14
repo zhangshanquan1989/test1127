@@ -17,7 +17,7 @@
 		<el-card class="box-card">
 			<!-- 创建按钮 -->
 			<el-button type="primary" plain @click="addDialogVisible = true">创建</el-button>
-			<el-input v-model="queryInfo.carName" placeholder="车牌号" clearable style="width: 200px;margin-left: 100px;"></el-input>
+			<el-input v-model="queryCarName" placeholder="车牌号" clearable style="width: 200px;margin-left: 100px;"></el-input>
 			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
 			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
 
@@ -82,16 +82,18 @@
 				</el-table-column>
 				<el-table-column label="操作" width="380px" fixed="right">
 					<template slot-scope="scope">
+						
+						<!-- 查违章按钮 -->
+						<el-button type="warning" size="mini"  @click="showQueryViolationDialog(scope.row.licensePlate)">查违章</el-button>
+						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showLocationDialog(scope.row.licensePlate)">位置</el-button>
+						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showHistoryDialog(scope.row.licensePlate)">历史轨迹</el-button>
+						
 						<!-- 修改按钮 -->
-						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>
+						<el-button type="primary" size="mini" style="margin-left: 10px;" @click="showEditDialog(scope.row.id)">编辑</el-button>
 						<!-- 删除按钮 -->
 						<el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
 							<el-button type="danger" size="mini" slot="reference">删除</el-button>
 						</el-popconfirm>
-						<!-- 查违章按钮 -->
-						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showQueryViolationDialog(scope.row.licensePlate)">查违章</el-button>
-						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showLocationDialog(scope.row.licensePlate)">位置</el-button>
-						<el-button type="warning" size="mini" style="margin-left: 10px;" @click="showHistoryDialog(scope.row.licensePlate)">历史轨迹</el-button>
 
 
 					</template>
@@ -291,12 +293,18 @@
 		</el-dialog>
 
 		<!-- 历史轨迹 -->
-		<el-dialog title="历史轨迹" :visible.sync="historyDialog" width="80%">
+		<el-dialog title="历史轨迹" :visible.sync="historyDialog" width="80%" @close="historyDialogClosed">
+			<div>
+				<el-date-picker v-model="selectTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒" value-format="yyyy-MM-dd HH:mm:ss">
+				</el-date-picker>
+				<el-button @click="handleSelectHistoryTrack" style="margin-left: 20px;"  v-loading.fullscreen.lock="fullscreenLoading">查询</el-button>
+			</div>
 			<div id="container" style="width: 100%;height: 500px;"></div>
 			<div class="input-card">
 				<h4>轨迹回放控制</h4>
 					<el-button @click="startAnimation">开始</el-button>
-					<el-button @click="stopAnimation">停止</el-button>
+					<el-button @click="pauseAnimation">暂停</el-button>
+					<el-button @click="resumeAnimation">继续</el-button>
 				</div>
 		</el-dialog>
 	</div>
@@ -307,7 +315,9 @@
 		data() {
 			return {
 				showImageSrc: '',
-				// 查询数据
+				// 查询的车牌
+				queryCarName:'',
+				// 分页查询数据
 				queryInfo: {
 					pageNo: 1,
 					pageSize: 10,
@@ -498,33 +508,25 @@
 				locationDialog: false,
 				// 历史轨迹数据
 				historyDialog: false,
+				// 历史轨迹查询的数据
 				historyQueryInfo:{
+					
 					string:'鲁AG6870',
 					begintime:'2021-04-14 10:30:10',
 					endtime:'2021-04-14 11:30:10'
 				},
+				// 历史轨迹查询的时间
+				selectTime:'',
+				// 历史轨迹查询加载
+				fullscreenLoading: false,
 				firstArr: [116.478935, 39.997761],
-				lineArr: [
-					[116.478935, 39.997761],
-					[116.478939, 39.997825],
-					[116.478912, 39.998549],
-					[116.478912, 39.998549],
-					[116.478998, 39.998555],
-					[116.478998, 39.998555],
-					[116.479282, 39.99856],
-					[116.479658, 39.998528],
-					[116.480151, 39.998453],
-					[116.480784, 39.998302],
-					[116.480784, 39.998302],
-					[116.481149, 39.998184],
-					[116.481573, 39.997997],
-					[116.481863, 39.997846],
-					[116.482072, 39.997718],
-					[116.482362, 39.997718],
-					[116.483633, 39.998935],
-					[116.48367, 39.998968],
-					[116.484648, 39.999861]
-				],
+				lineArr: {},
+				// 历史轨迹相关数据
+				map: {},
+				carMarker:{},
+				carWindow:{},
+				pathPolyline:{},
+				passedPolyline:{}
 			}
 		},
 
@@ -583,10 +585,10 @@
 					params: this.queryInfo
 				})
 				console.log(res)
-				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+				if (!res.result.records) {
+					return this.$message.error(res.message)
 				}
-				this.$message.success('获取信息成功')
+				this.$message.success(res.message)
 				this.carList = res.result.records
 				this.total = res.result.total
 			},
@@ -598,16 +600,21 @@
 			},
 
 			// 点击查询按钮
-			handleQueryBtn() {
-				this.queryInfo.licensePlate = "*" + this.queryInfo.carName + "*"
-				this.getCarList()
+			async handleQueryBtn() {
+				const licensePlate = "*" + this.queryCarName + "*"
+				const {
+					data: res
+				} = await this.$http.get('kCarinformation/list?licensePlate='+licensePlate)
+				console.log(res)
+				this.carList = res.result.records
+				this.total = res.result.total
 			},
 			// 返回按钮
 			handleQueryBackBtn() {
 				this.queryInfo.pageNo = 1
 				this.queryInfo.pageSize = 10
 				this.queryInfo.licensePlate = ''
-				this.queryInfo.carName = ''
+				this.queryCarName = ''
 				this.getCarList()
 			},
 
@@ -670,13 +677,13 @@
 					} = await this.$http.post('kCarinformation/add', this.addForm)
 					console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('添加信息失败')
+						return this.$message.error(res.message)
 					}
 					// 添加成功，关闭对话框，刷新数据列表，提示添加成功
 					this.addDialogVisible = false
 					this.getCarList()
 					// this.getAllDriverList()
-					this.$message.success('添加信息成功')
+					this.$message.success(res.message)
 				})
 			},
 			// 监听创建对话框关闭
@@ -812,43 +819,113 @@
 				}else{
 					this.$message.warning('暂无数据')
 				}
-				
-
-
 			},
-			// 历史轨迹
-			async showHistoryDialog() {
+			// 历史轨迹查询
+			async handleSelectHistoryTrack(){
+				
+				if (!this.selectTime) {
+					return this.$message.warning('请选择时间！')
+				}
+				this.fullscreenLoading = true;
+				this.historyQueryInfo.begintime = this.selectTime[0]
+				this.historyQueryInfo.endtime = this.selectTime[1]
+				console.log(this.historyQueryInfo.selectTime)
 				const {data:res} = await this.$http.get('kCarinformation/GetHistoryTrackBycarMark',{params:this.historyQueryInfo})
-				console.log(res)
+				this.fullscreenLoading = false;
+				
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
-				this.lineArr = res.result.anyType.HistoryTrack.map( item =>{
-					return [item.last_lon, item.last_lat]
-				})
-				this.firstArr = this.lineArr[0]
+				if(res.result.anyType.HistoryTrack){
+					this.lineArr = res.result.anyType.HistoryTrack.map( item =>{
+						return {
+							last_lon: `${item.last_lon}`,
+							last_lat: `${item.last_lat}`,
+							speedG: `${item.speedG}`,
+						}
+					})
+					console.log(this.lineArr)
+					this.firstArr = [this.lineArr[0].last_lon,this.lineArr[0].last_lat]
+					setTimeout(() => {
+						this.initMap();
+						// this.initroad();speed
+					}, 200);
+				}else{
+					this.$message.warning('未查询到线路信息')
+				}
+			},
+			
+			// 历史轨迹
+			async showHistoryDialog(string) {
+				
+				this.historyQueryInfo.string = string
+				const {data:res} = await this.$http.get('kCarinformation/GetCarCurrent?string=' + string)
+				if (res.code !== 200) {
+					return this.$message.error('查询信息失败')
+				}
+				console.log(res)
+				if(res.result.anyType.GPSPoint){				
+					const {last_lon} = res.result.anyType.GPSPoint
+					const {last_lat} = res.result.anyType.GPSPoint
+					this.firstArr = [last_lon,last_lat]
+					setTimeout(() => {
+						this.initMap();
+					}, 200)
+				}else{
+					this.$message.warning('暂无位置信息数据')
+				}
+				// const {data:res} = await this.$http.get('kCarinformation/GetHistoryTrackBycarMark',{params:this.historyQueryInfo})
+				
+				// console.log(res)
+				// if (res.code !== 200) {
+				// 	return this.$message.error('查询信息失败')
+				// }
+				// if(res.result.anyType.HistoryTrack){
+				// 	this.lineArr = res.result.anyType.HistoryTrack.map( item =>{
+				// 		return [item.last_lon, item.last_lat]
+				// 	})
+				// 	this.firstArr = this.lineArr[0]
+				// 	setTimeout(() => {
+				// 		this.initMap();
+				// 		this.initroad();
+				// 	}, 200);
+				// }else{
+				// 	this.$message.warning('未查询到线路信息')
+				// }
 				this.historyDialog = true
-				setTimeout(() => {
-					this.initMap();
-					this.initroad();
-				}, 200);
 			},
 
 			//初始化地图
 			initMap() {
+				// 1. 创建地图
 				this.map = new AMap.Map("container", {
 					resizeEnable: true, //窗口大小调整
 					center: this.firstArr, //中心 firstArr: [116.478935, 39.997761],
 					zoom: 12
 				});
-				this.marker = new AMap.Marker({
+				
+					// 2.创建小汽车marker
+				this.carMarker = new AMap.Marker({
 					map: this.map,
 					position: this.firstArr,
 					icon: "https://webapi.amap.com/images/car.png",
 					offset: new AMap.Pixel(-26, -13), //调整图片偏移
 					autoRotation: true, //自动旋转
-					angle: -90 //图片旋转角度
+					// angle: -90 //图片旋转角度
 				});
+				
+				// 3.创建跟速度信息展示框
+				this.carWindow = new AMap.InfoWindow({
+					offset: new AMap.Pixel(6, -25),
+					content: ""
+				});
+				
+				// 4.生成车辆回放轨迹
+				this.pathPolyline = this.initializePaths(this.lineArr, this.map);
+				
+				// 8.地图自适应缩放
+				this.map.setFitView();
+				
 				
 				// 设置label标签
 				// label默认蓝框白底左上角显示，样式className为：amap-marker-label
@@ -860,44 +937,107 @@
 			},
 
 			//初始化轨迹
-			initroad() {
-				//绘制还未经过的路线
-				this.polyline = new AMap.Polyline({
-					map: this.map,
-					path: this.lineArr,
-					showDir: true,
-					strokeColor: "#28F", //线颜色--蓝色
-					// strokeOpacity: 1,     //线透明度
-					strokeWeight: 6 //线宽
-					// strokeStyle: "solid"  //线样式
-				});
-				//绘制路过了的轨迹
-				var passedPolyline = new AMap.Polyline({
-					map: this.map,
-					strokeColor: "#AF5", //线颜色-绿色
-					//path: this.lineArr,
-					// strokeOpacity: 1,     //线透明度
-					strokeWeight: 6 //线宽
-					// strokeStyle: "solid"  //线样式
-				});
-				this.marker.on("moving", e => {
+			// initroad() {
+			// 	//绘制还未经过的路线
+			// 	this.polyline = new AMap.Polyline({
+			// 		map: this.map,
+			// 		path: this.lineArr,
+			// 		showDir: true,
+			// 		strokeColor: "#28F", //线颜色--蓝色
+			// 		// strokeOpacity: 1,     //线透明度
+			// 		strokeWeight: 6 //线宽
+			// 		// strokeStyle: "solid"  //线样式
+			// 	});
+			// 	//绘制路过了的轨迹
+			// 	this.passedPolyline = new AMap.Polyline({
+			// 		map: this.map,
+			// 		strokeColor: "#AF5", //线颜色-绿色
+			// 		//path: this.lineArr,
+			// 		// strokeOpacity: 1,     //线透明度
+			// 		strokeWeight: 6 //线宽
+			// 		// strokeStyle: "solid"  //线样式
+			// 	});
+			// 	this.marker.on("moving", e => {
 
-					passedPolyline.setPath(e.passedPath);
-				});
-				this.map.setFitView(); //合适的视口
+			// 		passedPolyline.setPath(e.passedPath);
+			// 	});
+			// 	this.map.setFitView(); //合适的视口
+			// },
+			initializePaths(paths, map1) {
+				console.log(map1)
+				var line;
+				var pathLngLatArray = new Array();
+				if (paths) {
+					for (var i = 0; i < paths.length; i++) {
+						pathLngLatArray.push(new AMap.LngLat(paths[i].last_lon, paths[i].last_lat));
+					}
+					line = new AMap.Polyline({
+						map: map1,
+						path: pathLngLatArray,
+						strokeColor: '#28F',
+						strokeOpacity: 0.8,
+						strokeWeight: 6,
+						strokeStyle: 'solid'
+					});
+					line.setMap(map1);
+				}
+				return line;
+			},
+			setVehicleSpeedInWidowns(lnglat) {
+				for (var i = 0; i < this.lineArr.length; i++) {
+					if (lnglat.distance(new AMap.LngLat(this.lineArr[i].last_lon, this.lineArr[i].last_lat)) < 4) {
+						this.carWindow.setContent("速度:" + (this.lineArr[i].speedG * 1.852).toFixed(2) + "公里/时");
+						return;
+					}
+				}
 			},
 
 			startAnimation() {
-				this.marker.moveAlong(this.lineArr, 500);
+				// 绘制车辆走过了的颜色
+					this.passedPolyline = new AMap.Polyline({
+						map: this.map,
+						strokeColor: "#AF5", //线颜色-绿色
+						//path: this.lineArr,
+						// strokeOpacity: 1,     //线透明度
+						strokeWeight: 6 //线宽
+						// strokeStyle: "solid"  //线样式
+					});
+				// 5.车辆随轨迹移动
+				this.carMarker.moveAlong(this.pathPolyline.getPath(), 1000, function(k) {
+					return k
+				}, false);
+				
+				// 6.速度框随车辆移动
+				AMap.event.addListener(this.carMarker, 'moving', (e)=> {
+					this.passedPolyline.setPath(e.passedPath);
+					var lastLocation = e.passedPath[e.passedPath.length - 1];
+					this.carWindow.setPosition(lastLocation);
+					this.setVehicleSpeedInWidowns(lastLocation);
+				});
+				
+				// 7.打开速度框setPosition
+				this.carWindow.open(this.map, this.carMarker.getPosition());
 			},
 			pauseAnimation() {
-				this.marker.pauseMove();
+				this.carMarker.pauseMove();
 			},
 			resumeAnimation() {
-				this.marker.resumeMove();
+				this.carMarker.resumeMove();
 			},
 			stopAnimation() {
-				this.marker.stopMove();
+				this.carMarker.stopMove();
+			},
+			// 历史轨迹对话框关闭事件carWindow.setPosition
+			historyDialogClosed(){
+				this.stopAnimation();
+				this.selectTime = []
+				this.lineArr ={}
+				this.map ={}
+				this.carMarker ={}
+				this.carWindow ={}
+				this.pathPolyline ={}
+				this.lineArr ={}
+				
 			},
 
 		}

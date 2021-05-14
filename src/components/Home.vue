@@ -180,6 +180,12 @@
 					// 	authName: 'text',
 					// 	path: '/text',
 					// 	icon: "el-icon-orange",
+					// },
+					// {
+					// 	id: 7,
+					// 	authName: 'test2',
+					// 	path: '/test2',
+					// 	icon: "el-icon-orange",
 					// }
 				],
 

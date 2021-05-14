@@ -1,5 +1,5 @@
 <template>
-	<div style="width: 46.875rem;">
+	<div style="width: 23.4375rem;">
 		<el-container>
 			<el-header class="header">
 				<div>订单详情</div>
@@ -82,7 +82,10 @@
 		},
 		created() {
 			console.log("url--info", this.$route.path);
-
+			let encodeData = window.btoa("0000045")
+			console.log('encodeData' + encodeData)
+			let decodeData = window.atob(encodeData)
+			console.log('decodeData' + decodeData)
 			this.getInfo()
 		},
 		methods: {
@@ -107,9 +110,9 @@
 <style lang="less" scoped>
 	.header {
 		width: 100%;
-		height: 12.5rem !important;
+		height: 5rem !important;
 		background-color: #0f4f7d;
-		font-size: 4.6875rem;
+		font-size: 1.5rem;
 		text-align: center;
 
 		div {
@@ -122,13 +125,13 @@
 	.box-card {
 		width: 100%;
 		height: 100%;
-		font-size: 3.75rem;
+		font-size:0.9375rem;
 
 		div {
 			width: 100%;
-			height: 6.25rem;
+			height: 1.25rem;
 			margin-left: 1.25rem;
-			margin-top: 1.875rem;
+			margin-top: 1.25rem;
 			border-bottom: 0.0625rem solid;
 		}
 	}

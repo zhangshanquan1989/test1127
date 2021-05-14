@@ -95,6 +95,7 @@
 		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+
 				<el-form-item  label="运单编号:" prop="no" class="rt-input">
 					<el-input disabled v-model="editForm.no" ></el-input>
 				</el-form-item>
@@ -293,17 +294,28 @@
 				</div>
 				
 			</el-form>
-			<span v-if="showSelectArea" slot="footer" class="dialog-footer" >				
+			<!-- <el-button @click="repeat">转 发</el-button> -->
+			
+			<span  slot="footer" class="dialog-footer" >	
+				<el-button type="primary" class="el-icon-share" :data-clipboard-text="shareUrl" @click="clickShareUrl">分享</el-button>
 				<el-button @click="editDialogVisible = false">关 闭</el-button>
-				<el-button @click="repeat">转 发</el-button>
-				<el-button type="primary" class="el-icon-share" :data-clipboard-text="shareUrl" @click="clickShareUrl">点击分享
-				  </el-button>
-				<el-popconfirm title="确定驳回？" @confirm="selectRejected" style="margin-left: 10px;">
-					<el-button  type="primary" slot="reference">驳 回</el-button>
+				
+				<el-popconfirm title="确定驳回？" @confirm="selectRejected" style="margin-left: 10px;"  v-if="showSelectArea">
+					<el-button type="primary" slot="reference">驳 回</el-button>
 				</el-popconfirm>
-				<el-popconfirm title="确定审核通过？" @confirm="selectApproved" style="margin-left: 10px;">
-					<el-button  type="primary" slot="reference">审核通过</el-button>
-				</el-popconfirm>				
+
+
+				<el-popconfirm title="司机拒单？" @confirm="driverReject" style="margin-left: 10px;" v-if="showSelectArea">
+					<el-button  type="primary" slot="reference">司机拒单</el-button>
+				</el-popconfirm>			
+				<el-popconfirm title="司机接单？" @confirm="driverAgree" style="margin-left: 10px;" v-if="showSelectArea">
+					<el-button  type="primary" slot="reference">司机接单</el-button>
+				</el-popconfirm>
+
+				<el-popconfirm title="订单已完结？" @confirm="orderDone" style="margin-left: 10px;" v-if="showOrderDone">
+					<el-button   type="primary" slot="reference">订单完结</el-button>
+				</el-popconfirm>
+					
 			</span>
 		
 	
@@ -314,7 +326,7 @@
 			</el-form-item>
 		</el-form>
 		<span v-if="showRejected" slot="footer" class="dialog-footer" >
-			<el-button @click="editDialogVisible = false">关 闭</el-button>
+<!-- 			<el-button @click="editDialogVisible = false">关 闭</el-button> -->
 			<el-button type="primary" @click="handleRejected">确 定</el-button>
 		</span>	
 		
@@ -382,13 +394,10 @@
 			</el-form-item>
 		</el-form>
 		<span v-if="showApproved" slot="footer" class="dialog-footer" >
-			<el-button @click="editDialogVisible = false">关 闭</el-button>
-			<el-button type="primary" @click="handleApproved">确 定</el-button>
+<!-- 			<el-button @click="editDialogVisible = false">关 闭</el-button> -->
+			<el-button type="primary" @click="handleApproved" style="margin-left: 10px;">确 定</el-button>
 		</span>	
 		
-		<span v-if="showOnlyClose" slot="footer" class="dialog-footer" >
-			<el-button @click="editDialogVisible = false">关 闭</el-button>
-		</span>	
 		</el-dialog>
 		
 		
@@ -421,12 +430,13 @@
 					Lidriver:'',
 					dispatch:'',
 				},
-				// 只显示关闭
-				showOnlyClose:false,
+
 				// 显示操作区
 				showSelectArea:false,
 				// 显示驳回
 				showRejected:false,
+				// 显示订单完结按钮
+				showOrderDone:false,
 				// 显示审核通过
 				showApproved:false,
 				// 订单完结，显示配送详情
@@ -542,8 +552,12 @@
 						v.stateText = "驳回"						
 					}else if(v.state == 1){
 						v.stateText = "待审核"						
-					}else{
+					}else if(v.state == 2){
 						v.stateText = "审核完成"						
+					}else if(v.state == 3){
+						v.stateText = "司机已接单"						
+					}else if(v.state == 4){
+						v.stateText = "司机已拒单"						
 					}
 				})
 			},
@@ -553,6 +567,7 @@
 				this.srcList= []
 				this.srcList.push(src)
 			},
+			
 			
 			// 点击查询按钮
 			handleQueryBtn() {
@@ -598,12 +613,17 @@
 				this.approvedForm.id = res.result[0].id
 				this.repeatPlistNo = res.result[0].no
 				if(res.result[0].state == 0){
-					this.showOnlyClose = true
+
 				}else if(res.result[0].state == 1){
 					this.showSelectArea = true
 				}else if(res.result[0].state == 2){
-					this.showOnlyClose = true
+
 					this.showDisDetails = true
+				}else if(res.result[0].state == 3){
+
+					this.showOrderDone = true
+				}else if(res.result[0].state == 4){
+
 				}
 
 				// 显示对话框
@@ -614,6 +634,34 @@
 			selectRejected(){
 				this.showSelectArea = false
 				this.showRejected = true
+			},
+			// 司机拒单
+			async driverReject(){
+				const {
+					data: res
+				} = await this.$http.get('waybill/sijijudan?id='+this.editForm.id)
+				console.log(res)
+				if (res.code !== 200) {
+					return this.$message.error(res.message)
+				}
+				// 更新成功，关闭对话框，刷新数据列表，提示修改成功
+				this.editDialogVisible = false
+								
+				this.getPageList()
+			},
+			// 司机接单
+			async driverAgree(){
+				const {
+					data: res
+				} = await this.$http.get('waybill/sijijiedan?id='+this.editForm.id)
+				console.log(res)
+				if (res.code !== 200) {
+					return this.$message.error(res.message)
+				}
+				// 更新成功，关闭对话框，刷新数据列表，提示修改成功
+				this.editDialogVisible = false
+								
+				this.getPageList()
 			},
 			
 			// 提交驳回
@@ -627,19 +675,19 @@
 					} = await this.$http.get('distribution/bohui',{params:this.rejectedForm})
 					console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('更新信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
 				
 					this.getPageList()
-					this.$message.success('更新信息成功')
+					this.$message.success(res.message)
 				})
 			},
 			
-			// 选择审核通过
-			selectApproved(){
-				this.showSelectArea = false
+			// 订单完结，填写信息
+			orderDone(){
+				this.showOrderDone = false
 				this.showApproved = true
 			},
 			
@@ -687,6 +735,7 @@
 				this.showSelectArea = false
 				this.showRejected = false
 				this.showApproved = false
+				this.showOrderDone = false
 			},
 		}
 	}

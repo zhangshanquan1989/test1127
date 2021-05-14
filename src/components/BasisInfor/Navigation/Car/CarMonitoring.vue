@@ -1,7 +1,27 @@
 <template>
 	<div>
-		<!-- 位置 -->
-		<div id="allCarLocition" style="width: 100%;height: 800px;"></div>
+		<el-container>
+		  <el-header>车辆实时监控</el-header>
+		  <el-container>
+		    <el-aside width="100px" style="height: 600px;">
+					<el-card class="box-card" >
+					  <div>测试测试</div>
+						<div>测试测试</div>
+						<div>测试测试</div>
+						<div>测试测试</div>
+						<div>测试测试</div>
+						<div>测试测试</div>
+
+					</el-card>
+				</el-aside>
+		    <el-main>		
+				<!-- 位置 -->
+			<div id="allCarLocition" style="width: 100%;height: 700px;"></div>
+		</el-main>
+		  </el-container>
+		</el-container>
+
+
 	</div>
 </template>
 
@@ -30,11 +50,11 @@
 				this.carList = res.result.forEach(v => {
 					this.carJointList.push('货好多' + v)
 				})
-				// console.log("carJointList" + this.carJointList)
+				console.log("carJointList" + this.carJointList)
 				const {
 					data: res1
 				} = await this.$http.get('kCarinformation/GetCarCurrentStatusBycarMark?s=' + this.carJointList)
-				console.log('res1'+res1.result.anyType.CarCurrentStatus)
+				console.log('res1',res1)
 				const list = res1.result.anyType.CarCurrentStatus
 				const allLocationList = res1.result.anyType.CarCurrentStatus.map(item => {
 					return [item.last_lon, item.last_lat]
