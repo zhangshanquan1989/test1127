@@ -106,7 +106,7 @@
 			resetLoginForm() {
 				this.$refs.loginFormRef.resetFields();
 			},
-			// 点击登录按钮
+			// 点击登录按钮 tPmAuthority
 			login() {
 				this.$refs.loginFormRef.validate(async valid => {
 					if (!valid) return;
@@ -120,7 +120,10 @@
 					this.$message.success("登录成功")
 					// 1.登录成功后，将返回的token值，保存到客户端的 sessionStorage 中
 					window.sessionStorage.setItem("satoken", res.result.satoken)
-					window.sessionStorage.setItem("userID", res.result.用户ID)
+					// 登录后的id,用于运单和配送获取数据
+					window.sessionStorage.setItem("userID", res.result.id)
+					// 登陆后的公司名称，用于权限获取公司用户
+					window.sessionStorage.setItem("company", res.result.company)
 					// 2.登录成功后，跳转到主页
 					this.$router.push("home")
 				})

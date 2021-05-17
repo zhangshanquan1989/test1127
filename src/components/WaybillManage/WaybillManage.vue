@@ -750,6 +750,7 @@
 		},
 		created() {
 			this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
+			console.log(this.queryInfo.userid)
 			this.getWaybillList()
 			this.getAllCompanyList()
 			this.findAllCarLicense()

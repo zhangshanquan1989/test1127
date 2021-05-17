@@ -13,6 +13,10 @@
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column prop="id" label="ID" v-if="false">
 				</el-table-column>
+				<el-table-column prop="company" label="公司" v-if="false">
+				</el-table-column>
+				<el-table-column prop="company" label="公司" v-if="false">
+				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
@@ -46,10 +50,6 @@
 				queryInfo: {
 					pageNo: 1,
 					pageSize: 10,
-					// 倒叙必填
-					order: "desc",
-					column: "id",
-					no: '',
 				},
 				// 分页列表
 				dataList: [],
@@ -58,26 +58,23 @@
 			}
 		},
 		created() {
+			this.queryInfo.company = window.sessionStorage.getItem('company')
 			this.getDataList()
 		},
 		methods:{
-			// 获取所有客户公司名称
+			// 获取与此账号相同公司的用户
 			async getDataList() {
 				const {
 					data: res
-				} = await this.$http.get('kuser/user')
-				// console.log(res)
+				} = await this.$http.get('kuser/user', {
+					params: this.queryInfo
+				})
+				console.log(res)
 				if (res.code !== 200) {
 					return
 				}
-				this.states = res.result
-				this.companyList = this.states.map(item => {
-					return {
-						value: `${item}`,
-						label: `${item}`
-					};
-				});
-				this.companyOptions = this.companyList
+				this.dataList = res.result.records
+				console.log(this.dataList)
 			},
 		}
 	}
