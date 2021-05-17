@@ -73,6 +73,8 @@
 				</el-table-column>
 				<el-table-column prop="stateText" label="订单状态" width="120px" fixed="right">
 				</el-table-column>
+				<!-- <el-table-column prop="refusenote" label="司机拒单备注" width="120px" fixed="right">
+				</el-table-column> -->
 				<el-table-column label="操作" width="120px" fixed="right">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
@@ -178,18 +180,18 @@
 					<template>
 						<el-table :data="addForm.apoints" style="width: 100%">
 							<el-table-column prop="spointphone" label="装货点电话">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input v-model="scope.row.spointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装货时间">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-date-picker v-model="scope.row.stime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
 									</el-date-picker>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sprovince" label="省">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-select v-model="scope.row.sprovince" clearable filterable remote placeholder="省" @change="sprovinceChange(scope.row.sprovince,scope.$index)">
 										<el-option v-for="item in sprovinceOptions" :key="item.index" :label="item.label" :value="item.value">
 										</el-option>
@@ -197,7 +199,7 @@
 								</template>
 							</el-table-column>
 							<el-table-column prop="scity" label="市">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-select v-model="scope.row.scity" clearable filterable remote placeholder="市" @change="scityChange(scope.row.scity,scope.$index)">
 										<el-option v-for="item in scope.row.scityOptions" :key="item.index" :label="item.label" :value="item.value">
 										</el-option>
@@ -205,7 +207,7 @@
 								</template>
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-select v-model="scope.row.sarea" clearable filterable remote placeholder="区" @change="sareaChange(scope.row.sprovince,scope.row.scity,scope.row.sarea,scope.$index)">
 										<el-option v-for="item in scope.row.sareaOptions" :key="item.index" :label="item.label" :value="item.value">
 										</el-option>
@@ -213,17 +215,17 @@
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sgrade" label="市场等级">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="shuafen" label="南北方界定">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.shuafen" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
@@ -241,18 +243,18 @@
 					<template>
 						<el-table :data="addForm.upoints" style="width: 100%">
 							<el-table-column prop="spointphone" label="装货点电话">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装货时间">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-date-picker v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
 									</el-date-picker>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sprovince" label="省">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-select v-model="scope.row.dprovince" clearable filterable remote placeholder="省" @change="dprovinceChange(scope.row.dprovince,scope.$index)">
 										<el-option v-for="item in dprovinceOptions" :key="item.index" :label="item.label" :value="item.value">
 										</el-option>
@@ -260,7 +262,7 @@
 								</template>
 							</el-table-column>
 							<el-table-column prop="dcity" label="市">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-select v-model="scope.row.dcity" clearable filterable remote placeholder="市" @change="dcityChange(scope.row.dcity,scope.$index)">
 										<el-option v-for="item in scope.row.dcityOptions" :key="item.index" :label="item.label" :value="item.value">
 										</el-option>
@@ -268,7 +270,7 @@
 								</template>
 							</el-table-column>
 							<el-table-column prop="darea" label="区">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-select v-model="scope.row.darea" clearable filterable remote placeholder="区" @change="dareaChange(scope.row.dprovince,scope.row.dcity,scope.row.darea,scope.$index)">
 										<el-option v-for="item in scope.row.dareaOptions" :key="item.index" :label="item.label" :value="item.value">
 										</el-option>
@@ -276,17 +278,17 @@
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sgrade" label="市场等级">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="shuafen" label="南北方界定">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dhuafen" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
@@ -329,6 +331,10 @@
 
 				<el-form-item v-if="!canClickEdit" label="驳回原因:" prop="bohuiyuanyin" class="redItem">
 					<div style="color: red;">{{this.editForm.bohuiyuanyin}}</div>
+				</el-form-item>
+				
+				<el-form-item v-if="showRefusenote" label="司机拒单原因:" prop="refusenote" class="redItem">
+					<div style="color: red;">{{this.editForm.refusenote}}</div>
 				</el-form-item>
 
 				<el-form-item label="运单编号:" prop="no" class="rt-input">
@@ -411,44 +417,44 @@
 					<template>
 						<el-table :data="editForm.apoints" style="width: 100%">
 							<el-table-column prop="spointphone" label="装货点电话">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.spointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装货时间">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-date-picker :disabled="canEdit" v-model="scope.row.stime" type="datetime" placeholder="选择日期时间"
 									 value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
 									</el-date-picker>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sprovince" label="省">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.sprovince" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="scity" label="市">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.scity" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input >
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sgrade" label="等级">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="snanbei" label="南北方界定">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.snanbei" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
@@ -466,44 +472,44 @@
 					<template>
 						<el-table :data="editForm.upoints" style="width: 100%">
 							<el-table-column prop="spointphone" label="装货点电话">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装货时间">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-date-picker :disabled="canEdit" v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间"
 									 value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
 									</el-date-picker>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sprovince" label="省">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.dprovince" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="scity" label="市">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.dcity" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.darea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="dgrade" label="等级">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="dnanbei" label="南北方界定">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dnanbei" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
@@ -736,6 +742,8 @@
 				canClickEdit: true,
 				// 订单完结，显示配送详情
 				showDisDetails:false,
+				// 显示司机拒单原因：
+				showRefusenote:false,
 
 				updatePictureUrl: "http://81.70.151.121:8080/jeecg-boot/waybill/uploadpicture",
 			}
@@ -1256,6 +1264,9 @@
 				this.editForm.LilicensePlate = this.editForm.liensess.licensePlate
 				this.editForm.Lidriver = this.editForm.liensess.driver
 				this.editForm.dispatch = this.editForm.liensess.dispatch
+				// if(this.editForm.refusenote){
+				// 	this.showRefusenote = true
+				// }
 				if (res.result[0].state == 0) {
 					this.canClickEdit = false
 				} else if (res.result[0].state == 1) {
@@ -1267,6 +1278,7 @@
 					this.canClickEdit = true
 				}else if (res.result[0].state == 4) {
 					this.canClickEdit = true
+					this.showRefusenote = true
 				}
 
 				// 显示对话框
@@ -1284,6 +1296,7 @@
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
 				this.canEdit = true
+				this.showRefusenote = false
 			},
 			handlecanEdit() {
 				this.canEdit = false

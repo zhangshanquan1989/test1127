@@ -9,7 +9,7 @@ import Assembly from '../components/Assembly/Assembly.vue'
 import BasisInfor from '../components/BasisInfor/BasisInfor.vue'
 import DataFactory from '../components/DataFactory/DataFactory.vue'
 import PerformanceInfor from '../components/PerformanceInfor/PerformanceInfor.vue'
-import RightsManage from '../components/RightsManage/RightsManage.vue'
+
 import Welcome from '../components/Welcome/Welcome.vue'
 import WaybillManage from '../components/WaybillManage/WaybillManage.vue'
 import DistributionManage from '../components/DistributionManage/DistributionManage.vue'
@@ -27,11 +27,9 @@ import ManagementFee from '../components/BasisInfor/Navigation/Car/ManagementFee
 import CarMonitoring from '../components/BasisInfor/Navigation/Car/CarMonitoring.vue'
 
 // 权限子组件
-import AssemblyAuthorized from '../components/RightsManage/Navigation/AssemblyAuthorized.vue'
-import BasisAuthorized from '../components/RightsManage/Navigation/BasisAuthorized.vue'
-import ManageLimit from '../components/RightsManage/Navigation/ManageLimit.vue'
-import PerformanceAuthorized from '../components/RightsManage/Navigation/PerformanceAuthorized.vue'
-
+import DepartManage from '../components/RightsManage/DepartManage.vue'
+import UserManage from '../components/RightsManage/UserManage.vue'
+import RightsManage from '../components/RightsManage/RightsManage.vue'
 
 
 import Text from '../components/text/text.vue'
@@ -63,16 +61,10 @@ const routes = [
 		{path:'/dataFactory', component:DataFactory},
 		{path:'/performance', component:PerformanceInfor},
 		{path:'/distributionManage', component:DistributionManage},
-		{path:'/waybillManage', component:WaybillManage},
-		
-		{path:'/rights', component:RightsManage,redirect:'/manageLimit',
-		children:[
-			{path: '/assemblyAuthorized',component: AssemblyAuthorized},
-			{path: '/basisAuthorized',component: BasisAuthorized},
-			{path: '/manageLimit',component: ManageLimit},
-			
-			{path: '/performanceAuthorized',component: PerformanceAuthorized},
-			]},
+		{path:'/waybillManage', component:WaybillManage},		
+		{path:'/rights', component:RightsManage},
+		{path:'/manage/departManage', component:DepartManage},
+		{path:'/manage/userManage', component:UserManage},
 		{path:'/text', component:Text},
 		{path:'/test2', component:Test2}
 		]

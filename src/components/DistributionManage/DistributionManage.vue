@@ -95,7 +95,9 @@
 		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="100px">
-
+				<el-form-item v-if="showRefusenote" label="司机拒单原因:" prop="refusenote" class="redItem">
+					<div style="color: red;">{{this.editForm.refusenote}}</div>
+				</el-form-item>
 				<el-form-item  label="运单编号:" prop="no" class="rt-input">
 					<el-input disabled v-model="editForm.no" ></el-input>
 				</el-form-item>
@@ -151,43 +153,43 @@
 					<template>
 						<el-table :data="editForm.apoints" style="width: 100%">
 							<el-table-column prop="spointphone" label="装货点电话">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled  v-model="scope.row.spointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装货时间">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-date-picker disabled v-model="scope.row.stime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
 									</el-date-picker>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sprovince" label="省">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sprovince" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="scity" label="市">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.scity"  class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sarea"></el-input class="rt-input">
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sgrade" label="等级">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="snanbei" label="南北方界定">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.snanbei" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
@@ -199,43 +201,43 @@
 					<template>
 						<el-table :data="editForm.upoints" style="width: 100%">
 							<el-table-column prop="spointphone" label="装货点电话">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled  v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column label="装货时间">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-date-picker disabled v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
 									</el-date-picker>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sprovince" label="省">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled  v-model="scope.row.dprovince" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="scity" label="市">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled  v-model="scope.row.dcity" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input  disabled v-model="scope.row.darea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="dgrade" label="等级">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input" ></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="dnanbei" label="南北方界定">
-								<template scope="scope">
+								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dnanbei" class="rt-input"></el-input >
 								</template>
 							</el-table-column>
@@ -330,6 +332,17 @@
 			<el-button type="primary" @click="handleRejected">确 定</el-button>
 		</span>	
 		
+		<el-divider v-if="showDriverReject">请填写司机拒单原因</el-divider>
+				<el-form v-if="showDriverReject" :model="rejectedForm" ref="rejectedFormRef" label-width="100px">
+					<el-form-item  label="司机拒单原因:" prop="note" class="rt-input">
+						<el-input  v-model="driverRejectForm.note" ></el-input>
+					</el-form-item>
+				</el-form>
+				<span v-if="showDriverReject" slot="footer" class="dialog-footer" >
+		<!-- 			<el-button @click="editDialogVisible = false">关 闭</el-button> -->
+					<el-button type="primary" @click="handleDriverReject">确 定</el-button>
+				</span>	
+		
 		<el-divider v-if="showApproved">请完善以下内容</el-divider>
 		<el-form v-if="showApproved" :model="approvedForm" ref="approvedFormRef" label-width="100px">
 			<el-form-item  v-if="false" label="运单管理ID:" prop="id" class="rt-input" >
@@ -382,15 +395,6 @@
 				<el-upload name="imgFile" :action="updateRiskUrl" :auto-upload="true" :on-success="handleRiskSuccess" :show-file-list="false">
 					<el-button size="small" type="primary" plain>上传风险附件</el-button>
 				</el-upload>
-			</el-form-item>
-			<el-form-item  label="车辆状态:" prop="carstatus" class="rt-input">
-				<el-select v-model="approvedForm.carstatus"  clearable>
-					<el-option v-for="item in carstatusList" :key="item.value" :label="item.label" :value="item.value">
-					</el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item  label="拒单备注:" prop="refusenote" class="rt-input">
-				<el-input v-model="approvedForm.refusenote" ></el-input>
 			</el-form-item>
 		</el-form>
 		<span v-if="showApproved" slot="footer" class="dialog-footer" >
@@ -446,6 +450,13 @@
 				rejectedForm:{					
 					note:''
 				},
+				// 司机拒单显示
+				showDriverReject:false,
+				// 司机拒单数据
+				driverRejectForm:{
+					id:'',
+					note:''
+				},
 				// 审核通过数据
 				approvedForm:{
 					returnpicture:'',
@@ -459,9 +470,6 @@
 					returnis:'',
 					returnote:'',
 					risknote:'',
-					carstatus:'',
-					refusenote:'',
-
 				},
 				// 司机是否已交订单
 				depositisList: [{
@@ -496,18 +504,15 @@
 					label: '否'
 				}],
 				// 车辆状态
-				carstatusList: [{
-					value: '已接单',
-					label: '已接单'
-				}, {
-					value: '未结单',
-					label: '未结单'
-				}],
+	
 				// 转发的订单编号
 				repeatPlistNo:'',
+				// 显示司机拒单原因：
+				showRefusenote:false,
 				
 				updateReturnUrl:"http://81.70.151.121:8080/jeecg-boot/distribution/uploadreturnpicture",
 				updateRiskUrl:"http://81.70.151.121:8080/jeecg-boot/distribution/uploadriskpicture",
+				
 			}
 		},
 		created() {
@@ -611,6 +616,7 @@
 				this.editForm.dispatch = this.editForm.liensess.dispatch
 				this.rejectedForm.id = res.result[0].id
 				this.approvedForm.id = res.result[0].id
+				this.driverRejectForm.id = res.result[0].id
 				this.repeatPlistNo = res.result[0].no
 				if(res.result[0].state == 0){
 
@@ -623,7 +629,7 @@
 
 					this.showOrderDone = true
 				}else if(res.result[0].state == 4){
-
+					this.showRefusenote = true
 				}
 
 				// 显示对话框
@@ -636,10 +642,17 @@
 				this.showRejected = true
 			},
 			// 司机拒单
-			async driverReject(){
+			driverReject(){
+				this.showDriverReject = true
+				this.showSelectArea = false
+			},
+			// 填写司机拒单
+			async handleDriverReject(){
 				const {
 					data: res
-				} = await this.$http.get('waybill/sijijudan?id='+this.editForm.id)
+				} = await this.$http.get('waybill/sijijudan', {
+					params: this.driverRejectForm
+				})
 				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
@@ -736,6 +749,8 @@
 				this.showRejected = false
 				this.showApproved = false
 				this.showOrderDone = false
+				this.showDriverReject = false
+				this.showRefusenote = false
 			},
 		}
 	}

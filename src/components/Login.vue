@@ -112,7 +112,7 @@
 					if (!valid) return;
 					const {
 						data: res
-					} = await this.$http.post('tPmAuthority/login', this.loginForm);
+					} = await this.$http.post('kaccount/login', this.loginForm);
 					console.log(res)
 					if (res.code !== 200) return this.$message.error(res.message)
 					console.log(res.result.satoken)

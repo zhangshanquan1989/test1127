@@ -80,7 +80,7 @@
 						id: 1,
 						authName: '基础信息管理',
 						icon: "el-icon-s-order",
-						path:'/',
+						path:'/basis',
 						children: [{
 								id: 11,
 								authName: '公司信息',
@@ -163,12 +163,24 @@
 						path: '/distributionManage',
 						icon: "el-icon-share",
 					},
-					// {
-					// 	id: 4,
-					// 	authName: '权限管理',
-					// 	path: '/rights',
-					// 	icon: "el-icon-unlock",
-					// },
+					{
+						id: 4,
+						authName: '权限管理',
+						icon: "el-icon-unlock",
+						path:'/manage',
+						children: [{
+								id: 41,
+								authName: '部门管理',
+								path: '/manage/departManage',
+								icon: "el-icon-caret-right"
+							},
+							{
+									id: 42,
+									authName: '用户管理',
+									path: '/manage/userManage',
+									icon: "el-icon-caret-right"
+								}]
+					},
 					// {
 					// 	id: 5,
 					// 	authName: '数据工厂',
