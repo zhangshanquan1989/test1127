@@ -284,14 +284,7 @@
 						<el-input disabled v-model="editForm.risknote"></el-input>
 					</el-form-item>
 					<el-form-item label="风险附件:" prop="riskpicture" class="rt-input">
-						<el-image style="width: 120px;" :src="editForm.riskpicture"></el-image>
-						
-					</el-form-item>
-					<el-form-item label="车辆状态:" prop="carstatus" class="rt-input">
-						<el-input disabled v-model="editForm.carstatus"></el-input>
-					</el-form-item>
-					<el-form-item label="拒单备注:" prop="refusenote" class="rt-input">
-						<el-input disabled v-model="editForm.refusenote"></el-input>
+						<el-image style="width: 120px;" :src="editForm.riskpicture"></el-image>						
 					</el-form-item>
 				</div>
 				
@@ -612,7 +605,7 @@
 				}
 				this.editForm = res.result[0]
 				this.editForm.LilicensePlate = this.editForm.liensess.licensePlate
-				this.editForm.Lidriver = this.editForm.liensess.driver
+				this.editForm.Lidriver = this.editForm.cars.name
 				this.editForm.dispatch = this.editForm.liensess.dispatch
 				this.rejectedForm.id = res.result[0].id
 				this.approvedForm.id = res.result[0].id

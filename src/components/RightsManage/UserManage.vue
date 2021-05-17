@@ -11,11 +11,11 @@
 		<el-card class="box-card">		
 			<el-table :data="dataList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
-				<el-table-column prop="id" label="ID" v-if="false">
+				<el-table-column prop="id" label="ID" >
 				</el-table-column>
-				<el-table-column prop="company" label="公司" v-if="false">
+				<el-table-column prop="company" label="公司" >
 				</el-table-column>
-				<el-table-column prop="company" label="公司" v-if="false">
+				<el-table-column prop="username" label="姓名" >
 				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
 					<template slot-scope="scope">
