@@ -216,7 +216,11 @@
 					<el-input v-model="editForm.phoneno"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司:" prop="companyl">
-					<el-input v-model="editForm.companyl"></el-input>
+					<el-select v-model="editForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod" :loading="companyLoading" style="width: 300px;">
+						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+					<!-- <el-input v-model="editForm.companyl"></el-input> -->
 				</el-form-item>
 				<el-form-item label="行驶证:" prop="vehicleLicense">
 					<el-image v-if="editForm.vehicleLicense" style="width: 150px;" :src="editForm.vehicleLicense"></el-image>

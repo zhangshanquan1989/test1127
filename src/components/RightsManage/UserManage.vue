@@ -19,8 +19,8 @@
 				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
 					<template slot-scope="scope">
-						<!-- 修改按钮 -->
-						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.no)" style="margin-left: 15px;">详情</el-button>
+						<!-- 角色分配按钮 -->
+						<el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)" style="margin-left: 15px;">分配角色</el-button>
 						<!-- 删除按钮 -->
 						<!-- <el-popconfirm title="确定删除吗？" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
 							<el-button type="danger" size="mini" slot="reference">删除</el-button>
@@ -32,12 +32,12 @@
 		
 		<!-- 分页区域 -->
 		<el-col>
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
-			 :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper"
-			 :total="total" style="margin-top: 5px;">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" style="margin-top: 5px;">
 			</el-pagination>
 		</el-col>
 		
+			<el-dialog title="订单详情" :visible.sync="roleDialogVisible" width="80%" @close="roleDialogClosed">
+			</el-dialog>
 		
 	</div>
 </template>
@@ -55,11 +55,14 @@
 				dataList: [],
 				// 总条数
 				total: 0,
+				// 角色分配dialog
+				roleDialogVisible:false
 			}
 		},
 		created() {
 			this.queryInfo.company = window.sessionStorage.getItem('company')
 			this.getDataList()
+			this.getAllRole()
 		},
 		methods:{
 			// 获取与此账号相同公司的用户
@@ -75,6 +78,31 @@
 				}
 				this.dataList = res.result.records
 				console.log(this.dataList)
+			},
+			// pageSize 改变的事件
+			handleSizeChange(newSize) {
+				this.queryInfo.pageSize = newSize
+				this.getDataList()
+			},
+			
+			// 页码值改变事件
+			handleCurrentChange(newPage) {
+				this.queryInfo.pageNo = newPage
+				this.getDataList()
+			},
+			
+			// 点击角色分配
+			showRoleDialog(){
+				
+			},
+			
+			// dialog关闭
+			roleDialogClosed(){},
+			
+			// 获取所有角色 不明白后端为啥要分页！！！
+			async getAllRole(){
+				const {data:res} = await this.$http.get('krole/list?pageSize=100&pageNo=1')
+				console.log(res)
 			},
 		}
 	}
