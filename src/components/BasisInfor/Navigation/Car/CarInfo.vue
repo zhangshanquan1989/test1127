@@ -812,7 +812,7 @@
 						});
 					
 						var marker1 = new AMap.Marker({
-							icon: "https://webapi.amap.com/images/car.png",
+							icon: "http://81.70.151.121/imgs/kache.png",
 							position: [last_lon, last_lat],
 							offset: new AMap.Pixel(-13, -30)
 						});
@@ -912,7 +912,7 @@
 				this.carMarker = new AMap.Marker({
 					map: this.map,
 					position: this.firstArr,
-					icon: "https://webapi.amap.com/images/car.png",
+					icon: "http://81.70.151.121/imgs/kache1.png",
 					offset: new AMap.Pixel(-26, -13), //调整图片偏移
 					autoRotation: true, //自动旋转
 					// angle: -90 //图片旋转角度

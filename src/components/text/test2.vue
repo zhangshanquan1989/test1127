@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<div>
-			
+			<el-checkbox-group v-model="checkList1" @change="groupchange">
+				<el-checkbox v-for="value in checkList2" :label="value.name" @change="boxchange(value.id)"></el-checkbox>
+			  </el-checkbox-group>
 		</div>
 		<div class="input-card">
 			<h4>轨迹回放控制</h4>
@@ -15,8 +17,11 @@
 
 <script>
 	export default {
+		
 		data() {
 			return {
+				checkList1:[],
+				checkList2:[{'name':'name1','id':'id1'},{'name':'name2','id':'id2'}],
 				// 历史轨迹速度
 				routeInfo: [{
 					"lat": 41.898985,
@@ -47,6 +52,12 @@
 			}, 200)
 		},
 		methods: {
+			groupchange(e){
+				console.log('g',e)
+			},
+			boxchange(e){
+				console.log('b',e)
+			},
 			// startAnimation() {
 			// 	this.marker.moveAlong(this.lineArr, 500);
 			// },
