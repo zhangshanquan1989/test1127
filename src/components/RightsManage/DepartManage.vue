@@ -9,7 +9,7 @@
 		<el-card class="box-card">
 			<div>
 				<el-button type="primary" plain @click="addDepartDialogVisible = true">添加部门</el-button>
-				<el-button type="primary" plain style="margin-left: 20px;" @click="addGroupDialogVisible = true">添加小组</el-button>
+				<el-button type="primary" plain style="margin-left: 20px;" @click="handleAddGroupDialog">添加小组</el-button>
 			</div>
 
 			<el-table :data="dataList" style="width: 100%;margin-bottom: 20px;margin-top: 20px;" row-key="menutype" border :tree-props="{children: 'department', hasChildren: 'hasChildren'}">
@@ -123,6 +123,11 @@
 				this.addDepartForm.name = ''
 				this.addDepartForm.type = '部门'
 				this.addDepartForm.pid = ''				
+			},
+			// 点击添加小组
+			handleAddGroupDialog(){
+				this.getAllDepart();
+				this.addGroupDialogVisible = true
 			},
 
 			// 添加小组dialog

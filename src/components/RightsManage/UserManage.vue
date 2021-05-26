@@ -70,7 +70,7 @@
 		</el-dialog>
 		
 		<!-- 删除部门dialog -->
-		<el-dialog title="部门/小组详情" :visible.sync="departDelDialogVisible" width="80%" @close="departDelDialogClosed">
+		<el-dialog title="部门/小组详情" :visible.sync="departDelDialogVisible" width="50%" @close="departDelDialogClosed">
 			<el-table :data="userDepartData" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 					<el-table-column type="index" width="50"></el-table-column>
@@ -81,7 +81,10 @@
 		
 					<el-table-column fixed="right" label="操作">
 						<template slot-scope="scope">
-							<el-button @click="deleteOneData(scope.row.id)">删除</el-button>
+							<el-popconfirm title="确定删除吗？" @confirm="deleteOneData(scope.row.id)" style="margin-left: 10px;">
+								<el-button type="danger" size="mini" slot="reference">删除</el-button>
+							</el-popconfirm>
+							<!-- <el-button @click="deleteOneData(scope.row.id)">删除</el-button> -->
 						</template>
 					</el-table-column>
 				</el-table>
