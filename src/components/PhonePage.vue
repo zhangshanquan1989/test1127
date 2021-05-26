@@ -1,5 +1,5 @@
 <template>
-	<div style="width: 23.4375rem;">
+	<div style="width: 23.4375rem;background-color: ;">
 		<el-container>
 			<el-header class="header">
 				<div>订单详情</div>
@@ -82,10 +82,12 @@
 		},
 		created() {
 			console.log("url--info", this.$route.path);
-			let encodeData = window.btoa("0000045")
-			console.log('encodeData' + encodeData)
-			let decodeData = window.atob(encodeData)
-			console.log('decodeData' + decodeData)
+			// // 订单号加密
+			// let encodeData = window.btoa("0000045")
+			// console.log('encodeData' + encodeData)
+			// // 订单号解密
+			// let decodeData = window.atob(encodeData)
+			// console.log('decodeData' + decodeData)
 			this.getInfo()
 		},
 		methods: {
@@ -93,10 +95,10 @@
 				let noList = this.$route.path.split("/")
 				// console.log(noList)
 				let no = noList[noList.length - 1]
-				// console.log(no)
+				console.log('no',no)
 				// console.log(this.$route.params)
 				// let id = this.$route.params.id;
-				// console.log('id'+id)
+				// console.log('id'+id)				
 				const {
 					data: res
 				} = await this.$http.get('waybill/lianjie?plistNo=' + no)
