@@ -147,7 +147,7 @@
 				} = await this.$http.get('kmanagement/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -171,6 +171,8 @@
 			// 点击查询按钮
 			handleQueryBtn() {
 				this.queryInfo.licensePlate = "*" + this.queryInfo.carName + "*"
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
 				this.getPageList()
 			},
 			handleQueryNearBtn(){
@@ -191,11 +193,11 @@
 
 			// 显示缴费页面
 			async payCostDialog(row) {
-				console.log(row)
+				// console.log(row)
 				const {
 					data: res
 				} = await this.$http.get('kmanagementRecords/list?licensePlate=' + row.licensePlate)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
@@ -211,7 +213,7 @@
 					const {
 						data: res
 					} = await this.$http.post('kmanagement/edit', this.payCostForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('失败')
 					}

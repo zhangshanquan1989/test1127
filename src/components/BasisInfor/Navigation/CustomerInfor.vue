@@ -386,13 +386,13 @@
 		},
 		methods: {
 			multiple(e){
-				console.log(e)
+				// console.log(e)
 				this.editForm.cartypeArray=[]
 				this.editForm.cartypeArray = e
 				this.$forceUpdate(); // 调用此函数方法
 			},
 			clickshouye(){
-				console.log("点击首页")
+				// console.log("点击首页")
 			},
 			change(e){e},
 			// 根据分页查询列表
@@ -402,7 +402,7 @@
 				} = await this.$http.get('base/client/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -426,7 +426,9 @@
 			// 点击查询按钮
 			handleQueryBtn() {
 				this.queryInfo.company = "*" + this.queryInfo.customerName + "*"
-				console.log(this.queryInfo)
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				// console.log(this.queryInfo)
 				this.getList()
 			},
 			// 返回按钮
@@ -441,14 +443,14 @@
 			// 创建对话框
 			addInfo() {
 				this.addForm.cartype = this.addForm.cartypeArray.toString()
-				console.log(this.addForm)
+				// console.log(this.addForm)
 				this.$refs.addFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起添加信息的数据请求
 					const {
 						data: res
 					} = await this.$http.post('base/client/add', this.addForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('添加信息失败')
 					}
@@ -470,7 +472,7 @@
 				const {
 					data: res
 				} = await this.$http.get('base/client/selectone?id=' + id)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
@@ -495,7 +497,7 @@
 					const {
 						data: res
 					} = await this.$http.put('/base/client/edit', this.editForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('更新信息失败')
 					}

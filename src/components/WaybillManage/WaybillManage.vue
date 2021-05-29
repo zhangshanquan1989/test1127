@@ -132,8 +132,7 @@
 				</el-form-item>
 				<el-form-item label="运单截图" prop="picture">
 					<el-image v-if="addForm.picture" style="width: 150px;" :src="addForm.picture"></el-image>
-					<el-upload name="imgFile" :action="updatePictureUrl" :auto-upload="true" :on-success="handlePictureUrlSuccess"
-					 :show-file-list="false">
+					<el-upload name="imgFile" :action="updatePictureUrl" :auto-upload="true" :on-success="handlePictureUrlSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传运单截图</el-button>
 					</el-upload>
 				</el-form-item>
@@ -743,8 +742,18 @@
 			}
 		},
 		created() {
-			this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
-			console.log(this.queryInfo.userid)
+			const role = window.sessionStorage.getItem('role')
+			if(role == '管理员'){
+				
+			}else if(role == '调度主管'){
+				this.queryInfo.partid = window.sessionStorage.getItem('departmentId') - 0
+			}else if(role == '调度组员'){
+				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
+			}else{
+				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
+			}
+			
+			console.log(this.queryInfo)
 			this.getWaybillList()
 			this.getAllCompanyList()
 			this.findAllCarLicense()

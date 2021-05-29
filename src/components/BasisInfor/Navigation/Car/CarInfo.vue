@@ -605,13 +605,16 @@
 
 			// 点击查询按钮
 			async handleQueryBtn() {
-				const licensePlate = "*" + this.queryCarName + "*"
-				const {
-					data: res
-				} = await this.$http.get('kCarinformation/list?licensePlate='+licensePlate)
-				console.log(res)
-				this.carList = res.result.records
-				this.total = res.result.total
+				this.queryInfo.licensePlate = "*" + this.queryCarName + "*"
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
+				this.getCarList()
+				// const {
+				// 	data: res
+				// } = await this.$http.get('kCarinformation/list?licensePlate='+licensePlate)
+				// console.log(res)
+				// this.carList = res.result.records
+				// this.total = res.result.total
 			},
 			// 返回按钮
 			handleQueryBackBtn() {

@@ -375,7 +375,7 @@
 				} = await this.$http.get('base/company/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取公司列表失败')
 				}
@@ -403,6 +403,8 @@
 			// 点击查询按钮
 			handleQueryBtn() {
 				this.queryInfo.name = "*" + this.queryInfo.companyName + "*"
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
 				this.getCompanyList()
 			},
 			// 返回按钮
@@ -418,12 +420,12 @@
 
 			// 添加营业执照成功
 			handleBusinessSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.addForm.business = response.result.businessFileName
 				
 			},
 			handleTransportSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.addForm.permit = response.result.transportFileName
 				
 			},
@@ -431,11 +433,11 @@
 			// 修改营业执照成功
 			handleEditBusinessSuccess(response, file, fileList) {
 				this.editCompanyForm.business = response.result.businessFileName
-				console.log(this.addCompanyForm.business)
+				// console.log(this.addCompanyForm.business)
 			},
 			handleEditTransportSuccess(response, file, fileList) {
 				this.editCompanyForm.permit = response.result.transportFileName
-				console.log(this.addCompanyForm.permit)
+				// console.log(this.addCompanyForm.permit)
 			},
 
 			// 点击按钮，展示添加对话框
@@ -450,7 +452,7 @@
 					const {
 						data: res
 					} = await this.$http.post('base/company/add', this.addForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('添加公司失败!')
 					}
@@ -473,7 +475,7 @@
 				const {
 					data: res
 				} = await this.$http.get('base/company/selectOne?companyId=' + id)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询公司信息失败！')
 				}

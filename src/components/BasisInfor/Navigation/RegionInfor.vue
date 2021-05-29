@@ -178,7 +178,7 @@
 				} = await this.$http.get('base/tBaArea/list', {
 					params: this.queryInfo
 				})
-        console.log(res)
+        // console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -252,11 +252,11 @@
 			
 			// 展示编辑的对话框
 			async showEditDialog(id) {
-				console.log(id)
+				// console.log(id)
 				const {
 					data: res
 				} = await this.$http.get('base/tBaArea/findArea?id=' + id)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}

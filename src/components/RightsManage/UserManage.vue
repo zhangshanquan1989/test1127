@@ -44,9 +44,11 @@
 		
 		<!-- 分配角色 -->
 		<el-dialog title="分配角色" :visible.sync="roleDialogVisible" width="80%" @close="roleDialogClosed">
-			<el-checkbox-group v-model="roleGroupList" @change="groupchange">
+			<el-radio v-for="item in roleData" v-model="roleAddData.roleid" :label="item.id" @change="groupchange">{{item.roleName}}</el-radio>
+			<!-- 首版，复选框，传递给后端多个角色的id，已废弃 -->
+			<!-- <el-checkbox-group v-model="roleGroupList" @change="groupchange">
 				<el-checkbox v-for="value in roleData" :label="value.roleName" @change="boxchange(value.id)"></el-checkbox>
-			</el-checkbox-group>
+			</el-checkbox-group> -->
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="roleDialogVisible = false">关 闭</el-button>
 				<el-button type="primary" @click="handleRoleChoose">确 定</el-button>
@@ -111,15 +113,16 @@
 				total: 0,
 				// 角色分配dialog
 				roleDialogVisible: false,
-				// 角色的数据
+				// 所有的角色数据
 				roleData: [],
-				// 复选框的组数据
+				// 复选框的组数据 首版，复选框，传递给后端多个角色的id，已废弃
 				roleGroupList: [],
 				// 添加角色的数据
 				roleAddData:{
-					"roleid": null,
+					"roleid": '',
 					"userid": '',
-					"roleidlist":[]
+					// 首版，复选框，传递给后端多个角色的id，已废弃
+					// "roleidlist":[]
 				},
 				// 给用户添加部门分配的dialog
 				departAddDialogVisible:false,
@@ -188,11 +191,17 @@
 				this.roleAddData.userid = userid
 				const {data:res} = await this.$http.get('krole/querrole?id='+userid)
 				console.log(res)
-				res.result.forEach(v => {
-					this.roleGroupList.push(v.roleName)
-					this.roleAddData.roleidlist.push(v.id)
-				})
-				console.log(this.roleGroupList)
+				// 新版，仅需传递给后端一个角色id值
+				if(res.result.length!==0){
+					this.roleAddData.roleid = res.result[0].id
+				}
+				
+				// 首版，复选框，需要传递给后端多个角色的id，已废弃
+				// res.result.forEach(v => {
+				// 	this.roleGroupList.push(v.roleName)
+				// 	this.roleAddData.roleid.push(v.id)
+				// })
+				// console.log(this.roleGroupList)
 				this.roleDialogVisible = true
 				
 			},			
@@ -200,11 +209,13 @@
 			// dialog关闭
 			roleDialogClosed() {
 				this.roleAddData.userid = ''
-				this.roleAddData.roleidlist = []
+				this.roleAddData.roleid = ''
+				// 首版，复选框，传递给后端多个角色的id，已废弃
+				// this.roleAddData.roleidlist = []
 				this.roleGroupList = []
 			},
 
-			// 获取所有角色 不明白后端为啥要分页！！！handleRoleChoose
+			// 获取所有角色 不明白后端为啥要分页！！！
 			async getAllRole() {
 				const {
 					data: res
@@ -217,14 +228,15 @@
 				console.log('g', e)
 			},
 			// 选择的角色变化
-			boxchange(id) {
-				if(this.roleAddData.roleidlist.indexOf(id)==-1){
-				        this.roleAddData.roleidlist.push(id)
-				    }else{
-				        this.roleAddData.roleidlist.splice(this.roleAddData.roleidlist.indexOf(id), 1); 
-				    }
-						console.log(this.roleAddData.roleidlist)
-			},
+			// 首版，复选框，传递给后端多个角色的id，已废弃
+			// boxchange(id) {
+			// 	if(this.roleAddData.roleidlist.indexOf(id)==-1){
+			// 	        this.roleAddData.roleidlist.push(id)
+			// 	    }else{
+			// 	        this.roleAddData.roleidlist.splice(this.roleAddData.roleidlist.indexOf(id), 1); 
+			// 	    }
+			// 			console.log(this.roleAddData.roleidlist)
+			// },
 			// 添加角色
 			async handleRoleChoose(){
 				const {data:res} = await this.$http.post('k_user_role/add',this.roleAddData)

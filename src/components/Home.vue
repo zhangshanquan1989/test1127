@@ -87,12 +87,12 @@
 								path: '/basis/company',
 								icon: "el-icon-caret-right"
 							},
-							// {
-							// 	id: 12,
-							// 	authName: '员工信息',
-							// 	path: '/basis/worker',
-							// 	icon: "el-icon-caret-right"
-							// },
+							{
+								id: 12,
+								authName: '员工信息',
+								path: '/basis/worker',
+								icon: "el-icon-caret-right"
+							},
 							{
 								id: 13,
 								authName: '司机信息',

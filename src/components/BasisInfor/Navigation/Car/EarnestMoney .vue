@@ -171,7 +171,7 @@
 				} = await this.$http.get('base/margin/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -196,6 +196,8 @@
 			// 点击查询按钮
 			handleQueryBtn() {
 				this.queryInfo.license = "*" + this.queryInfo.carName + "*"
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
 				this.getPageList()
 			},
 			// 返回按钮
@@ -228,11 +230,11 @@
 					if (!valid) return
 					// 发起修改信息的数据请求
 					this.addRechargeForm.amount = this.addRechargeForm.amountS - 0
-					console.log(this.addRechargeForm)
+					// console.log(this.addRechargeForm)
 					const {
 						data: res
 					} = await this.$http.post('base/top/add', this.addRechargeForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('失败')
 					}
@@ -267,12 +269,12 @@
 					if (!valid) return
 					// 发起修改信息的数据请求
 					this.fineForm.fine = this.fineForm.fine - 0
-					console.log(this.fineForm)
+					// console.log(this.fineForm)
 					const {
 						data: res
 					} = await this.$http.post('base/down/add', this.fineForm)
-					console.log(this.fineForm)
-					console.log(res)
+					// console.log(this.fineForm)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}

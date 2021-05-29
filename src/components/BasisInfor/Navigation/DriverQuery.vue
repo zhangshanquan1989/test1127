@@ -298,7 +298,7 @@
 				res.result.forEach(v => {
 			      this.companyStates.push(v.name)
 				})
-				console.log(this.companyStates)
+				// console.log(this.companyStates)
 				this.companyList = this.companyStates.map(item => {
 					return {
 						value: `${item}`,
@@ -331,7 +331,7 @@
 				if (res.code !== 200) {
 					return
 				}
-				console.log(res)
+				// console.log(res)
 				// res.result.forEach(v => {
 				// 	this.plateNumberStates.push(v.driverLicense)
 				// })
@@ -376,14 +376,14 @@
 				} = await this.$http.get('kDriver/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
 				// this.$message.success('获取信息成功')
 				this.driverList = res.result.records
 				this.total = res.result.total
-				console.log(this.driverList)
+				// console.log(this.driverList)
 			},
 
 			// pageSize 改变的事件
@@ -401,6 +401,8 @@
 			// 点击查询按钮
 			handleQueryBtn() {
 				this.queryInfo.name = "*" + this.queryInfo.driverName + "*"
+				this.queryInfo.pageNo = 1
+				this.queryInfo.pageSize = 10
 				this.getDriverList()
 			},
 			// 返回按钮
@@ -420,15 +422,15 @@
 
 			// 创建图片上传成功的回调
 			handleUserIdUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.addForm.userid = response.result.UseridFileName
 			},
 			handleDrivingLicenseUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.addForm.drivingLicense = response.result.DriverFileName
 			},
 			handleWorkLicenseUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.addForm.workLicense = response.result.PostCardFileName
 			},
 
@@ -441,7 +443,7 @@
 					const {
 						data: res
 					} = await this.$http.post('kDriver/add', this.addForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error('添加信息失败')
 					}
@@ -463,7 +465,7 @@
 				const {
 					data: res
 				} = await this.$http.get('kDriver/list?id=' + id)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
@@ -478,15 +480,15 @@
 			
 			// 编辑图片上传成功的回调
 			handleEditUserIdUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.editForm.userid = response.result.UseridFileName
 			},
 			handleEditDrivingLicenseUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.editForm.drivingLicense = response.result.DriverFileName
 			},
 			handleEditWorkLicenseUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.editForm.workLicense = response.result.PostCardFileName
 			},
 

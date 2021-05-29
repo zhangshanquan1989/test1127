@@ -516,7 +516,17 @@
 			}
 		},
 		created() {
-			this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
+			const role = window.sessionStorage.getItem('role')
+			if(role == '管理员'){
+				
+			}else if(role == '调度主管'){
+				this.queryInfo.partid = window.sessionStorage.getItem('departmentId') - 0
+			}else if(role == '调度组员'){
+				this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
+			}else{
+				this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
+			}			
+			console.log(this.queryInfo)
 			this.getPageList()
 		},
 		methods: {			

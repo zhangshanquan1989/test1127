@@ -110,18 +110,23 @@
 			login() {
 				this.$refs.loginFormRef.validate(async valid => {
 					if (!valid) return;
+					console.log(this.loginForm)
 					const {
 						data: res
 					} = await this.$http.post('kaccount/login', this.loginForm);
 					console.log(res)
 					if (res.code !== 200) return this.$message.error(res.message)
-					console.log(res.result.satoken)
-					console.log('用户ID',res.result.用户ID)
+					// console.log(res.result.satoken)
+					// console.log('用户ID',res.result.用户ID)
 					this.$message.success("登录成功")
 					// 1.登录成功后，将返回的token值，保存到客户端的 sessionStorage 中
 					window.sessionStorage.setItem("satoken", res.result.satoken)
-					// 登录后的id,用于运单和配送获取数据
+					// 登录后的用户id,用于运单和配送获取数据
 					window.sessionStorage.setItem("userID", res.result.id)
+					// 登录后的用户所属的部门id,用于运单和配送获取数据
+					window.sessionStorage.setItem("departmentId", res.result.department)
+					// 登录后的用户的角色名,用于运单和配送获取数据
+					window.sessionStorage.setItem("role", res.result.role)
 					// 登陆后的公司名称，用于权限获取公司用户
 					window.sessionStorage.setItem("company", res.result.company)
 					// 登陆后的公司id，用于部门管理添加部门时的父ID

@@ -32,10 +32,9 @@
 			return {
 				chooseCarData:[],
 				checkBoxData: [],
-				carList: [],
 				carJointList: [],
 				newmap:{},
-				// 加载查询
+				// 加载查询CarCurrentStatus
 				fullscreenLoading: false,
 			}
 		},
@@ -60,23 +59,40 @@
 			},
 			// 点击查询
 			async handleQuery(){
-				this.carList = []
-				if(!this.chooseCarData[1] ) { return this.$message.error('请选择最少两个车牌！')}
-				this.carList = this.chooseCarData.forEach(v => {
+				this.newmap.clearMap();
+				var list = []
+				var allLocationList = []
+				this.carJointList = []
+				if(!this.chooseCarData[0] ) { return this.$message.error('请选择车牌！')}
+				// conso/le.log(this.chooseCarData)
+				this.chooseCarData.forEach(v => {
 					this.carJointList.push('货好多' + v)
 				})
+				// console.log(this.carJointList)
+
 				this.fullscreenLoading = true;
 				const {
 					data: res1
 				} = await this.$http.get('kCarinformation/GetCarCurrentStatusBycarMark?s=' + this.carJointList)
-				console.log('res1', res1)
+				console.log('res1', res1.result)
 				this.fullscreenLoading = false;
-				let list = []
-				list = res1.result.anyType.CarCurrentStatus
-				let allLocationList = []
-				allLocationList = res1.result.anyType.CarCurrentStatus.map(item => {
-					return [item.last_lon, item.last_lat]
-				})
+				if (res1.code !== 200) {
+					return this.$message.error(res1.message)
+				}
+				if (!res1.result.anyType.CarCurrentStatus){
+					return this.$message.warning('未查询到数据！')
+					}else if(!res1.result.anyType.CarCurrentStatus[0].length){
+						list = res1.result.anyType.CarCurrentStatus
+						allLocationList = res1.result.anyType.CarCurrentStatus.map(item => {
+							return [item.last_lon, item.last_lat]
+						})
+					}else{
+						list = res1.result.anyType.CarCurrentStatus[0]
+						allLocationList = res1.result.anyType.CarCurrentStatus[0].map(item => {
+							return [item.last_lon, item.last_lat]
+						})
+					}
+							
 				setTimeout(() => {
 					for (var i = 0, markerList; i < allLocationList.length; i++) {
 						var markerList = new AMap.Marker({
@@ -106,7 +122,6 @@
 				this.newmap.clearMap();
 				this.carJointList = []
 				this.chooseCarData = []
-				this.carList = []
 			},
 			
 			
@@ -120,7 +135,7 @@
 			// 		return
 			// 	}
 			// 	this.checkBoxData = res.result
-			// 	this.carList = res.result.forEach(v => {
+			// 	res.result.forEach(v => {
 			// 		this.carJointList.push('货好多' + v)
 			// 	})
 			// 	console.log("carJointList" + this.carJointList)
