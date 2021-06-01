@@ -13,6 +13,7 @@ import PerformanceInfor from '../components/PerformanceInfor/PerformanceInfor.vu
 import Welcome from '../components/Welcome/Welcome.vue'
 import WaybillManage from '../components/WaybillManage/WaybillManage.vue'
 import DistributionManage from '../components/DistributionManage/DistributionManage.vue'
+import OrderManage from '../components/OrderManage/OrderManage.vue'
 
 // Basis子组件
 import CompanyInfor from '../components/BasisInfor/Navigation/CompanyInfor.vue'
@@ -30,6 +31,8 @@ import CarMonitoring from '../components/BasisInfor/Navigation/Car/CarMonitoring
 import DepartManage from '../components/RightsManage/DepartManage.vue'
 import UserManage from '../components/RightsManage/UserManage.vue'
 import RightsManage from '../components/RightsManage/RightsManage.vue'
+import RoleManage from '../components/RightsManage/RoleManage.vue'
+
 
 
 import Text from '../components/text/text.vue'
@@ -62,9 +65,11 @@ const routes = [
 		{path:'/performance', component:PerformanceInfor},
 		{path:'/distributionManage', component:DistributionManage},
 		{path:'/waybillManage', component:WaybillManage},		
+		{path:'/orderManage', component:OrderManage},		
 		{path:'/rights', component:RightsManage},
 		{path:'/manage/departManage', component:DepartManage},
 		{path:'/manage/userManage', component:UserManage},
+		{path:'/manage/roleManage', component:RoleManage},
 		{path:'/text', component:Text},
 		{path:'/test2', component:Test2}
 		]

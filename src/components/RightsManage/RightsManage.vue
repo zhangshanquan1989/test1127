@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<!-- 第一版权限管理，已废弃 -->
 		<el-container>
 			
 		  <el-header>

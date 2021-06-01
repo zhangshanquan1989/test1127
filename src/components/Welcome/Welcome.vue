@@ -2,90 +2,90 @@
 	<div>
 		<!-- <h2>欢迎登陆天康系统</h2> -->
 		<div style="display: flex;">
-			<el-card shadow="hover" style="width: 220px;height: 110px;" @click.native="showNianJian" v-loading.fullscreen.lock="fullscreenLoading">
-				<div style="display: flex;margin-left: 17px;margin-top: 9px;">
+			<el-card shadow="hover" style="width: 300px;height: 144px;margin-left:8px;" @click.native="showNianJian" v-loading.fullscreen.lock="fullscreenLoading">
+				<div style="display: flex;margin-left: 22px;margin-top: 12px;">
 					<div>
-						<div style="width:59px;height: 42px;font-size: 32px;">{{nianjianCarData}}</div>
-						<div style="width:77px;height: 16px;font-size: 12px;color: #999999;">年检到期车辆</div>
+						<div style="width:76px;height: 54px;font-size: 41px;">{{nianjianCarData}}</div>
+						<div style="width:96px;height: 16px;font-size: 15px;color: #999999;">年检到期车辆</div>
 					</div>
 					<div>
-						<el-image :src="require('../../assets/welcome/组929.png')" style="width: 42px; height: 42px;margin-left:60px ;margin-top: 10px;"></el-image>
-					</div>
-				</div>
-				<div style="height: 22px;background-color: #224EA6;margin-top: 20px;">
-					<div style="font-size: 5px;color: #FFFFFF;margin-left: 17px;padding-top: 2px;">总车辆数：{{allCarData}}</div>
-				</div>
-			</el-card>
-
-			<el-card shadow="hover" style="width: 220px;height: 110px;margin-left:40px;" @click.native="showBaoXian"
-			 v-loading.fullscreen.lock="fullscreenLoading">
-				<div style="display: flex;margin-left: 17px;margin-top: 9px;">
-					<div>
-						<div style="width:59px;height: 42px;font-size: 32px;">{{baoxianCarData}}</div>
-						<div style="width:77px;height: 16px;font-size: 12px;color: #999999;">保险到期车辆</div>
-					</div>
-					<div>
-						<el-image :src="require('../../assets/welcome/组945.png')" style="width: 42px; height: 42px;margin-left:60px ;margin-top: 10px;"></el-image>
+						<el-image :src="require('../../assets/welcome/组929.png')" style="width: 55px; height: 55px;margin-left:105px ;margin-top: 10px;"></el-image>
 					</div>
 				</div>
-				<div style="height: 22px;background-color: #9DB7CD;margin-top: 20px;">
-					<div style="font-size: 5px;color: #FFFFFF;margin-left: 17px;padding-top: 2px;">总车辆数：{{allCarData}}</div>
+				<div style="height: 29px;background-color: #224EA6;margin-top: 30px;">
+					<div style="font-size: 15px;color: #FFFFFF;margin-left: 22px;padding-top: 4px;">总车辆数：{{allCarData}}</div>
 				</div>
 			</el-card>
 
-			<el-card shadow="hover" style="width: 220px;height: 110px;margin-left:40px;" @click.native="showWeiZhang"
+			<el-card shadow="hover" style="width: 300px;height: 144px;margin-left:40px;" @click.native="showBaoXian"
 			 v-loading.fullscreen.lock="fullscreenLoading">
-				<div style="display: flex;margin-left: 17px;margin-top: 9px;">
+				<div style="display: flex;margin-left: 22px;margin-top: 12px;">
 					<div>
-						<div style="width:59px;height: 42px;font-size: 32px;">{{weizhangCarData}}</div>
-						<div style="width:77px;height: 16px;font-size: 12px;color: #999999;">违章处理车辆</div>
+						<div style="width:76px;height: 54px;font-size: 41px;">{{baoxianCarData}}</div>
+						<div style="width:96px;height: 16px;font-size: 15px;color: #999999;">保险到期车辆</div>
 					</div>
 					<div>
-						<el-image :src="require('../../assets/welcome/组947.png')" style="width: 42px; height: 42px;margin-left:60px ;margin-top: 10px;"></el-image>
+						<el-image :src="require('../../assets/welcome/组945.png')" style="width: 55px; height: 55px;margin-left:105px ;margin-top: 10px;"></el-image>
 					</div>
 				</div>
-				<div style="height: 22px;background-color: #B3161A;margin-top: 20px;">
-					<div style="font-size: 5px;color: #FFFFFF;margin-left: 17px;padding-top: 2px;">总车辆数：{{allCarData}}</div>
+				<div style="height: 29px;background-color: #9DB7CD;margin-top: 30px;">
+					<div style="font-size:15px;color: #FFFFFF;margin-left: 22px;padding-top: 4px;">总车辆数：{{allCarData}}</div>
 				</div>
 			</el-card>
 
-			<el-card shadow="hover" style="width: 220px;height: 110px;margin-left:40px;" @click.native="showYaJin"
+			<el-card shadow="hover" style="width: 300px;height: 144px;margin-left:40px;" @click.native="showWeiZhang"
 			 v-loading.fullscreen.lock="fullscreenLoading">
-				<div style="display: flex;margin-left: 17px;margin-top: 9px;">
+				<div style="display: flex;margin-left: 22px;margin-top: 12px;">
 					<div>
-						<div style="width:59px;height: 42px;font-size: 32px;">{{yajinCarData}}</div>
-						<div style="width:95px;height: 16px;font-size: 12px;color: #999999;">押金小于500车辆</div>
+						<div style="width:76px;height: 54px;font-size: 41px;">{{weizhangCarData}}</div>
+						<div style="width:96px;height: 16px;font-size: 15px;color: #999999;">违章处理车辆</div>
 					</div>
 					<div>
-						<el-image :src="require('../../assets/welcome/组948.png')" style="width: 42px; height: 42px;margin-left:42px ;margin-top: 10px;"></el-image>
+						<el-image :src="require('../../assets/welcome/组947.png')" style="width: 55px; height: 55px;margin-left:105px ;margin-top: 10px;"></el-image>
 					</div>
 				</div>
-				<div style="height: 22px;background-color: #E3C191;margin-top: 20px;">
-					<div style="font-size: 5px;color: #FFFFFF;margin-left: 17px;padding-top: 2px;">总车辆数：{{allCarData}}</div>
+				<div style="height: 29px;background-color: #B3161A;margin-top: 30px;">
+					<div style="font-size: 15px;color: #FFFFFF;margin-left: 22px;padding-top: 4px;">总车辆数：{{allCarData}}</div>
 				</div>
 			</el-card>
 
-			<el-card shadow="hover" style="width: 220px;height: 110px;margin-left:40px;" @click.native="showDiaoDuFei"
+			<el-card shadow="hover" style="width: 300px;height: 144px;margin-left:40px;" @click.native="showYaJin"
 			 v-loading.fullscreen.lock="fullscreenLoading">
-				<div style="display: flex;margin-left: 17px;margin-top: 9px;">
+				<div style="display: flex;margin-left: 22px;margin-top: 12px;">
 					<div>
-						<div style="width:59px;height: 42px;font-size: 32px;">{{diaodufeiCarData}}</div>
-						<div style="width:90px;height: 16px;font-size: 12px;color: #999999;">调度费到期车辆</div>
+						<div style="width:76px;height: 54px;font-size: 41px;">{{yajinCarData}}</div>
+						<div style="width:126px;height: 16px;font-size: 15px;color: #999999;">押金小于500车辆</div>
 					</div>
 					<div>
-						<el-image :src="require('../../assets/welcome/组1322.png')" style="width: 42px; height: 42px;margin-left:47px ;margin-top: 10px;"></el-image>
+						<el-image :src="require('../../assets/welcome/组948.png')" style="width: 55px; height: 55px;margin-left:75px ;margin-top: 10px;"></el-image>
 					</div>
 				</div>
-				<div style="height: 22px;background-color: #8B8F99;margin-top: 20px;">
-					<div style="font-size: 5px;color: #FFFFFF;margin-left: 17px;padding-top: 2px;">总车辆数：{{allCarData}}</div>
+				<div style="height: 29px;background-color: #E3C191;margin-top: 30px;">
+					<div style="font-size: 15px;color: #FFFFFF;margin-left: 22px;padding-top: 4px;">总车辆数：{{allCarData}}</div>
+				</div>
+			</el-card>
+
+			<el-card shadow="hover" style="width: 300px;height: 144px;margin-left:40px;" @click.native="showDiaoDuFei"
+			 v-loading.fullscreen.lock="fullscreenLoading">
+				<div style="display: flex;margin-left: 22px;margin-top: 12px;">
+					<div>
+						<div style="width:76px;height: 54px;font-size: 41px;">{{diaodufeiCarData}}</div>
+						<div style="width:106px;height: 16px;font-size: 15px;color: #999999;">调度费到期车辆</div>
+					</div>
+					<div>
+						<el-image :src="require('../../assets/welcome/组1322.png')" style="width: 55px; height: 55px;margin-left:95px ;margin-top: 10px;"></el-image>
+					</div>
+				</div>
+				<div style="height: 29px;background-color: #8B8F99;margin-top: 30px;">
+					<div style="font-size: 15px;color: #FFFFFF;margin-left: 22px;padding-top: 4px;">总车辆数：{{allCarData}}</div>
 				</div>
 			</el-card>
 					</div>
 			<!-- 图标展示区域 -->
-			<el-card class="box-card" style="margin-top: 220px;height: 384px;">
+			<el-card class="box-card" style="margin-top: 30px;height: 600px;margin-left:8px;">
 				<div>
 					<!-- echarts图表 -->
-					<div id="main" style="width:100%;height: 384px;margin-top: 30px;"></div>
+					<div id="main" style="width:100%;height: 600px;margin-top: 50px;"></div>
 				</div>
 			</el-card>
 

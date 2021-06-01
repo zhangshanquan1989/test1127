@@ -72,7 +72,7 @@
 				</el-table-column>
 				<el-table-column prop="phone" label="联系方式" width="150px">
 				</el-table-column>
-				<el-table-column prop="email" label="邮箱" width="150px">
+				<el-table-column prop="email" label="邮箱" width="200px">
 				</el-table-column>
 				<el-table-column prop="userimg" label="身份证照片" width="150px">
 					<template slot-scope="scope">

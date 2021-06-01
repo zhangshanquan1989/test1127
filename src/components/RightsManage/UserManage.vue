@@ -102,7 +102,7 @@
 	export default {
 		data() {
 			return {
-				// 查询数据roleDialogVisible
+				// 查询数据
 				queryInfo: {
 					pageNo: 1,
 					pageSize: 10,

@@ -11,50 +11,51 @@
 		<!-- 页面主体 -->
 		<el-container>
 			<el-aside width="200px" style="background-color: #0f4f7d;">
-			<!-- 侧边栏菜单区域 -->
-			<el-menu background-color="#0f4f7d" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true" :default-active="activePath" >
+				<!-- 侧边栏菜单区域 -->
+				<el-menu background-color="#0f4f7d" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true"
+				 :default-active="activePath">
 
-				<template v-for="one in menulist">
-					<template v-if="one.children">
-						<el-submenu :index="one.path" :key="one.id" @click="saveNavState(one.path)">
-							<template slot="title">
-								<i :class="one.icon" ></i>
-								<span style="font-size: 18px;">{{one.authName}}</span>
-							</template>
-							<template v-for="two in one.children">
-								<template v-if="two.children">
-									<el-submenu :key='two.id' :index="two.path" @click="saveNavState(two.path)">
-										<template slot="title">
-											<i :class="two.icon" ></i>
-											<span style="font-size: 16px;">{{two.authName}}</span>
-										</template>
-										<template v-for="three in two.children">
-											<el-menu-item :key='three.id' :index='three.path' style="font-size: 15px;" @click="saveNavState(three.path)">
-											<i :class="three.icon" ></i>
-											<span>{{three.authName}}</span></el-menu-item>
-										</template>
-									</el-submenu>
+					<template v-for="one in menulist">
+						<template v-if="one.children">
+							<el-submenu :index="one.path" :key="one.id" @click="saveNavState(one.path)">
+								<template slot="title">
+									<i :class="one.icon"></i>
+									<span style="font-size: 18px;">{{one.authName}}</span>
 								</template>
-								<template v-else>									
+								<template v-for="two in one.children">
+									<template v-if="two.children">
+										<el-submenu :key='two.id' :index="two.path" @click="saveNavState(two.path)">
+											<template slot="title">
+												<i :class="two.icon"></i>
+												<span style="font-size: 16px;">{{two.authName}}</span>
+											</template>
+											<template v-for="three in two.children">
+												<el-menu-item :key='three.id' :index='three.path' style="font-size: 15px;" @click="saveNavState(three.path)">
+													<i :class="three.icon"></i>
+													<span>{{three.authName}}</span></el-menu-item>
+											</template>
+										</el-submenu>
+									</template>
+									<template v-else>
 										<el-menu-item :index="two.path" style="font-size: 16px " @click="saveNavState(two.path)">
-											<i :class="two.icon" ></i>
+											<i :class="two.icon"></i>
 											<span>{{two.authName}}</span>
-									  </el-menu-item>									
+										</el-menu-item>
+									</template>
 								</template>
-							</template>
-						</el-submenu>
+							</el-submenu>
+						</template>
+						<template v-else>
+							<el-menu-item :index="one.path" :key="one.id" @click="saveNavState(one.path)">
+								<template>
+									<i :class="one.icon"></i>
+									<span style="font-size: 18px;">{{one.authName}}</span>
+								</template>
+							</el-menu-item>
+						</template>
 					</template>
-					<template v-else>
-						<el-menu-item :index="one.path" :key="one.id" @click="saveNavState(one.path)">
-							<template>
-								<i :class="one.icon"></i>
-								<span style="font-size: 18px;">{{one.authName}}</span>
-							</template>
-						</el-menu-item>
-					</template>
-				</template>
-			</el-menu>
-</el-aside>
+				</el-menu>
+			</el-aside>
 			<!-- 右侧内容主体 -->
 			<el-main>
 				<!-- 路由占位符 -->
@@ -69,8 +70,7 @@
 		data() {
 			return {
 				// 左侧菜单数据
-				menulist: [
-					{
+				menulist: [{
 						id: 0,
 						authName: '首页',
 						path: '/welcome',
@@ -80,7 +80,7 @@
 						id: 1,
 						authName: '基础信息管理',
 						icon: "el-icon-s-order",
-						path:'/basis',
+						path: '/basis',
 						children: [{
 								id: 11,
 								authName: '公司信息',
@@ -98,7 +98,7 @@
 								authName: '司机信息',
 								path: '/basis/driver',
 								icon: "el-icon-caret-right"
-							},	
+							},
 							{
 								id: 15,
 								authName: '客户信息',
@@ -122,23 +122,23 @@
 										icon: "el-icon-caret-right"
 									},
 									{
-											id: 112,
-											authName: '车辆保证金',
-											path: '/basis/car/earnestMoney',
-											icon: "el-icon-caret-right"
-										},
-										{
-												id: 113,
-												authName: '车辆管理费',
-												path: '/basis/car/managementFee',
-												icon: "el-icon-caret-right"
-											},
-											{
-													id: 114,
-													authName: '实时监控',
-													path: '/basis/car/CarMonitoring',
-													icon: "el-icon-caret-right"
-												},
+										id: 112,
+										authName: '车辆保证金',
+										path: '/basis/car/earnestMoney',
+										icon: "el-icon-caret-right"
+									},
+									{
+										id: 113,
+										authName: '车辆管理费',
+										path: '/basis/car/managementFee',
+										icon: "el-icon-caret-right"
+									},
+									{
+										id: 114,
+										authName: '实时监控',
+										path: '/basis/car/CarMonitoring',
+										icon: "el-icon-caret-right"
+									},
 									// {
 									// 	id: 114,
 									// 	authName: '违章信息',
@@ -150,6 +150,12 @@
 							},
 						]
 						// path:'basis'
+					},
+					{
+						id: 8,
+						authName: '订单管理',
+						path: '/orderManage',
+						icon: "el-icon-document"
 					},
 					{
 						id: 2,
@@ -167,7 +173,7 @@
 						id: 4,
 						authName: '权限管理',
 						icon: "el-icon-unlock",
-						path:'/manage',
+						path: '/manage',
 						children: [{
 								id: 41,
 								authName: '部门管理',
@@ -175,11 +181,18 @@
 								icon: "el-icon-caret-right"
 							},
 							{
-									id: 42,
-									authName: '用户管理',
-									path: '/manage/userManage',
-									icon: "el-icon-caret-right"
-								}]
+								id: 42,
+								authName: '角色管理',
+								path: '/manage/roleManage',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 43,
+								authName: '用户管理',
+								path: '/manage/userManage',
+								icon: "el-icon-caret-right"
+							}
+						]
 					},
 					// {
 					// 	id: 5,
@@ -280,8 +293,8 @@
 	.el-menu-item.is-active {
 		background-color: #03395f !important;
 	}
-	
-	
+
+
 	// .el-submenu {
 	// 	padding-left: 30px !important;
 	// 	font-size: 18px;
