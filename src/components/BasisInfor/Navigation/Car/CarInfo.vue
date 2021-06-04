@@ -143,7 +143,7 @@
 				</el-form-item>
 				<el-form-item label="行驶证:" prop="vehicleLicense">
 					<el-image v-if="addForm.vehicleLicense" style="width: 150px;" :src="addForm.vehicleLicense"></el-image>
-					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleVehicleLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleVehicleLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
@@ -159,7 +159,7 @@
 				</el-form-item>
 				<el-form-item label="保险单据:" prop="insurance">
 					<el-image v-if="addForm.insurance" style="width: 150px;" :src="addForm.insurance"></el-image>
-					<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleInsuranceUrlSuccess"
+					<el-upload name="imgFile" :action="updateInsuranceUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleInsuranceUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
@@ -171,7 +171,7 @@
 				</el-form-item>
 				<el-form-item label="车辆营运证:" prop="caroperating">
 					<el-image v-if="addForm.caroperating" style="width: 150px;" :src="addForm.caroperating"></el-image>
-					<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleCaroperatingUrlSuccess"
+					<el-upload name="imgFile" :action="updateCaroperatingUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleCaroperatingUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传营运证照片</el-button>
 					</el-upload>
@@ -224,7 +224,7 @@
 				</el-form-item>
 				<el-form-item label="行驶证:" prop="vehicleLicense">
 					<el-image v-if="editForm.vehicleLicense" style="width: 150px;" :src="editForm.vehicleLicense"></el-image>
-					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :auto-upload="true" :on-success="handleEditVehicleLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateVehicleLicenseUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditVehicleLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
@@ -240,7 +240,7 @@
 				</el-form-item>
 				<el-form-item label="保险单据:" prop="insurance">
 					<el-image v-if="editForm.insurance" style="width: 150px;" :src="editForm.insurance"></el-image>
-					<el-upload name="imgFile" :action="updateInsuranceUrl" :auto-upload="true" :on-success="handleEditInsuranceUrlSuccess"
+					<el-upload name="imgFile" :action="updateInsuranceUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditInsuranceUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传保险单照片</el-button>
 					</el-upload>
@@ -252,7 +252,7 @@
 				</el-form-item>
 				<el-form-item label="车辆营运证:" prop="caroperating">
 					<el-image v-if="editForm.caroperating" style="width: 150px;" :src="editForm.caroperating"></el-image>
-					<el-upload name="imgFile" :action="updateCaroperatingUrl" :auto-upload="true" :on-success="handleEditCaroperatingUrlSuccess"
+					<el-upload name="imgFile" :action="updateCaroperatingUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditCaroperatingUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传营运证照片</el-button>
 					</el-upload>
@@ -318,6 +318,10 @@
 	export default {
 		data() {
 			return {
+				// 上传图片需要携带token
+				myHeaders:{
+					satoken:window.sessionStorage.getItem('satoken')
+				},
 				showImageSrc: '',
 				// 查询的车牌
 				queryCarName:'',

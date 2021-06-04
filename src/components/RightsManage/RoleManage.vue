@@ -35,7 +35,7 @@
 			</el-col>
 			
 			<!-- 添加角色 -->
-			<el-dialog title="添加角色" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+			<el-dialog title="添加角色" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
 				<el-form :model="addForm" ref="addFormRef"  label-width="100px">
 					<el-form-item label="角色名称">
 						<el-input v-model="addForm.roleName" style="width: 440px;"></el-input>

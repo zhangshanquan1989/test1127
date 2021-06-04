@@ -30,7 +30,7 @@
 		</el-card>
 
 		<!-- 添加部门 -->
-		<el-dialog title="添加部门" :visible.sync="addDepartDialogVisible" width="50%" @close="addDepartDialogClosed">
+		<el-dialog title="添加部门" :visible.sync="addDepartDialogVisible" width="35%" @close="addDepartDialogClosed">
 			<el-form ref="addDepartRef" :model="addDepartForm" label-width="100px">
 				<el-form-item label="部门名称">
 					<el-input v-model="addDepartForm.name" style="width: 440px;"></el-input>

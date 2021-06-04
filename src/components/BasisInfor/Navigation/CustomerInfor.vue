@@ -404,7 +404,7 @@
 				})
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+					return this.$message.error(res.message)
 				}
 				// this.$message.success('获取信息成功')
 				this.customerList = res.result.records
@@ -452,12 +452,12 @@
 					} = await this.$http.post('base/client/add', this.addForm)
 					// console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('添加信息失败')
+						return this.$message.error(res.message)
 					}
 					// 添加成功，关闭对话框，刷新数据列表，提示添加成功
 					this.addDialogVisible = false
 					this.getList()
-					this.$message.success('添加信息成功')
+					this.$message.success(res.message)
 				})
 			},
 
@@ -474,7 +474,7 @@
 				} = await this.$http.get('base/client/selectone?id=' + id)
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.editForm = res.result
 				this.editForm.cartypeArray = res.result.cartype.split(",")
@@ -499,12 +499,12 @@
 					} = await this.$http.put('/base/client/edit', this.editForm)
 					// console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('更新信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
 					this.getList()
-					this.$message.success('更新信息成功')
+					this.$message.success(res.message)
 				})
 			},
 
@@ -515,11 +515,11 @@
 				} = await this.$http.get('base/client/deleteById?id=' + id)
 
 				if (res.code !== 200) {
-					return this.$message.error('删除失败')
+					return this.$message.error(res.message)
 				}
 				// 删除成功，刷新数据列表，提示删除成功
 				this.getList()
-				this.$message.success('删除成功')
+				this.$message.success(res.message)
 			},
 		}
 	}

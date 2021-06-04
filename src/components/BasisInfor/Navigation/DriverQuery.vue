@@ -115,14 +115,14 @@
 				</el-form-item>
 				<el-form-item label="身份证" prop="userid">
 					<el-image v-if="addForm.userid" style="width: 150px;" :src="addForm.userid"></el-image>
-					<el-upload name="imgFile" :action="updateUserIdUrl" :auto-upload="true" :on-success="handleUserIdUrlSuccess"
+					<el-upload name="imgFile" :action="updateUserIdUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleUserIdUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证" prop="drivingLicense">
 					<el-image v-if="addForm.drivingLicense" style="width: 150px;" :src="addForm.drivingLicense"></el-image>
-					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :auto-upload="true" :on-success="handleDrivingLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleDrivingLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
 					</el-upload>
@@ -134,7 +134,7 @@
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
 					<el-image v-if="addForm.workLicense" style="width: 150px;" :src="addForm.workLicense"></el-image>
-					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :auto-upload="true" :on-success="handleWorkLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleWorkLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
 					</el-upload>
@@ -185,14 +185,14 @@
 				</el-form-item>
 				<el-form-item label="身份证" prop="userid">
 					<el-image v-if="editForm.userid" style="width: 150px;" :src="editForm.userid"></el-image>
-					<el-upload name="imgFile" :action="updateUserIdUrl" :auto-upload="true" :on-success="handleEditUserIdUrlSuccess"
+					<el-upload name="imgFile" :action="updateUserIdUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditUserIdUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证照片</el-button>
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证" prop="drivingLicense">
 					<el-image v-if="editForm.drivingLicense" style="width: 150px;" :src="editForm.drivingLicense"></el-image>
-					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :auto-upload="true" :on-success="handleEditDrivingLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateDrivingLicenseUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditDrivingLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
 					</el-upload>
@@ -203,7 +203,7 @@
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
 					<el-image v-if="editForm.workLicense" style="width: 150px;" :src="editForm.workLicense"></el-image>
-					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :auto-upload="true" :on-success="handleEditWorkLicenseUrlSuccess"
+					<el-upload name="imgFile" :action="updateWorkLicenseUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditWorkLicenseUrlSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传驾驶证照片</el-button>
 					</el-upload>
@@ -227,6 +227,10 @@
 	export default {
 		data() {
 			return {
+				// 上传图片需要携带token
+				myHeaders:{
+					satoken:window.sessionStorage.getItem('satoken')
+				},
 				// 大图列表
 				srcList:[],
 				// 创建对话框显示

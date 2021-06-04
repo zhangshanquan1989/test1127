@@ -152,22 +152,29 @@
 						// path:'basis'
 					},
 					{
-						id: 8,
+						id: 2,
 						authName: '订单管理',
 						path: '/orderManage',
-						icon: "el-icon-document"
-					},
-					{
-						id: 2,
-						authName: '运单管理',
-						path: '/waybillManage',
-						icon: "el-icon-s-claim"
-					},
-					{
-						id: 3,
-						authName: '配送管理',
-						path: '/distributionManage',
-						icon: "el-icon-share",
+						icon: "el-icon-document",
+						children: [{
+								id: 21,
+								authName: '订单查询',
+								path: '/orderManage',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 22,
+								authName: '运单管理',
+								path: '/waybillManage',
+								icon: "el-icon-caret-right"
+							},
+							{
+								id: 23,
+								authName: '配送管理',
+								path: '/distributionManage',
+								icon: "el-icon-caret-right",
+							}
+						]
 					},
 					{
 						id: 4,

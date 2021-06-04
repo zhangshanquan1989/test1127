@@ -133,7 +133,7 @@
 				</el-form-item>
 				<el-form-item label="身份证照片" prop="userimg">
 					<el-image v-if="addForm.userimg" style="width: 150px;" :src="addForm.userimg"></el-image>
-					<el-upload name="imgFile" :action="updateIdCardUrl" :auto-upload="true" :on-success="handlePictureUrlSuccess" :show-file-list="false">
+					<el-upload name="imgFile" :action="updateIdCardUrl" :headers="myHeaders" :auto-upload="true" :on-success="handlePictureUrlSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证</el-button>
 					</el-upload>
 				</el-form-item>
@@ -175,7 +175,7 @@
 				</el-form-item>
 				<el-form-item label="身份证照片:" prop="phone">
 					<el-image v-if="editForm.userimg" style="width: 150px;" :src="editForm.userimg"></el-image>
-					<el-upload name="imgFile" :action="updateIdCardUrl" :auto-upload="true" :on-success="handleEditPictureSuccess" :show-file-list="false">
+					<el-upload name="imgFile" :action="updateIdCardUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditPictureSuccess" :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传身份证</el-button>
 					</el-upload>
 				</el-form-item>
@@ -195,6 +195,10 @@
 	export default {
 		data() {
 			return {
+				// 上传图片需要携带token
+				myHeaders:{
+					satoken:window.sessionStorage.getItem('satoken')
+				},
 				// 放大图片
 				srcList: [],
 				// 查询数据column=id&order=desc

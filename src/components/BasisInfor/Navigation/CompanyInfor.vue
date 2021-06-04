@@ -14,6 +14,7 @@
 			<el-input v-model="queryInfo.companyName" placeholder="公司名" clearable style="width: 200px;margin-left: 100px;"></el-input>
 			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
 			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
+			
 						
 			<el-table :data="companylist" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column v-if="false" prop="id" label="id">
@@ -82,7 +83,7 @@
 			<!-- 创建公司的对话框 -->
 			<el-dialog class="dialog" title="创建公司信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
 				<!-- 添加公司的表单 -->
-				<el-form :model="addForm" ref="addFormRef" label-width="100px">
+				<el-form :model="addForm" ref="addFormRef" label-width="120px">
 					<el-form-item label="公司名称:" prop="name">
 						<el-input v-model="addForm.name"></el-input>
 					</el-form-item>
@@ -119,14 +120,14 @@
 					</el-form-item>
 					<el-form-item label="营业执照:">
 						<el-image v-if="addForm.business" style="width: 150px; " :src="addForm.business"></el-image>
-						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleBusinessSuccess"
+						<el-upload name="imgFile" :action="updateBusinessUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleBusinessSuccess"
 						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
 					<el-form-item label="运输许可证:">
 						<el-image v-if="addForm.permit" style="width: 150px;" :src="addForm.permit"></el-image>
-						<el-upload name="imgFile" :action="updateTransportUrl" :auto-upload="true" :on-success="handleTransportSuccess"
+						<el-upload name="imgFile" :action="updateTransportUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleTransportSuccess"
 						 :show-file-list="false">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
@@ -181,15 +182,13 @@
 					</el-form-item>
 					<el-form-item label="营业执照:">
 						<el-image v-if="editCompanyForm.business" style="width: 150px; " :src="editCompanyForm.business"></el-image>
-						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleEditBusinessSuccess"
-						 :show-file-list="false">
+						<el-upload name="imgFile" :action="updateBusinessUrl" :auto-upload="true" :on-success="handleEditBusinessSuccess" :show-file-list="false" :headers="myHeaders">
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
 					<el-form-item label="运输许可证:">
 						<el-image v-if="editCompanyForm.permit" style="width: 150px; " :src="editCompanyForm.permit"></el-image>
-						<el-upload name="imgFile" :action="updateTransportUrl" :auto-upload="true" :on-success="handleEditTransportSuccess"
-						 :show-file-list="false">
+						<el-upload name="imgFile" :action="updateTransportUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditTransportSuccess" :show-file-list="false" >
 							<el-button size="small" type="primary" plain>点击上传</el-button>
 						</el-upload>
 					</el-form-item>
@@ -209,6 +208,10 @@
 	export default {
 		data() {
 			return {
+				// 上传图片需要携带token
+				myHeaders:{
+					satoken:window.sessionStorage.getItem('satoken')
+				},
 				// 放大图片的列表
 				srcList:[],
 				// 查询参数对象
@@ -361,7 +364,8 @@
 
 		},
 		created() {
-
+			// this.myHeaders.satoken = window.sessionStorage.getItem('satoken')
+			// console.log(this.myHeaders)
 			this.getCompanyList()
 		},
 		mounted() {
@@ -377,7 +381,7 @@
 				})
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('获取公司列表失败')
+					return this.$message.error(res.message)
 				}
 				this.companylist = res.result.records
 				this.total = res.result.total
@@ -454,9 +458,9 @@
 					} = await this.$http.post('base/company/add', this.addForm)
 					// console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('添加公司失败!')
+						return this.$message.error(res.message)
 					}
-					this.$message.success('添加公司成功！')
+					this.$message.success(res.message)
 					this.getCompanyList()
 					this.addDialogVisible = false
 				})
@@ -477,7 +481,7 @@
 				} = await this.$http.get('base/company/selectOne?companyId=' + id)
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('查询公司信息失败！')
+					return this.$message.error(res.message)
 				}
 				this.editCompanyForm = res.result
 				// 显示对话框
@@ -497,12 +501,12 @@
 					} = await this.$http.post('base/company/edit', this.editCompanyForm)
 
 					if (res.code !== 200) {
-						return this.$message.error('修改公司信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
 					this.getCompanyList()
-					this.$message.success('修改公司信息成功')
+					this.$message.success(res.message)
 				})
 			},
 
@@ -512,12 +516,13 @@
 					data: res
 				} = await this.$http.get('base/company/deleteById?companyId=' + id)
 				if (res.code !== 200) {
-					return this.$message.error('删除公司失败')
+					return this.$message.error(res.message)
 				}
 				// 删除成功，刷新数据列表，提示删除成功
 				this.getCompanyList()
-				this.$message.success('删除成功')
+				this.$message.success(res.message)
 			},
+			
 
 		}
 	}

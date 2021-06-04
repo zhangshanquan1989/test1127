@@ -97,61 +97,76 @@
 		<!-- 详情的对话框 -->
 		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 详情的表单 -->
-			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+			<el-form :model="editForm" ref="editFormRef" label-width="140px">
 				<el-form-item v-if="showRefusenote" label="司机拒单原因:" prop="refusenote" class="redItem">
 					<div style="color: red;">{{this.editForm.refusenote}}</div>
 				</el-form-item>
-				<el-form-item label="运单编号:" prop="no" class="rt-input">
-					<el-input disabled v-model="editForm.no"></el-input>
-				</el-form-item>
-				<el-form-item label="派单类型:" prop="waybilltype" class="rt-input">
-					<el-input disabled v-model="editForm.waybilltype"></el-input>
-				</el-form-item>
-				<el-form-item label="订单来源:" prop="source" class="rt-input">
-					<el-input disabled v-model="editForm.source"></el-input>
-				</el-form-item>
-				<el-form-item label="司机对接人:" prop="people" class="rt-input">
-					<el-input disabled v-model="editForm.people"></el-input>
-				</el-form-item>
-				<el-form-item label="货物名称:" prop="goodsname" class="rt-input">
-					<el-input disabled v-model="editForm.goodsname"></el-input>
-				</el-form-item>
-				<el-form-item label="货物重量/方数:" prop="goodsweight" class="rt-input">
-					<el-input disabled v-model="editForm.goodsweight"></el-input>
-				</el-form-item>
-				<el-form-item label="是否超高/超宽/超重:" prop="overweight" class="rt-input">
-					<el-input disabled v-model="editForm.overweight"></el-input>
-				</el-form-item>
+				<div style="display: flex;">
+					<el-form-item label="运单编号:" prop="no" class="rt-input">
+						<el-input disabled v-model="editForm.no"></el-input>
+					</el-form-item>
+					<el-form-item label="派单类型:" prop="waybilltype" class="rt-input">
+						<el-input disabled v-model="editForm.waybilltype"></el-input>
+					</el-form-item>
+					<el-form-item label="订单来源:" prop="source" class="rt-input">
+						<el-input disabled v-model="editForm.source"></el-input>
+					</el-form-item>
+					<el-form-item label="司机对接人:" prop="people" class="rt-input">
+						<el-input disabled v-model="editForm.people"></el-input>
+					</el-form-item>
+				</div>
+				
+				<div style="display: flex;">
+					<el-form-item label="货物名称:" prop="goodsname" class="rt-input">
+						<el-input disabled v-model="editForm.goodsname"></el-input>
+					</el-form-item>
+					<el-form-item label="货物重量/方数:" prop="goodsweight" class="rt-input">
+						<el-input disabled v-model="editForm.goodsweight"></el-input>
+					</el-form-item>
+					<el-form-item label="是否超高/宽/重:" prop="overweight" class="rt-input">
+						<el-input disabled v-model="editForm.overweight"></el-input>
+					</el-form-item>
+					<el-form-item label="空车距离:" prop="emptydistance" class="rt-input">
+						<el-input disabled v-model="editForm.emptydistance"></el-input>
+					</el-form-item>
+				</div>
+
+				
+				
+				<div style="display: flex;">					
+					<el-form-item label="高速预计距离:" prop="highspeed" class="rt-input">
+						<el-input disabled v-model="editForm.highspeed"></el-input>
+					</el-form-item>
+					<el-form-item label="下道预计距离:" prop="estimatedistance" class="rt-input">
+						<el-input disabled v-model="editForm.estimatedistance"></el-input>
+					</el-form-item>
+					<el-form-item label="是否禁行:" prop="ban" class="rt-input">
+						<el-input disabled v-model="editForm.ban"></el-input>
+					</el-form-item>
+					<el-form-item label="定金:" prop="deposit" class="rt-input">
+						<el-input disabled v-model="editForm.deposit"></el-input>
+					</el-form-item>
+				</div>
+				
+				<div style="display: flex;">
+					<el-form-item label="到付:" prop="pay" class="rt-input">
+						<el-input disabled v-model="editForm.pay"></el-input>
+					</el-form-item>
+					<el-form-item label="到车:" prop="car" class="rt-input">
+						<el-input disabled v-model="editForm.car"></el-input>
+					</el-form-item>
+					<el-form-item label="下单客户:" prop="aclient" class="rt-input">
+						<el-input disabled v-model="editForm.aclient"></el-input>
+					</el-form-item>
+					<el-form-item label="收单客户:" prop="uclient" class="rt-input">
+						<el-input disabled v-model="editForm.uclient"></el-input>
+					</el-form-item>
+				</div>
+				
 				<el-form-item label="运单截图:" prop="picture">
-					<el-image v-if="editForm.picture" style="width: 150px;" :src="editForm.picture"></el-image>
+					<el-image v-if="editForm.picture" style="width: 200px;" :src="editForm.picture"></el-image>
 				</el-form-item>
-				<el-form-item label="空车距离:" prop="emptydistance" class="rt-input">
-					<el-input disabled v-model="editForm.emptydistance"></el-input>
-				</el-form-item>
-				<el-form-item label="高速预计距离:" prop="highspeed" class="rt-input">
-					<el-input disabled v-model="editForm.highspeed"></el-input>
-				</el-form-item>
-				<el-form-item label="下道预计距离:" prop="estimatedistance" class="rt-input">
-					<el-input disabled v-model="editForm.estimatedistance"></el-input>
-				</el-form-item>
-				<el-form-item label="是否禁行:" prop="ban" class="rt-input">
-					<el-input disabled v-model="editForm.ban"></el-input>
-				</el-form-item>
-				<el-form-item label="定金:" prop="deposit" class="rt-input">
-					<el-input disabled v-model="editForm.deposit"></el-input>
-				</el-form-item>
-				<el-form-item label="到付:" prop="pay" class="rt-input">
-					<el-input disabled v-model="editForm.pay"></el-input>
-				</el-form-item>
-				<el-form-item label="到车:" prop="car" class="rt-input">
-					<el-input disabled v-model="editForm.car"></el-input>
-				</el-form-item>
-				<el-form-item label="下单客户:" prop="aclient" class="rt-input">
-					<el-input disabled v-model="editForm.aclient"></el-input>
-				</el-form-item>
-				<el-form-item label="收单客户:" prop="uclient" class="rt-input">
-					<el-input disabled v-model="editForm.uclient"></el-input>
-				</el-form-item>
+				
 				<el-form-item label="装货信息">
 					<template>
 						<el-table :data="editForm.apoints" style="width: 100%">
@@ -249,48 +264,59 @@
 						</el-table>
 					</template>
 				</el-form-item>
-				<el-form-item label="车牌号:" prop="lienses" class="rt-input">
-					<el-input disabled v-model="editForm.lienses"></el-input>
-				</el-form-item>
-				<el-form-item label="司机:" prop="Lidriver" class="rt-input">
-					<el-input disabled v-model="editForm.Lidriver"></el-input>
-				</el-form-item>
-				<el-form-item label="负责调度:" prop="dispatch" class="rt-input">
-					<el-input disabled v-model="editForm.dispatch"></el-input>
-				</el-form-item>
+				
+				<div style="display: flex;">
+					<el-form-item label="车牌号:" prop="lienses" class="rt-input">
+						<el-input disabled v-model="editForm.lienses"></el-input>
+					</el-form-item>
+					<el-form-item label="司机:" prop="Lidriver" class="rt-input">
+						<el-input disabled v-model="editForm.Lidriver"></el-input>
+					</el-form-item>
+					<el-form-item label="负责调度:" prop="dispatch" class="rt-input">
+						<el-input disabled v-model="editForm.dispatch"></el-input>
+					</el-form-item>
+				</div>
+				
 
 				<div v-if="showDisDetails">
-					<el-form-item label="司机已交订单:" prop="depositis" class="rt-input">
-						<el-input disabled v-model="editForm.depositis"></el-input>
-					</el-form-item>
-					<el-form-item label="定金是否已退还:" prop="returnd" class="rt-input">
-						<el-input disabled v-model="editForm.returnd"></el-input>
-					</el-form-item>
-					<el-form-item label="运费是否结算:" prop="freight" class="rt-input">
-						<el-input disabled v-model="editForm.freight"></el-input>
-					</el-form-item>
-					<el-form-item label="调整后利润:" prop="profits" class="rt-input">
-						<el-input disabled v-model="editForm.profits"></el-input>
-					</el-form-item>
-					<el-form-item label="调整原因:" prop="why" class="rt-input">
-						<el-input disabled v-model="editForm.why"></el-input>
-					</el-form-item>
-					<el-form-item label="回单是否已结算:" prop="returnis" class="rt-input">
-						<el-input disabled v-model="editForm.returnis"></el-input>
-					</el-form-item>
-					<el-form-item label="回单完结备注:" prop="returnote" class="rt-input">
-						<el-input disabled v-model="editForm.returnote"></el-input>
-					</el-form-item>
-					<el-form-item label="回单附件:" prop="riskpicture" class="rt-input">
-						<el-image style="width: 120px;" :src="editForm.riskpicture"></el-image>
-
-					</el-form-item>
-					<el-form-item label="风险备注:" prop="risknote" class="rt-input">
-						<el-input disabled v-model="editForm.risknote"></el-input>
-					</el-form-item>
-					<el-form-item label="风险附件:" prop="riskpicture" class="rt-input">
-						<el-image style="width: 120px;" :src="editForm.riskpicture"></el-image>
-					</el-form-item>
+					<div style="display: flex;">
+						<el-form-item label="司机已交订单:" prop="depositis" class="rt-input">
+							<el-input disabled v-model="editForm.depositis"></el-input>
+						</el-form-item>
+						<el-form-item label="定金是否已退还:" prop="returnd" class="rt-input">
+							<el-input disabled v-model="editForm.returnd"></el-input>
+						</el-form-item>
+						<el-form-item label="运费是否结算:" prop="freight" class="rt-input">
+							<el-input disabled v-model="editForm.freight"></el-input>
+						</el-form-item>
+						<el-form-item label="风险备注:" prop="risknote" class="rt-input">
+							<el-input disabled v-model="editForm.risknote"></el-input>
+						</el-form-item>
+					</div>
+					<div style="display: flex;">
+						<el-form-item label="调整后利润:" prop="profits" class="rt-input">
+							<el-input disabled v-model="editForm.profits"></el-input>
+						</el-form-item>
+						<el-form-item label="调整原因:" prop="why" class="rt-input">
+							<el-input disabled v-model="editForm.why"></el-input>
+						</el-form-item>
+						<el-form-item label="回单是否已结算:" prop="returnis" class="rt-input">
+							<el-input disabled v-model="editForm.returnis"></el-input>
+						</el-form-item>
+						<el-form-item label="回单完结备注:" prop="returnote" class="rt-input">
+							<el-input disabled v-model="editForm.returnote"></el-input>
+						</el-form-item>
+					</div>
+					<div style="display: flex;">
+						<el-form-item label="回单附件:" prop="riskpicture" class="rt-input">
+							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
+						</el-form-item>
+						
+						<el-form-item label="风险附件:" prop="riskpicture" class="rt-input">
+							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
+						</el-form-item>
+					</div>
+					
 				</div>
 
 			</el-form>
@@ -380,7 +406,7 @@
 				</el-form-item>
 				<el-form-item label="回单附件:" prop="returnpicture">
 					<el-image v-if="approvedForm.returnpicture" style="width: 150px;" :src="approvedForm.returnpicture"></el-image>
-					<el-upload name="imgFile" :action="updateReturnUrl" :auto-upload="true" :on-success="handleReturnSuccess"
+					<el-upload name="imgFile" :action="updateReturnUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleReturnSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传回单附件</el-button>
 					</el-upload>
@@ -390,7 +416,7 @@
 				</el-form-item>
 				<el-form-item label="风险附件:" prop="riskpicture">
 					<el-image v-if="approvedForm.riskpicture" style="width: 150px;" :src="approvedForm.riskpicture"></el-image>
-					<el-upload name="imgFile" :action="updateRiskUrl" :auto-upload="true" :on-success="handleRiskSuccess"
+					<el-upload name="imgFile" :action="updateRiskUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleRiskSuccess"
 					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传风险附件</el-button>
 					</el-upload>
@@ -411,6 +437,10 @@
 	export default {
 		data() {
 			return {
+				// 上传图片需要携带token
+				myHeaders:{
+					satoken:window.sessionStorage.getItem('satoken')
+				},
 				// 复制的链接
 				shareUrl: '',
 				// 查询数据
@@ -526,7 +556,7 @@
 			}else{
 				this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
 			}			
-			console.log(this.queryInfo)
+
 			this.getPageList()
 		},
 		methods: {			
@@ -557,7 +587,7 @@
 				} = await this.$http.get('waybill/listdis', {
 					params: this.queryInfo
 				})
-				console.log('list', res)
+
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -647,7 +677,7 @@
 					const {
 						data: res2
 					} = await this.$http.get('waybill/jiami?plistNo='+this.repeatPlistNo)
-					console.log(res2.result.加密后订单号)
+
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -675,7 +705,7 @@
 				} = await this.$http.get('waybill/sijijudan', {
 					params: this.driverRejectForm
 				})
-				console.log(res)
+
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
@@ -689,7 +719,7 @@
 				const {
 					data: res
 				} = await this.$http.get('waybill/sijijiedan?id=' + this.editForm.id)
-				console.log(res)
+
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
@@ -701,7 +731,7 @@
 
 			// 提交驳回
 			handleRejected() {
-				console.log(this.rejectedForm)
+		
 				this.$refs.rejectedFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起修改信息的数据请求
@@ -710,7 +740,7 @@
 					} = await this.$http.get('distribution/bohui', {
 						params: this.rejectedForm
 					})
-					console.log(res)
+
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -736,7 +766,7 @@
 					const {
 						data: res
 					} = await this.$http.post('distribution/add', this.approvedForm)
-					console.log(res)
+
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -749,12 +779,12 @@
 
 			// 回单附件图片上传成功的回调
 			handleReturnSuccess(response, file, fileList) {
-				console.log(response)
+
 				this.approvedForm.returnpicture = response.result.returnpictureFileName
 			},
 			// 风险备注图片上传成功的回调
 			handleRiskSuccess(response, file, fileList) {
-				console.log(response)
+
 				this.approvedForm.riskpicture = response.result.riskpictureFileName
 			},
 
@@ -774,6 +804,7 @@
 				this.showOrderDone = false
 				this.showDriverReject = false
 				this.showRefusenote = false
+				this.showDisDetails = false
 			},
 		}
 	}

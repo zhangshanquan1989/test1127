@@ -43,7 +43,7 @@
 		</el-col>
 		
 		<!-- 分配角色 -->
-		<el-dialog title="分配角色" :visible.sync="roleDialogVisible" width="80%" @close="roleDialogClosed">
+		<el-dialog title="分配角色" :visible.sync="roleDialogVisible" width="35%" @close="roleDialogClosed">
 			<el-radio v-for="item in roleData" v-model="roleAddData.roleid" :label="item.id" @change="groupchange">{{item.roleName}}</el-radio>
 			<!-- 首版，复选框，传递给后端多个角色的id，已废弃 -->
 			<!-- <el-checkbox-group v-model="roleGroupList" @change="groupchange">
@@ -56,12 +56,12 @@
 		</el-dialog>
 		
 		<!-- 分配部门dialog -->
-		<el-dialog title="分配部门/小组" :visible.sync="departAddDialogVisible" width="80%" @close="departDialogClosed">
-							<el-select v-model="userAddDepartData.addDepart" clearable filterable placeholder="部门" @change="addDepartNameChange">
+		<el-dialog title="分配部门/小组" :visible.sync="departAddDialogVisible" width="35%" @close="departDialogClosed">
+							<el-select v-model="userAddDepartData.addDepart" clearable filterable placeholder="部门" @change="addDepartNameChange" style="margin-left: 20px;">
 								<el-option v-for="item in allDepartOptions" :key="item.index" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
-							<el-select v-model="userAddDepartData.addGroup" clearable filterable placeholder="小组" @change="addGroupNameChange">
+							<el-select v-model="userAddDepartData.addGroup" clearable filterable placeholder="小组" @change="addGroupNameChange" style="margin-left: 20px;">
 								<el-option v-for="item in allGroupOptions" :key="item.index" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
@@ -72,7 +72,7 @@
 		</el-dialog>
 		
 		<!-- 删除部门dialog -->
-		<el-dialog title="部门/小组详情" :visible.sync="departDelDialogVisible" width="50%" @close="departDelDialogClosed">
+		<el-dialog title="部门/小组详情" :visible.sync="departDelDialogVisible" width="40%" @close="departDelDialogClosed">
 			<el-table :data="userDepartData" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 					<el-table-column type="index" width="50"></el-table-column>

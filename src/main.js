@@ -36,6 +36,8 @@ axios.interceptors.request.use(config => {
 // 把axios包挂在到vue原型对象上
 Vue.prototype.$http = axios
 
+import qs from 'qs'
+Vue.prototype.$qs = qs;
 
 Vue.config.productionTip = false
 

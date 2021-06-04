@@ -5,25 +5,21 @@
 			<el-breadcrumb-item>首页</el-breadcrumb-item>
 			<el-breadcrumb-item>订单管理</el-breadcrumb-item>
 		</el-breadcrumb>
-		
+
 		<!-- 卡片视图区 -->
 		<el-card class="box-card">
 			<!-- 创建按钮 -->
 			<el-input v-model="queryInfo.chepai" placeholder="完整车牌号" clearable style="width: 200px;"></el-input>
-			 <el-date-picker
-			      v-model="selectTime"
-			      type="datetimerange"
-			      range-separator="至"
-			      start-placeholder="开始日期"
-			      end-placeholder="结束日期"
-						format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒" 
-						value-format="yyyy-MM-dd HH:mm:ss"
-style="margin-left: 20px;">
-			    </el-date-picker>
+			<el-date-picker v-model="selectTime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
+			 end-placeholder="结束日期" format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒" value-format="yyyy-MM-dd HH:mm:ss" style="margin-left: 20px;">
+			</el-date-picker>
 			<el-button type="primary" plain @click="handleQueryBtn" style="margin-left: 30px;">查询</el-button>
 			<el-button type="primary" plain @click="handleQueryBackBtn" style="margin-left: 30px;">返回</el-button>
-		
-			<el-table :data="List" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+			<el-button type="primary" icon="el-icon-download" plain @click="handleExport" style="margin-left: 30px;">导出Excel</el-button>
+
+			<el-table :data="List" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}" @selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="55">
+				</el-table-column>
 				<el-table-column prop="id" label="ID" v-if="false">
 				</el-table-column>
 				<el-table-column fixed prop="no" label="运单编号" width="100px">
@@ -95,7 +91,7 @@ style="margin-left: 20px;">
 				</el-table-column>
 			</el-table>
 		</el-card>
-		
+
 		<!-- 分页区域 remoteMethod -->
 		<el-col>
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNo"
@@ -103,38 +99,75 @@ style="margin-left: 20px;">
 			 :total="total" style="margin-top: 5px;">
 			</el-pagination>
 		</el-col>
-		
+
 		<!-- 详情的对话框  -->
 		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
-			<el-form :model="editForm" ref="editFormRef" label-width="100px">
-				
+			<el-form :model="editForm" ref="editFormRef" label-width="140px">
+
 				<el-form-item v-if="showRefusenote" label="司机拒单原因" prop="refusenote" class="redItem">
 					<div style="color: red;">{{this.editForm.refusenote}}</div>
 				</el-form-item>
-		
-				<el-form-item label="运单编号" prop="no" class="rt-input">
-					<el-input disabled v-model="editForm.no"></el-input>
-				</el-form-item>
-				<el-form-item label="派单类型" prop="waybilltype" class="rt-input">
-					<el-input disabled v-model="editForm.waybilltype"></el-input>
+				<div style="display: flex;">
+					<el-form-item label="运单编号" prop="no" class="rt-input">
+						<el-input disabled v-model="editForm.no"></el-input>
 					</el-form-item>
-				</el-form-item>
-				<el-form-item label="订单来源" prop="source" class="rt-input">
-					<el-input disabled v-model="editForm.source"></el-input>
-				</el-form-item>
-				<el-form-item label="司机对接人" prop="people" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.people"></el-input>
-				</el-form-item>
-				<el-form-item label="货物名称" prop="goodsname" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.goodsname"></el-input>
-				</el-form-item>
-				<el-form-item label="货物重量/方数" prop="goodsweight" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.goodsweight"></el-input>
-				</el-form-item>
-				<el-form-item label="是否超高/超宽/超重" prop="overweight" class="rt-input">
-					<el-input disabled v-model="editForm.overweight"></el-input>
-				</el-form-item>
+					<el-form-item label="派单类型" prop="waybilltype" class="rt-input">
+						<el-input disabled v-model="editForm.waybilltype"></el-input>
+					</el-form-item>
+					</el-form-item>
+					<el-form-item label="订单来源" prop="source" class="rt-input">
+						<el-input disabled v-model="editForm.source"></el-input>
+					</el-form-item>
+					<el-form-item label="司机对接人" prop="people" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.people"></el-input>
+					</el-form-item>
+				</div>
+
+				<div style="display: flex;">
+					<el-form-item label="货物名称" prop="goodsname" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.goodsname"></el-input>
+					</el-form-item>
+					<el-form-item label="货物重量/方数" prop="goodsweight" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.goodsweight"></el-input>
+					</el-form-item>
+					<el-form-item label="是否超高/超宽/超重" prop="overweight" class="rt-input">
+						<el-input disabled v-model="editForm.overweight"></el-input>
+					</el-form-item>
+					<el-form-item label="空车距离" prop="emptydistance" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.emptydistance"></el-input>
+					</el-form-item>
+				</div>
+
+
+				<div style="display: flex;">
+					<el-form-item label="高速预计距离" prop="highspeed" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.highspeed"></el-input>
+					</el-form-item>
+					<el-form-item label="下道预计距离" prop="estimatedistance" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.estimatedistance"></el-input>
+					</el-form-item>
+					<el-form-item label="是否禁行" prop="ban" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.ban"></el-input>
+					</el-form-item>
+					<el-form-item label="定金" prop="deposit" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.deposit"></el-input>
+					</el-form-item>
+				</div>
+				<div style="display: flex;">
+					<el-form-item label="到付" prop="pay" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.pay"></el-input>
+					</el-form-item>
+					<el-form-item label="到车" prop="car" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.car"></el-input>
+					</el-form-item>
+					<el-form-item label="下单客户" prop="aclient" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.aclient"></el-input>
+					</el-form-item>
+					<el-form-item label="收单客户" prop="uclient" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.uclient"></el-input>
+					</el-form-item>
+				</div>
 				<el-form-item label="运单截图" prop="picture">
 					<el-image v-if="editForm.picture" style="width: 150px;" :src="editForm.picture"></el-image>
 					<!-- <el-upload name="imgFile" :action="updatePictureUrl" :auto-upload="true" :on-success="handleEditPictureUrlSuccess"
@@ -142,34 +175,7 @@ style="margin-left: 20px;">
 						<el-button :disabled="canEdit" size="small" type="primary" plain>上传运单截图</el-button>
 					</el-upload> -->
 				</el-form-item>
-				<el-form-item label="空车距离" prop="emptydistance" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.emptydistance"></el-input>
-				</el-form-item>
-				<el-form-item label="高速预计距离" prop="highspeed" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.highspeed"></el-input>
-				</el-form-item>
-				<el-form-item label="下道预计距离" prop="estimatedistance" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.estimatedistance"></el-input>
-				</el-form-item>
-				<el-form-item label="是否禁行" prop="ban" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.ban"></el-input>
-				</el-form-item>
-				<el-form-item label="定金" prop="deposit" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.deposit"></el-input>
-				</el-form-item>
-				<el-form-item label="到付" prop="pay" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.pay"></el-input>
-				</el-form-item>
-				<el-form-item label="到车" prop="car" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.car"></el-input>
-				</el-form-item>
-				<el-form-item label="下单客户" prop="aclient" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.aclient"></el-input>
-				</el-form-item>
-				<el-form-item label="收单客户" prop="uclient" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.uclient"></el-input>					
-				</el-form-item>
-		
+
 				<el-form-item label="装货信息">
 					<template>
 						<el-table :data="editForm.apoints" style="width: 100%">
@@ -178,7 +184,7 @@ style="margin-left: 20px;">
 									<el-input :disabled="canEdit" v-model="scope.row.spointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="装货时间">
+							<el-table-column label="装货时间" width="200px">
 								<template slot-scope="scope">
 									<el-date-picker :disabled="canEdit" v-model="scope.row.stime" type="datetime" placeholder="选择日期时间"
 									 value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
@@ -197,7 +203,7 @@ style="margin-left: 20px;">
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
 								<template slot-scope="scope">
-									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input >
+									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
@@ -224,7 +230,7 @@ style="margin-left: 20px;">
 					</template>
 					<!-- <el-button :disabled="canEdit" @click="addApoints(editForm.apoints)">添加</el-button> -->
 				</el-form-item>
-		
+
 				<el-form-item label="卸货信息">
 					<template>
 						<el-table :data="editForm.upoints" style="width: 100%">
@@ -233,7 +239,7 @@ style="margin-left: 20px;">
 									<el-input :disabled="canEdit" v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="装货时间">
+							<el-table-column label="装货时间" width="200px">
 								<template slot-scope="scope">
 									<el-date-picker :disabled="canEdit" v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间"
 									 value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
@@ -279,69 +285,80 @@ style="margin-left: 20px;">
 					</template>
 					<!-- <el-button :disabled="canEdit" @click="addUpoints(editForm.upoints)">添加</el-button> -->
 				</el-form-item>
-		
-				<el-form-item label="车牌号" prop="searchDriver" class="rt-input">
-					<el-input :disabled="canEdit" v-model="editForm.lienses"></el-input>
-				</el-form-item>
-				<el-form-item label="司机" prop="lienses" class="rt-input">
-					<el-input disabled v-model="editForm.Lidriver"></el-input>
-				</el-form-item>
-				<el-form-item label="负责调度" prop="lienses" class="rt-input">
-					<el-input disabled v-model="editForm.dispatch"></el-input>
-				</el-form-item>
-				
+
+				<div style="display: flex;">
+					<el-form-item label="车牌号" prop="searchDriver" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.lienses"></el-input>
+					</el-form-item>
+					<el-form-item label="司机" prop="lienses" class="rt-input">
+						<el-input disabled v-model="editForm.Lidriver"></el-input>
+					</el-form-item>
+					<el-form-item label="负责调度" prop="lienses" class="rt-input">
+						<el-input disabled v-model="editForm.dispatch"></el-input>
+					</el-form-item>
+				</div>
+
+
 				<div v-if="showDisDetails">
-					<el-form-item label="司机已交定金" prop="depositis" class="rt-input">
-						<el-input disabled v-model="editForm.depositis"></el-input>
-					</el-form-item>
-					<el-form-item label="定金是否已退还" prop="returnd" class="rt-input">
-						<el-input disabled v-model="editForm.returnd"></el-input>
-					</el-form-item>
-					<el-form-item label="运费是否结算" prop="freight" class="rt-input">
-						<el-input disabled v-model="editForm.freight"></el-input>
-					</el-form-item>
-					<el-form-item label="调整后利润" prop="profits" class="rt-input">
-						<el-input disabled v-model="editForm.profits"></el-input>
-					</el-form-item>
-					<el-form-item label="调整原因" prop="why" class="rt-input">
-						<el-input disabled v-model="editForm.why"></el-input>
-					</el-form-item>
-					<el-form-item label="回单是否已结算" prop="returnis" class="rt-input">
-						<el-input disabled v-model="editForm.returnis"></el-input>
-					</el-form-item>
-					<el-form-item label="回单完结备注" prop="returnote" class="rt-input">
-						<el-input disabled v-model="editForm.returnote"></el-input>
-					</el-form-item>
-					<el-form-item label="回单附件" prop="riskpicture" class="rt-input">
-						<el-image style="width: 120px;" :src="editForm.riskpicture"></el-image>
-						
-					</el-form-item>
-					<el-form-item label="风险备注" prop="risknote" class="rt-input">
-						<el-input disabled v-model="editForm.risknote"></el-input>
-					</el-form-item>
-					<el-form-item label="风险附件" prop="riskpicture" class="rt-input">
-						<el-image style="width: 120px;" :src="editForm.riskpicture"></el-image>
-						
-					</el-form-item>
+					<div style="display: flex;">
+						<el-form-item label="司机已交定金" prop="depositis" class="rt-input">
+							<el-input disabled v-model="editForm.depositis"></el-input>
+						</el-form-item>
+						<el-form-item label="定金是否已退还" prop="returnd" class="rt-input">
+							<el-input disabled v-model="editForm.returnd"></el-input>
+						</el-form-item>
+						<el-form-item label="运费是否结算" prop="freight" class="rt-input">
+							<el-input disabled v-model="editForm.freight"></el-input>
+						</el-form-item>
+						<el-form-item label="风险备注" prop="risknote" class="rt-input">
+							<el-input disabled v-model="editForm.risknote"></el-input>
+						</el-form-item>
+					</div>
+
+					<div style="display: flex;">
+						<el-form-item label="调整后利润" prop="profits" class="rt-input">
+							<el-input disabled v-model="editForm.profits"></el-input>
+						</el-form-item>
+						<el-form-item label="调整原因" prop="why" class="rt-input">
+							<el-input disabled v-model="editForm.why"></el-input>
+						</el-form-item>
+						<el-form-item label="回单是否已结算" prop="returnis" class="rt-input">
+							<el-input disabled v-model="editForm.returnis"></el-input>
+						</el-form-item>
+						<el-form-item label="回单完结备注" prop="returnote" class="rt-input">
+							<el-input disabled v-model="editForm.returnote"></el-input>
+						</el-form-item>
+					</div>
+					<div style="display: flex;">
+						<el-form-item label="回单附件" prop="riskpicture" class="rt-input">
+							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
+						</el-form-item>
+						<el-form-item label="风险附件" prop="riskpicture" class="rt-input">
+							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
+						</el-form-item>
+					</div>
+
 				</div>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-		
+
 				<el-button @click="editDialogVisible = false">关 闭</el-button>
 				<!-- <el-button v-if="canEdit" :disabled="canClickEdit" type="primary" @click="handlecanEdit">修 改</el-button> -->
 				<!-- <el-button v-else type="primary" @click="editInfo">确 定</el-button> -->
 			</span>
-		
+
 		</el-dialog>
-		
+
 
 	</div>
 </template>
 
 <script>
 	export default {
-		data(){
-			return{
+		data() {
+			return {
+				// 多选框数据
+					no:[],
 				// 查询数据 waybilltypeList
 				queryInfo: {
 					pageNo: 1,
@@ -350,20 +367,20 @@ style="margin-left: 20px;">
 					order: "desc",
 					column: "id",
 					chepai: '',
-					startime:'',
-					endtime:'',
-					
+					startime: '',
+					endtime: '',
+
 				},
-				selectTime:[],
+				selectTime: [],
 				// 分页列表
 				List: [],
 				// 总条数
 				total: 0,
 				// 显示大图数组
 				srcList: [],
-				
+
 				// 编辑对话框数据
-				editDialogVisible: false,   
+				editDialogVisible: false,
 				editForm: {
 					Lidriver: '',
 					dispatch: '',
@@ -373,10 +390,10 @@ style="margin-left: 20px;">
 				// 修改按钮可否点击
 				canClickEdit: true,
 				// 订单完结，显示配送详情
-				showDisDetails:false,
+				showDisDetails: false,
 				// 显示司机拒单原因：
-				showRefusenote:false,
-				
+				showRefusenote: false,
+
 				// 派单类型
 				waybilltypeList: [{
 					value: '前置派单',
@@ -424,22 +441,43 @@ style="margin-left: 20px;">
 					value: '否',
 					label: '否'
 				}],
+				testList:['00071','00072','00073'],
 			}
 		},
 		created() {
 			const role = window.sessionStorage.getItem('role')
-			if(role == '管理员'){
-				
-			}else if(role == '调度主管'){
+			if (role == '管理员') {
+
+			} else if (role == '调度主管') {
 				this.queryInfo.partid = window.sessionStorage.getItem('departmentId') - 0
-			}else if(role == '调度组员'){
+			} else if (role == '调度组员') {
 				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
-			}else{
+			} else {
 				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
 			}
 			this.getList()
 		},
-		methods:{
+		methods: {
+			// 多选框变化
+			handleSelectionChange(e) {
+				console.log(e)
+				this.no=[]
+				e.forEach(v=>{
+				this.no.push(v.no)
+				})
+				// e.forEach(v=>{
+				// 	if(this.no.indexOf(v.no) == -1){
+				// 		this.no.push(v.no)
+				// 	}					
+				// })
+				console.log(this.no)
+			},
+			// 导出
+			async handleExport(){
+				if(!this.no[0]){return this.$message.warning('请选择需要导出的数据！')}
+				const {data:res} = await this.$http.get('YMpageController/selectDingDanX?'+this.$qs.stringify({ no: this.no }, { arrayFormat: 'repeat' }))
+				window.location.href = 'http://81.70.151.121:8080/jeecg-boot/YMpageController/selectDingDanX?'+this.$qs.stringify({ no: this.no }, { arrayFormat: 'repeat' })
+			},
 			//分页区域
 			// 根据分页查询列表srcList
 			async getList() {
@@ -456,11 +494,11 @@ style="margin-left: 20px;">
 						v.stateText = "驳回"
 					} else if (v.state == 1) {
 						v.stateText = "审核中"
-					} else if (v.state == 2){
+					} else if (v.state == 2) {
 						v.stateText = "审核完成"
-					} else if (v.state == 3){
+					} else if (v.state == 3) {
 						v.stateText = "司机已接单"
-					} else if (v.state == 4){
+					} else if (v.state == 4) {
 						v.stateText = "司机已拒单"
 					}
 				})
@@ -470,7 +508,7 @@ style="margin-left: 20px;">
 				this.srcList = []
 				this.srcList.push(src)
 			},
-			
+
 			// 点击查询按钮
 			handleQueryBtn() {
 				console.log(this.selectTime)
@@ -488,19 +526,19 @@ style="margin-left: 20px;">
 				this.selectTime = []
 				this.getList()
 			},
-			
+
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
 				this.queryInfo.pageSize = newSize
 				this.getList()
 			},
-			
+
 			// 页码值改变事件
 			handleCurrentChange(newPage) {
 				this.queryInfo.pageNo = newPage
 				this.getList()
 			},
-			
+
 			// 详情对话框操作
 			// 展示详情的对话框
 			async showEditDialog(plistNo) {
@@ -530,15 +568,15 @@ style="margin-left: 20px;">
 					this.showDisDetails = true
 				} else if (res.result[0].state == 3) {
 					this.canClickEdit = true
-				}else if (res.result[0].state == 4) {
+				} else if (res.result[0].state == 4) {
 					this.canClickEdit = true
 					this.showRefusenote = true
 				}
-			
+
 				// 显示对话框
 				this.editDialogVisible = true
 			},
-			
+
 			// 监听修改用户对话框关闭事件
 			editDialogClosed() {
 				this.$refs.editFormRef.resetFields()
@@ -546,9 +584,7 @@ style="margin-left: 20px;">
 				this.showRefusenote = false
 			},
 			
-			
-			
-			
+
 		}
 	}
 </script>
@@ -558,9 +594,9 @@ style="margin-left: 20px;">
 		color: #606266 !important;
 
 	}
-	
+
 	/* 要实现驳回原因的label字体变红，需要把scoped去掉，但是去掉，上边禁用字体颜色样式就不起效果 */
 	.redItem .el-form-item__label {
-	     color: red;
-	   }
+		color: red;
+	}
 </style>

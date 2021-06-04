@@ -85,14 +85,16 @@
 			<el-card class="box-card" style="margin-top: 30px;height: 600px;margin-left:8px;">
 				<div>
 					<!-- echarts图表 -->
-					<div id="main" style="width:100%;height: 600px;margin-top: 50px;"></div>
+					<div id="main" style="width:100%;height: 570px;margin-top: 50px;"></div>
 				</div>
 			</el-card>
 
 			<!-- 年检对话框 -->
 			<el-dialog title="年检到期车辆" :visible.sync="nianjianDialogVisible" width="60%" @close="nianjianDialogClosed">
-				<el-table :data="nianjianCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
-				 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-button type="primary" plain @click="nianjianExport" icon="el-icon-download">导出Excel</el-button>
+				<el-table :data="nianjianCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}" @selection-change="nianjianSelectionChange">
+				 <el-table-column type="selection" width="55">
+				 </el-table-column>
 					<el-table-column prop="License_plate" label="车牌号" width="100px">
 					</el-table-column>
 					<el-table-column prop="companyl" label="所属公司">
@@ -117,8 +119,9 @@
 
 			<!-- 保险对话框 -->
 			<el-dialog title="保险到期车辆" :visible.sync="baoxianDialogVisible" width="50%" @close="baoxianDialogClosed">
-				<el-table :data="baoxianCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
-				 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-button type="primary" plain @click="baoxianExport" icon="el-icon-download">导出Excel</el-button>
+				<el-table :data="baoxianCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}" @selection-change="baoxianSelectionChange">
+				 <el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="License_plate" label="车牌号" width="100px">
 					</el-table-column>
 					<el-table-column prop="companyl" label="所属公司">
@@ -142,9 +145,10 @@
 			</el-dialog>
 
 			<!-- 违章对话框 -->
-			<el-dialog title="违章到期车辆" :visible.sync="weizhangDialogVisible" width="80%" @close="weizhangDialogClosed">
-				<el-table :data="weizhangCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
-				 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+			<el-dialog title="违章未处理车辆" :visible.sync="weizhangDialogVisible" width="80%" @close="weizhangDialogClosed">
+				<el-button type="primary" plain @click="weizhangExport" icon="el-icon-download">导出Excel</el-button>
+				<el-table :data="weizhangCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}" @selection-change="weizhangSelectionChange">
+				 <el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="Car_number" label="车牌号" width="120px">
 					</el-table-column>
 					<el-table-column prop="illegal_act" label="违章行为">
@@ -167,8 +171,9 @@
 
 			<!-- 押金对话框 -->
 			<el-dialog title="押金不足车辆" :visible.sync="yajinDialogVisible" width="70%" @close="yajinDialogClosed">
-				<el-table :data="yajinCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
-				 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-button type="primary" plain @click="yajinExport" icon="el-icon-download">导出Excel</el-button>
+				<el-table :data="yajinCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}" @selection-change="yajinSelectionChange">
+				 <el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="License_plate" label="车牌号" width="120px">
 					</el-table-column>
 					<el-table-column prop="companyl" label="所属公司">
@@ -194,8 +199,9 @@
 
 			<!-- 调度费对话框 -->
 			<el-dialog title="调度费到期车辆" :visible.sync="diaodufeiDialogVisible" width="70%" @close="diaodufeiDialogClosed">
-				<el-table :data="diaodufeiCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
-				 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
+				<el-button type="primary" plain @click="diaodufeiExport" icon="el-icon-download">导出Excel</el-button>
+				<el-table :data="diaodufeiCarList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}" @selection-change="diaodufeiSelectionChange">
+				 <el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="License_plate" label="车牌号" width="120px">
 					</el-table-column>
 					<el-table-column prop="companyl" label="所属公司">
@@ -232,22 +238,27 @@
 				nianjianCarData: '',
 				nianjianDialogVisible: false,
 				nianjianCarList: [],
+				nianjianExcel:[],
 				// 保险到期车俩
 				baoxianCarData: '',
 				baoxianDialogVisible: false,
 				baoxianCarList: [],
+				baoxianExcel:[],
 				// 违章未处理车辆
 				weizhangCarData: '',
 				weizhangDialogVisible: false,
 				weizhangCarList: [],
+				weizhangExcel:[],
 				// 押金不足车辆
 				yajinCarData: '',
 				yajinDialogVisible: false,
 				yajinCarList: [],
+				yajinExcel:[],
 				// 调度到期车辆
 				diaodufeiCarData: '',
 				diaodufeiDialogVisible: false,
 				diaodufeiCarList: [],
+				diaodufeiExcel:[],
 
 				// 加载查询
 				fullscreenLoading: false,
@@ -276,6 +287,80 @@
 			}, 500);
 		},
 		methods: {
+			// 年检多选框变化
+			nianjianSelectionChange(e){
+				this.nianjianExcel = []
+				e.forEach(v=>{
+				this.nianjianExcel.push(v.License_plate)
+				})
+			},
+			// 导出
+			async nianjianExport(){
+				if(!this.nianjianExcel[0]){return this.$message.warning('请选择需要导出的数据！')}
+				const {data:res} = await this.$http.get('ExcelController/ExcelNianjian?'+this.$qs.stringify({ ExcelNianjians: this.nianjianExcel }, { arrayFormat: 'repeat' }))
+				window.location.href = 'http://81.70.151.121:8080/jeecg-boot/ExcelController/ExcelNianjian?'+this.$qs.stringify({ ExcelNianjians: this.nianjianExcel }, { arrayFormat: 'repeat' })
+			},
+			
+			// 保险多选框变化
+			baoxianSelectionChange(e){
+				console.log(e)
+				this.baoxianExcel = []
+				e.forEach(v=>{
+				this.baoxianExcel.push(v.License_plate)
+				})
+			},
+			// 保险导出
+			async baoxianExport(){
+				if(!this.baoxianExcel[0]){return this.$message.warning('请选择需要导出的数据！')}
+				const {data:res} = await this.$http.get('ExcelController/selectbaoxiandaoqi?'+this.$qs.stringify({selectbaoxiandaoqis: this.baoxianExcel }, { arrayFormat: 'repeat' }))
+				window.location.href = 'http://81.70.151.121:8080/jeecg-boot/ExcelController/selectbaoxiandaoqi?'+this.$qs.stringify({selectbaoxiandaoqis: this.baoxianExcel }, { arrayFormat: 'repeat' })
+			},
+			
+			// 违章多选框变化
+			weizhangSelectionChange(e){
+				console.log(e)
+				this.weizhangExcel = []
+				e.forEach(v=>{
+				this.weizhangExcel.push(v.Car_number)
+				})
+			},
+			// 违章导出
+			async weizhangExport(){
+				if(!this.weizhangExcel[0]){return this.$message.warning('请选择需要导出的数据！')}
+				const {data:res} = await this.$http.get('ExcelController/selectweizhangxiangqing?'+this.$qs.stringify({ selectweizhangxiangqings: this.weizhangExcel }, { arrayFormat: 'repeat' }))
+				window.location.href = 'http://81.70.151.121:8080/jeecg-boot/ExcelController/selectweizhangxiangqing?'+this.$qs.stringify({ selectweizhangxiangqings: this.weizhangExcel }, { arrayFormat: 'repeat' })
+			},
+			
+			// 押金多选框变化
+			yajinSelectionChange(e){
+				console.log(e)
+				this.yajinExcel = []
+				e.forEach(v=>{
+				this.yajinExcel.push(v.License_plate)
+				})
+			},
+			// 押金导出
+			async yajinExport(){
+				if(!this.yajinExcel[0]){return this.$message.warning('请选择需要导出的数据！')}
+				const {data:res} = await this.$http.get('ExcelController/sdelectxiaoyuWB?'+this.$qs.stringify({ sdelectxiaoyuWBs: this.yajinExcel }, { arrayFormat: 'repeat' }))
+				window.location.href = 'http://81.70.151.121:8080/jeecg-boot/ExcelController/sdelectxiaoyuWB?'+this.$qs.stringify({ sdelectxiaoyuWBs: this.yajinExcel }, { arrayFormat: 'repeat' })
+			},
+			
+			// 调度费多选框变化
+			diaodufeiSelectionChange(e){
+				console.log(e)
+				this.diaodifeiExcel = []
+				e.forEach(v=>{
+				this.diaodifeiExcel.push(v.License_plate)
+				})
+			},
+			// 调度费导出
+			async diaodufeiExport(){
+				if(!this.diaodifeiExcel[0]){return this.$message.warning('请选择需要导出的数据！')}
+				const {data:res} = await this.$http.get('ExcelController/selectDiaoDuFeiDQ?'+this.$qs.stringify({ selectDiaoDuFeiDQ: this.diaodifeiExcel }, { arrayFormat: 'repeat' }))
+				window.location.href = 'http://81.70.151.121:8080/jeecg-boot/ExcelController/selectDiaoDuFeiDQ?'+this.$qs.stringify({ selectDiaoDuFeiDQ: this.diaodifeiExcel }, { arrayFormat: 'repeat' })
+			},
+			
 			// 获取面板数据
 			async getAllData() {
 				const {
@@ -465,25 +550,26 @@
 				console.log(this.yDataArr1)
 				console.log(this.yDataArr2)
 				var options = {
-					title: {
-						text: '订单数据'
-					},
+					// title: {
+					// 	text: '订单数据'
+					// },
 					legend: {
 						data: ['里程', '收入'],
-						right: '180px'
+						// right: '180px',
+						
 					},
 					xAxis: {
 						name: '时间',
 						nameTextStyle: {
 							fontWeight: 600,
 							fontSize: 16,
-			
+							
 						},
 						type: 'category',
 						data: this.xDataArr
 					},
 					yAxis: {
-						name: '数据',
+						name: '订单数据',
 						nameTextStyle: {
 							fontWeight: 600,
 							fontSize: 16,
@@ -502,7 +588,11 @@
 							name: '里程',
 							type: 'bar',
 							data: this.yDataArr1,
-							color: '#409EFF'
+							// color: '#409EFF',
+							itemStyle: {    //柱状颜色和圆角
+									color: '#409EFF',
+									barBorderRadius: [10, 10, 10, 10], // （顺时针左上，右上，右下，左下）
+								},
 							// 平均值线
 							// markLine:{
 							// 	data:[
@@ -514,7 +604,11 @@
 							name: '收入',
 							type: 'bar',
 							data: this.yDataArr2,
-							color: '#E6AE5C'
+							// color: '#E6AE5C',
+							itemStyle: {    //柱状颜色和圆角
+									color: '#E6AE5C',
+									barBorderRadius: [10, 10, 10, 10], // （顺时针左上，右上，右下，左下）
+								},
 							// 平均值
 							// markLine:{
 							// 	data:[
