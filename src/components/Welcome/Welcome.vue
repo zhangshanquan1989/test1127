@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- <h2>欢迎登陆天康系统</h2> -->
+		<!-- <h2>欢迎登陆天康系统</h2> -->		
 		<div style="display: flex;">
 			<el-card shadow="hover" style="width: 300px;height: 144px;margin-left:8px;" @click.native="showNianJian" v-loading.fullscreen.lock="fullscreenLoading">
 				<div style="display: flex;margin-left: 22px;margin-top: 12px;">
@@ -284,7 +284,7 @@
 		mounted() {
 			setTimeout(() => {
 				this.creatEchartsMethod()
-			}, 500);
+			}, 1000);
 		},
 		methods: {
 			// 年检多选框变化
@@ -303,7 +303,6 @@
 			
 			// 保险多选框变化
 			baoxianSelectionChange(e){
-				console.log(e)
 				this.baoxianExcel = []
 				e.forEach(v=>{
 				this.baoxianExcel.push(v.License_plate)
@@ -318,7 +317,6 @@
 			
 			// 违章多选框变化
 			weizhangSelectionChange(e){
-				console.log(e)
 				this.weizhangExcel = []
 				e.forEach(v=>{
 				this.weizhangExcel.push(v.Car_number)
@@ -333,7 +331,6 @@
 			
 			// 押金多选框变化
 			yajinSelectionChange(e){
-				console.log(e)
 				this.yajinExcel = []
 				e.forEach(v=>{
 				this.yajinExcel.push(v.License_plate)
@@ -348,7 +345,6 @@
 			
 			// 调度费多选框变化
 			diaodufeiSelectionChange(e){
-				console.log(e)
 				this.diaodifeiExcel = []
 				e.forEach(v=>{
 				this.diaodifeiExcel.push(v.License_plate)
@@ -456,7 +452,7 @@
 				setTimeout(() => {
 					this.fullscreenLoading = false;
 					this.weizhangDialogVisible = true
-				}, 700)
+				}, 600)
 			},
 			weizhangDialogClosed() {},
 			// 押金
@@ -502,7 +498,6 @@
 					'plistCtime1': plistCtime1,
 					'plistCtime2': plistCtime2
 				}
-				console.log(this.queryInfo)
 			},
 			// 获取当前时间
 			getFormatDate(date) {
@@ -534,7 +529,7 @@
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
-				console.log('res',res)
+
 				this.sourceData = res.result
 			
 				this.sourceData.forEach(v => {
@@ -546,9 +541,6 @@
 			// 创建图表
 			creatEchartsMethod() {
 				var myChart = this.$echarts.init(document.getElementById('main'));
-				console.log(this.xDataArr)
-				console.log(this.yDataArr1)
-				console.log(this.yDataArr2)
 				var options = {
 					// title: {
 					// 	text: '订单数据'

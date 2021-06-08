@@ -59,8 +59,8 @@
 				<el-form-item label="车牌号:" prop="license">
 					{{addRechargeForm.license}}
 				</el-form-item>
-				<el-form-item label="充值金额:" prop="amountS">
-					<el-input v-model="addRechargeForm.amountS"></el-input>
+				<el-form-item label="充值金额:" prop="amountS" >
+					<el-input v-model="addRechargeForm.amountS" style="width: 350px;"></el-input>
 				</el-form-item>
 			</el-form>	
 			

@@ -3,6 +3,7 @@
 		<!-- 面包屑导航区 -->
 		<el-breadcrumb separator-class="el-icon-arrow-right">
 			<el-breadcrumb-item>首页</el-breadcrumb-item>
+			<el-breadcrumb-item>订单管理</el-breadcrumb-item>
 			<el-breadcrumb-item>配送管理</el-breadcrumb-item>
 		</el-breadcrumb>
 
@@ -72,6 +73,9 @@
 				<el-table-column prop="creatime" label="创建时间" width="180px">
 				</el-table-column>
 				<el-table-column prop="stateText" label="订单状态" width="120px" fixed="right">
+					<template slot-scope="scope">
+						<span :style="{'color':scope.row.stateText=='待审核'?'red':'black'}">{{scope.row.stateText}}</span>
+					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
 					<template slot-scope="scope">

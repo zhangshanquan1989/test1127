@@ -6,7 +6,13 @@
 				<img src="../assets/天康系统3.png" alt="">
 				<!-- <span>天康系统</span> -->
 			</div>
-			<el-button type="info" @click="logout">退出</el-button>
+			<div>
+				<el-badge  :value="daibanData" class="item" style="margin-right: 30px;font-size: 18px;">
+				  <span>待办事项</span>
+				</el-badge>
+				<el-button type="info" @click="logout">退出</el-button>
+			</div>
+			
 		</el-header>
 		<!-- 页面主体 -->
 		<el-container>
@@ -222,12 +228,18 @@
 				],
 
 				// 被激活的链接地址
-				activePath: ''
+				activePath: '',
+				// 用户id
+				userid:'',
+				// 代办数量
+				daibanData:''
 			}
 		},
 		created() {
-			// this.getMenuList()
+			// this.getMenuList()userID
+			this.userid = window.sessionStorage.getItem('userID')
 			this.activePath = window.sessionStorage.getItem('activePath')
+			this.getDaiBan()
 		},
 		methods: {
 			logout() {
@@ -246,7 +258,13 @@
 			saveNavState(activePath) {
 				window.sessionStorage.setItem('activePath', activePath)
 				this.activePath = activePath
-			}
+			},
+			// 获取代办提醒
+			async getDaiBan(){
+				const {data:res} = await this.$http.get('waybill/daiban?id='+this.userid)
+				console.log(res)
+				this.daibanData = res.result.代办流程数量
+			},
 		}
 	}
 </script>
@@ -300,6 +318,10 @@
 	.el-menu-item.is-active {
 		background-color: #03395f !important;
 	}
+	
+	.el-badge /deep/.el-badge__content.is-fixed{
+	       right: 5px
+	    }
 
 
 	// .el-submenu {

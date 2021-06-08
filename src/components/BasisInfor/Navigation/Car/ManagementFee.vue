@@ -37,7 +37,7 @@
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<!-- 缴费按钮 -->
-						<el-button type="primary" size="mini" @click="payCostDialog(scope.row)">缴费</el-button>
+						<el-button style="margin-left: 10px;" type="primary" size="mini" @click="handlePayCostDialog(scope.row)">缴费</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -59,20 +59,20 @@
 					 {{payCostForm.licensePlate}}
 				</el-form-item>
 				<el-form-item label="缴费周期:" prop="managementcycle">
-					<el-select v-model="payCostForm.managementcycle" placeholder="请选择">
+					<el-select v-model="selectManagementcycle" clearable placeholder="请选择缴费周期" @change="managementcycleChange">
 						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="到期时间:" prop="asoftime">
-					 <el-date-picker v-model="payCostForm.asoftime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					 <el-date-picker v-model="selectAsoftime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
 					 </el-date-picker>
 				</el-form-item>
 			</el-form>
 			
 			<!-- <span slot="footer" class="dialog-footer"> -->
 			<span style="float:right">
-				<el-button @click="editDialogVisible = false">取 消</el-button>
+				<el-button @click="payCostDialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="payCostInfo">确 定</el-button>
 			</span>
 			
@@ -114,6 +114,8 @@
 				total: 0,
 				// 充值页面显示
 				payCostDialogVisible: false,
+				selectManagementcycle:'',
+				selectAsoftime:'',
 				// 充值记录
 				payCostList: [],
 				payCostForm: {
@@ -147,7 +149,7 @@
 				} = await this.$http.get('kmanagement/list', {
 					params: this.queryInfo
 				})
-				// console.log(res)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -192,21 +194,79 @@
 			},
 
 			// 显示缴费页面
-			async payCostDialog(row) {
-				// console.log(row)
+			async handlePayCostDialog(row) {
+				console.log('显示')
+				console.log('row',row)
 				const {
 					data: res
 				} = await this.$http.get('kmanagementRecords/list?licensePlate=' + row.licensePlate)
-				// console.log(res)
+				console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
 				this.payCostList = res.result.records
 				this.payCostForm = row
+				if(!row.asoftime){
+					this.selectAsoftime = ''
+				}else{
+					this.selectAsoftime = row.asoftime
+				}
+				
 				this.payCostDialogVisible = true
 			},
+			
+			// 选择缴费周期变化
+			managementcycleChange(e){
+				console.log(e)
+				if(!this.payCostForm.asoftime){				
+					if(e == '月付'){
+						this.selectAsoftime = this.addDate(new Date(),1)
+					}else if(e == '季度付'){
+						this.selectAsoftime = this.addDate(new Date(),3)
+					}else if(e == '半年付'){
+						this.selectAsoftime = this.addDate(new Date(),6)
+					}else if(e == '年付'){
+						this.selectAsoftime = this.addDate(new Date(),12)
+					}else if(e == ''){
+						this.selectAsoftime = ''
+					}
+				}else{
+					if(e == '月付'){
+						this.selectAsoftime = this.addDate(new Date(this.payCostForm.asoftime),1)
+					}else if(e == '季度付'){
+						this.selectAsoftime = this.addDate(new Date(this.payCostForm.asoftime),3)
+					}else if(e == '半年付'){
+						this.selectAsoftime = this.addDate(new Date(this.payCostForm.asoftime),6)
+					}else if(e == '年付'){
+						this.selectAsoftime = this.addDate(new Date(this.payCostForm.asoftime),12)
+					}else if(e == ''){
+						this.selectAsoftime = this.payCostForm.asoftime
+					}
+				}
+			},
+			
+			// 根据缴费周期增加月份
+			addDate(newdate,addMonth){
+				  var Dates = newdate;
+				    Dates.setMonth(Dates.getMonth() + addMonth);
+				    var mon = Dates.getMonth() + 1,
+				        day = Dates.getDate();
+				    if(mon < 10){
+				        mon = "0" + mon;//月份小于10，在前面补充0
+				    }
+				    if(day < 10){
+				        day = "0" + day;//日小于10，在前面补充0
+				    }
+						console.log(Dates.getFullYear() + "-" + mon + "-" +day)
+				    return Dates.getFullYear() + "-" + mon + "-" +day
+			},
+			
 			// 充值
 			async payCostInfo() {
+				console.log('充值')
+				this.payCostForm.managementcycle = this.selectManagementcycle
+				this.payCostForm.asoftime = this.selectAsoftime
+				
 				this.$refs.payCostFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起修改信息的数据请求
@@ -215,18 +275,24 @@
 					} = await this.$http.post('kmanagement/edit', this.payCostForm)
 					// console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.payCostDialogVisible = false
 					this.getPageList()
-					this.$message.success('成功')
+					this.$message.success(res.message)
 				})
 			},
 
 			// 监听充值对话框关闭事件
 			payCostDialogClosed() {
-				this.$refs.payCostFormRef.resetFields()
+				console.log('关闭')
+				// this.$refs.payCostFormRef.resetFields()
+				this.payCostForm = {}
+				this.payCostList=[]
+				this.selectManagementcycle = ''
+				this.selectAsoftime = ''
+				// this.getPageList()
 			},
 
 		}

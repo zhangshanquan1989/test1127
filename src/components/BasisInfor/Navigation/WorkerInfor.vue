@@ -104,14 +104,14 @@
 		</el-col>
 
 		<!-- 创建的对话框 -->
-		<el-dialog title="新增员工信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+		<el-dialog title="新增员工信息" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
 			<!-- 创建表单 -->
-			<el-form :model="addForm"  ref="addFormRef" label-width="100px">
+			<el-form :model="addForm"  ref="addFormRef" label-width="120px">
 				<el-form-item label="员工ID:" v-if="false">
-					<el-input  disabled style="width: 50%;" placeholder="自动生成"></el-input>
+					<el-input  disabled style="width: 400px;" placeholder="自动生成"></el-input>
 				</el-form-item>
 				<el-form-item label="员工姓名:" prop="username">
-					<el-input v-model="addForm.username" style="width: 50%;"></el-input>
+					<el-input v-model="addForm.username" style="width: 300px;"></el-input>
 				</el-form-item>
 <!-- 				<el-form-item label="部门:" prop="department">
 					<el-input v-model="addForm.department" style="width: 50%;"></el-input>
@@ -120,16 +120,16 @@
 					<el-input v-model="addForm.position" style="width: 50%;"></el-input>
 				</el-form-item> -->
 				<el-form-item label="所属公司" prop="company">
-					<el-select v-model="addForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod" :loading="companyLoading" style="width: 200px;">
+					<el-select v-model="addForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod" :loading="companyLoading" style="width: 300px;">
 						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="联系方式" prop="phone">
-					<el-input v-model="addForm.phone" style="width: 50%;"></el-input>
+					<el-input v-model="addForm.phone" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="邮箱" prop="email">
-					<el-input v-model="addForm.email" style="width: 50%;"></el-input>
+					<el-input v-model="addForm.email" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="身份证照片" prop="userimg">
 					<el-image v-if="addForm.userimg" style="width: 150px;" :src="addForm.userimg"></el-image>

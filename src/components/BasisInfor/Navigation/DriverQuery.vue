@@ -62,7 +62,7 @@
 				</el-table-column>
 				<el-table-column prop="utTime" label="最近更新时间" width="150px">
 				</el-table-column>
-				<el-table-column label="操作" width="200px">
+				<el-table-column label="操作" width="200px" fixed="right">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>

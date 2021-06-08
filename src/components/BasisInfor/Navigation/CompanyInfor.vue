@@ -61,7 +61,7 @@
 				</el-table-column>
 				<el-table-column prop="nearcreatime" label="最近更新时间"  width="200px" show-overflow-tooltip>
 				</el-table-column>
-				<el-table-column label="操作" width="200">
+				<el-table-column label="操作" width="200" fixed="right">
 					<template slot-scope="scope">
 						<!-- 修改按钮 -->
 						<el-button type="primary" size="mini" @click="showEditDialog(scope.row.id)">编辑</el-button>
