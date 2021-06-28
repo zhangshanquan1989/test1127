@@ -59,8 +59,8 @@
 				randomImage: '',
 				// 登录表单的数据绑定对象
 				loginForm: {
-					username: 'zhangsan',
-					password: 'zhangsan',
+					username: '',
+					password: '',
 					checkKey: 'abc',
 					captcha: ''
 				},
