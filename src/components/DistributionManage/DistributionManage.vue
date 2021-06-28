@@ -119,7 +119,7 @@
 						<el-input disabled v-model="editForm.people"></el-input>
 					</el-form-item>
 				</div>
-				
+
 				<div style="display: flex;">
 					<el-form-item label="货物名称:" prop="goodsname" class="rt-input">
 						<el-input disabled v-model="editForm.goodsname"></el-input>
@@ -135,9 +135,9 @@
 					</el-form-item>
 				</div>
 
-				
-				
-				<div style="display: flex;">					
+
+
+				<div style="display: flex;">
 					<el-form-item label="高速预计距离:" prop="highspeed" class="rt-input">
 						<el-input disabled v-model="editForm.highspeed"></el-input>
 					</el-form-item>
@@ -151,7 +151,7 @@
 						<el-input disabled v-model="editForm.deposit"></el-input>
 					</el-form-item>
 				</div>
-				
+
 				<div style="display: flex;">
 					<el-form-item label="到付:" prop="pay" class="rt-input">
 						<el-input disabled v-model="editForm.pay"></el-input>
@@ -166,11 +166,11 @@
 						<el-input disabled v-model="editForm.uclient"></el-input>
 					</el-form-item>
 				</div>
-				
+
 				<el-form-item label="运单截图:" prop="picture">
 					<el-image v-if="editForm.picture" style="width: 200px;" :src="editForm.picture"></el-image>
 				</el-form-item>
-				
+
 				<el-form-item label="装货信息">
 					<template>
 						<el-table :data="editForm.apoints" style="width: 100%">
@@ -268,7 +268,7 @@
 						</el-table>
 					</template>
 				</el-form-item>
-				
+
 				<div style="display: flex;">
 					<el-form-item label="车牌号:" prop="lienses" class="rt-input">
 						<el-input disabled v-model="editForm.lienses"></el-input>
@@ -280,7 +280,7 @@
 						<el-input disabled v-model="editForm.dispatch"></el-input>
 					</el-form-item>
 				</div>
-				
+
 
 				<div v-if="showDisDetails">
 					<div style="display: flex;">
@@ -315,12 +315,12 @@
 						<el-form-item label="回单附件:" prop="riskpicture" class="rt-input">
 							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
 						</el-form-item>
-						
+
 						<el-form-item label="风险附件:" prop="riskpicture" class="rt-input">
 							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
 						</el-form-item>
 					</div>
-					
+
 				</div>
 
 			</el-form>
@@ -442,8 +442,8 @@
 		data() {
 			return {
 				// 上传图片需要携带token
-				myHeaders:{
-					satoken:window.sessionStorage.getItem('satoken')
+				myHeaders: {
+					satoken: window.sessionStorage.getItem('satoken')
 				},
 				// 复制的链接
 				shareUrl: '',
@@ -540,36 +540,64 @@
 
 				// 转发的订单编号
 				repeatPlistNo: '',
-				encryptionPlistNo:'',
+				encryptionPlistNo: '',
 				// 显示司机拒单原因：
 				showRefusenote: false,
-
+				
 				updateReturnUrl: "http://81.70.151.121:8080/jeecg-boot/distribution/uploadreturnpicture",
 				updateRiskUrl: "http://81.70.151.121:8080/jeecg-boot/distribution/uploadriskpicture",
+				
+				// 微信转发的数据
+				// appid
+				appid:'wx4838ce0c19c524d0',
+				// 当前网址：
+				oldUrl:'http://tkhhd.com/',
+				// 转码后网址：
+				newUrl:'',
 
 			}
 		},
 		created() {
 			const role = window.sessionStorage.getItem('role')
-			if(role == '管理员'){
-				
-			}else if(role == '调度主管'){
+			if (role == '管理员') {
+
+			} else if (role == '调度主管') {
 				this.queryInfo.partid = window.sessionStorage.getItem('departmentId') - 0
-			}else if(role == '调度组员'){
+			} else if (role == '调度组员') {
 				this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
-			}else{
+			} else {
 				this.queryInfo.disuserid = window.sessionStorage.getItem('userID') - 0
-			}			
+			}
 
 			this.getPageList()
+			this.getBaseInfos()
 		},
-		methods: {			
+		methods: {
+
+			// 编码函数			
+			urlencode(str) {
+				str = (str + '').toString();
+				return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
+				replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+			},
+
+			// 获取code
+			getBaseInfos() {
+				this.newUrl = this.urlencode(this.oldUrl)
+				console.log(this.newUrl)
+				var url_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + this.appid +
+					"&redirect_uri=" + this.newUrl +
+					"&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect";
+				console.log(url_code)
+				// window.location.href = url_code; //打开这个链接，你的url后面就会跟上code的参数
+
+			},
 			// 复制链接
 			async clickShareUrl() {
 				let clipboard = new this.Clipboard(".el-icon-share");
 				clipboard.on("success", e => {
 					// 释放内存
-									// console.log(e)
+					// console.log(e)
 					this.$message.success('已成功复制')
 					clipboard.destroy();
 				});
@@ -678,15 +706,15 @@
 					this.showRefusenote = true
 				}
 				// 对订单号进行加密，用于复制链接
-					const {
-						data: res2
-					} = await this.$http.get('waybill/jiami?plistNo='+this.repeatPlistNo)
+				const {
+					data: res2
+				} = await this.$http.get('waybill/jiami?plistNo=' + this.repeatPlistNo)
 
-					if (res.code !== 200) {
-						return this.$message.error(res.message)
-					}
-					this.encryptionPlistNo = res2.result.加密后订单号
-					this.shareUrl = 'http://81.70.151.121/#/phonePage/' + res2.result.加密后订单号
+				if (res.code !== 200) {
+					return this.$message.error(res.message)
+				}
+				this.encryptionPlistNo = res2.result.加密后订单号
+				this.shareUrl = 'http://81.70.151.121/#/phonePage/' + res2.result.加密后订单号
 
 				// 显示对话框
 				this.editDialogVisible = true
@@ -735,7 +763,7 @@
 
 			// 提交驳回
 			handleRejected() {
-		
+
 				this.$refs.rejectedFormRef.validate(async valid => {
 					if (!valid) return
 					// 发起修改信息的数据请求

@@ -11,13 +11,13 @@
 		<el-card class="box-card">
 			<el-table :data="dataList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 			 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
-				<el-table-column prop="id" label="ID">
+				<el-table-column prop="id" label="ID" width="200">
 				</el-table-column>
-				<el-table-column prop="company" label="公司">
+				<el-table-column prop="company" label="公司" width="400">
 				</el-table-column>
-				<el-table-column prop="username" label="姓名">
+				<el-table-column prop="username" label="姓名" width="200">
 				</el-table-column>
-				<el-table-column label="操作"  fixed="right">
+				<el-table-column label="操作" >
 					<template slot-scope="scope">
 						<!-- 角色分配按钮 -->
 						<el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)" style="margin-left: 15px;">分配角色</el-button>

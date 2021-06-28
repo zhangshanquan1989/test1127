@@ -11,9 +11,9 @@
 				<el-button type="primary" plain @click="addDialogVisible = true">添加角色</el-button>
 				<el-table :data="dataList" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}"
 				 :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
-					<el-table-column prop="id" label="ID">
+					<el-table-column prop="id" label="ID" width="200">
 					</el-table-column>
-					<el-table-column prop="roleName" label="角色名">
+					<el-table-column prop="roleName" label="角色名" width="500">
 					</el-table-column>
 					<el-table-column label="操作"  fixed="right">
 						<template slot-scope="scope">

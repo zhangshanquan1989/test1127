@@ -33,7 +33,7 @@
 				</el-table-column>
 				<el-table-column prop="phoneno" label="车主手机号" width="150px">
 				</el-table-column>
-				<el-table-column prop="companyl" label="所属分公司" width="150px">
+				<el-table-column prop="companyl" label="所属分公司" width="250px">
 				</el-table-column>
 				<el-table-column prop="driver" label="对应司机" width="100px">
 				</el-table-column>
@@ -57,7 +57,7 @@
 						</el-tooltip>
 					</template>
 				</el-table-column>
-				<el-table-column prop="insuranceDate" label="保险起止日期" width="150px">
+				<el-table-column prop="insuranceDate" label="保险到期日期" width="150px">
 				</el-table-column>
 				<el-table-column prop="caroperating" label="车辆营运证" width="150px">
 					<template slot-scope="scope">
@@ -76,9 +76,9 @@
 				</el-table-column> -->
 				<el-table-column prop="createuser" label="创建人" width="150px">
 				</el-table-column>
-				<el-table-column prop="ctTime" label="创建时间" width="150px">
+				<el-table-column prop="ctTime" label="创建时间" width="180px">
 				</el-table-column>
-				<el-table-column prop="utTime" label="最近更新时间" width="150px">
+				<el-table-column prop="utTime" label="最近更新时间" width="180px">
 				</el-table-column>
 				<el-table-column label="操作" width="380px" fixed="right">
 					<template slot-scope="scope">

@@ -12,13 +12,17 @@
 				<el-button type="primary" plain style="margin-left: 20px;" @click="handleAddGroupDialog">添加小组</el-button>
 			</div>
 
-			<el-table :data="dataList" style="width: 100%;margin-bottom: 20px;margin-top: 20px;" row-key="menutype" border :tree-props="{children: 'department', hasChildren: 'hasChildren'}">
+			<el-table :data="dataList" border stripe style="width: 100%;margin-bottom: 20px;margin-top: 20px;" row-key="menutype" :tree-props="{children: 'department', hasChildren: 'hasChildren'}" :row-style="{height:'50px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column v-if="false" prop="id" label="id" >
 				</el-table-column>
-				<el-table-column type="index" width="100"></el-table-column>
-				<el-table-column prop="name" label="公司" >
+				<el-table-column type="index" width="200"></el-table-column>
+				<el-table-column prop="name" label="公司" width="600">
+					 <template slot-scope="scope">
+						 <el-image style="width: 18px; height: 18px;margin-left: 10px;" :src="require('./icon-1.png')"></el-image>
+						 <span style="margin-left: 5px;">{{scope.row.name}}</span>
+					 </template>
 				</el-table-column>
-				<el-table-column label="操作"  fixed="right" width="300px">
+				<el-table-column label="操作" >
 					<template slot-scope="scope">
 						<!-- 删除按钮 -->
 						<el-popconfirm title="确定删除吗？" v-if="scope.row.tag?true:false" @confirm="removeById(scope.row.id)" style="margin-left: 10px;">
@@ -194,5 +198,31 @@
 </script>
 
 <style scoped>
+/deep/.el-icon-arrow-right:before {
 
+content: "\e6d9";
+
+}
+
+/deep/.el-table__expand-icon--expanded .el-icon-arrow-right:before{
+
+content: "\e6d8"!important;
+
+}
+
+/deep/.el-table__expand-icon--expanded {
+
+-webkit-transform: rotate(0deg);
+
+transform: rotate(0deg);
+
+}
+
+/deep/.el-table__expand-icon {
+
+border: 1px solid #e7e7e7;
+
+padding:1px;
+
+}
 </style>
