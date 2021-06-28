@@ -131,7 +131,7 @@
 						<el-input disabled v-model="editForm.overweight"></el-input>
 					</el-form-item>
 					<el-form-item label="空车距离:" prop="emptydistance" class="rt-input">
-						<el-input disabled v-model="editForm.emptydistance"></el-input>
+						<el-input disabled v-model="editForm.emptydistance+'km'"></el-input>
 					</el-form-item>
 				</div>
 
@@ -139,25 +139,25 @@
 
 				<div style="display: flex;">
 					<el-form-item label="高速预计距离:" prop="highspeed" class="rt-input">
-						<el-input disabled v-model="editForm.highspeed"></el-input>
+						<el-input disabled v-model="editForm.highspeed+'km'"></el-input>
 					</el-form-item>
 					<el-form-item label="下道预计距离:" prop="estimatedistance" class="rt-input">
-						<el-input disabled v-model="editForm.estimatedistance"></el-input>
+						<el-input disabled v-model="editForm.estimatedistance+'km'"></el-input>
 					</el-form-item>
 					<el-form-item label="是否禁行:" prop="ban" class="rt-input">
 						<el-input disabled v-model="editForm.ban"></el-input>
 					</el-form-item>
 					<el-form-item label="定金:" prop="deposit" class="rt-input">
-						<el-input disabled v-model="editForm.deposit"></el-input>
+						<el-input disabled v-model="editForm.deposit+'元'"></el-input>
 					</el-form-item>
 				</div>
 
 				<div style="display: flex;">
 					<el-form-item label="到付:" prop="pay" class="rt-input">
-						<el-input disabled v-model="editForm.pay"></el-input>
+						<el-input disabled v-model="editForm.pay+'元'"></el-input>
 					</el-form-item>
 					<el-form-item label="到车:" prop="car" class="rt-input">
-						<el-input disabled v-model="editForm.car"></el-input>
+						<el-input disabled v-model="editForm.car+'元'"></el-input>
 					</el-form-item>
 					<el-form-item label="下单客户:" prop="aclient" class="rt-input">
 						<el-input disabled v-model="editForm.aclient"></el-input>
@@ -179,10 +179,9 @@
 									<el-input disabled v-model="scope.row.spointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="装货时间">
+							<el-table-column label="装货时间" width="200">
 								<template slot-scope="scope">
-									<el-date-picker disabled v-model="scope.row.stime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"
-									 class="rt-input">
+									<el-date-picker disabled v-model="scope.row.stime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"	 class="rt-input">
 									</el-date-picker>
 								</template>
 							</el-table-column>
@@ -198,7 +197,7 @@
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
 								<template slot-scope="scope">
-									<el-input disabled v-model="scope.row.sarea"></el-input class="rt-input">
+									<el-input disabled v-model="scope.row.sarea" class="rt-input"></el-input >
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
@@ -228,7 +227,7 @@
 									<el-input disabled v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="装货时间">
+							<el-table-column label="装货时间" width="200">
 								<template slot-scope="scope">
 									<el-date-picker disabled v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"
 									 class="rt-input">
@@ -843,5 +842,8 @@
 </script>
 
 <style scoped>
+	.rt-input /deep/ .el-input__inner {
+		color: #606266 !important;
 
+	}
 </style>

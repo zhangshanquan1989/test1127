@@ -391,16 +391,16 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="空车距离" prop="emptydistance" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.emptydistance"></el-input>
+						<el-input :disabled="canEdit" v-model="editForm.emptydistance + 'km'"></el-input>
 					</el-form-item>
 				</div>
 				
 				<div style="display: flex;">
 					<el-form-item label="高速预计距离" prop="highspeed" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.highspeed"></el-input>
+						<el-input :disabled="canEdit" v-model="editForm.highspeed + 'km'"></el-input>
 					</el-form-item>
 					<el-form-item label="下道预计距离" prop="estimatedistance" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.estimatedistance"></el-input>
+						<el-input :disabled="canEdit" v-model="editForm.estimatedistance + 'km'"></el-input>
 					</el-form-item>
 					<el-form-item label="是否禁行" prop="ban" class="rt-input">
 						<el-select :disabled="canEdit" v-model="editForm.ban" placeholder="请选择" clearable>
@@ -409,16 +409,16 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="定金" prop="deposit" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.deposit"></el-input>
+						<el-input :disabled="canEdit" v-model="editForm.deposit + '元'"></el-input>
 					</el-form-item>
 				</div>
 				
 				<div style="display: flex;">
 					<el-form-item label="到付" prop="pay" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.pay"></el-input>
+						<el-input :disabled="canEdit" v-model="editForm.pay + '元'"></el-input>
 					</el-form-item>
 					<el-form-item label="到车" prop="car" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.car"></el-input>
+						<el-input :disabled="canEdit" v-model="editForm.car + '元'"></el-input>
 					</el-form-item>
 					<el-form-item label="下单客户" prop="aclient" class="rt-input">
 						<el-select :disabled="canEdit" v-model="editForm.aclient" clearable filterable remote placeholder="请输入公司名称"
