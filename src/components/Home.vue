@@ -7,8 +7,9 @@
 				<!-- <span>天康系统</span> -->
 			</div>
 			<div>
-				<el-badge  :value="daibanData" class="item" style="margin-right: 30px;font-size: 18px;">
-				  <span>待办事项</span>
+				<el-badge :value="daibanData"  style="margin-right: 30px;margin-top: 5px;font-size: 18px ;">
+				  <span >待办事项</span>
+					<!-- <el-button style="font-size: 18px ;color: #FFFFFF;"  type="text" @click="turnTo">待办事项</el-button> -->
 				</el-badge>
 				<el-button type="info" @click="logout">退出</el-button>
 			</div>
@@ -18,9 +19,7 @@
 		<el-container>
 			<el-aside width="200px" style="background-color: #0f4f7d;">
 				<!-- 侧边栏菜单区域 -->
-				<el-menu background-color="#0f4f7d" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true"
-				 :default-active="activePath">
-
+				<el-menu background-color="#0f4f7d" text-color="#fff" active-text-color="#FFFFFF" :unique-opened="true" :router="true" :default-active="activePath">
 					<template v-for="one in menulist">
 						<template v-if="one.children">
 							<el-submenu :index="one.path" :key="one.id" @click="saveNavState(one.path)">
@@ -43,7 +42,7 @@
 										</el-submenu>
 									</template>
 									<template v-else>
-										<el-menu-item :index="two.path" style="font-size: 16px " @click="saveNavState(two.path)">
+										<el-menu-item :index="two.path" :key="two.id" style="font-size: 16px;" @click="saveNavState(two.path)">
 											<i :class="two.icon"></i>
 											<span>{{two.authName}}</span>
 										</el-menu-item>
@@ -265,6 +264,11 @@
 				console.log(res)
 				this.daibanData = res.result.代办流程数量
 			},
+			// 跳转到待办事项功能，目前跳转地址不明确
+			// turnTo(){
+			// 	this.$router.push('/distributionManage')
+			// 	this.activePath = '/distributionManage'
+			// },
 		}
 	}
 </script>

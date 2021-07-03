@@ -74,7 +74,7 @@
 				</el-table-column>
 				<el-table-column prop="stateText" label="订单状态" width="120px" fixed="right">
 					<template slot-scope="scope">
-						<span :style="{'color':scope.row.stateText=='待审核'?'red':'black'}">{{scope.row.stateText}}</span>
+						<span :style="{'color':scope.row.stateText=='待审核' || scope.row.stateText=='司机已接单' || scope.row.stateText=='待完结'?'red':'black'}">{{scope.row.stateText}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
@@ -115,7 +115,7 @@
 					<el-form-item label="订单来源:" prop="source" class="rt-input">
 						<el-input disabled v-model="editForm.source"></el-input>
 					</el-form-item>
-					<el-form-item label="司机对接人:" prop="people" class="rt-input">
+					<el-form-item label="当日负责配管:" prop="people" class="rt-input">
 						<el-input disabled v-model="editForm.people"></el-input>
 					</el-form-item>
 				</div>
@@ -130,35 +130,49 @@
 					<el-form-item label="是否超高/宽/重:" prop="overweight" class="rt-input">
 						<el-input disabled v-model="editForm.overweight"></el-input>
 					</el-form-item>
-					<el-form-item label="空车距离:" prop="emptydistance" class="rt-input">
-						<el-input disabled v-model="editForm.emptydistance+'km'"></el-input>
+					<el-form-item label="是否禁行:" prop="ban" class="rt-input">
+						<el-input disabled v-model="editForm.ban"></el-input>
 					</el-form-item>
+					
 				</div>
 
 
 
 				<div style="display: flex;">
+					<el-form-item label="空车距离:" prop="emptydistance" class="rt-input">
+						<el-input disabled v-model="editForm.emptydistance+'km'"></el-input>
+					</el-form-item>
 					<el-form-item label="高速预计距离:" prop="highspeed" class="rt-input">
 						<el-input disabled v-model="editForm.highspeed+'km'"></el-input>
 					</el-form-item>
 					<el-form-item label="下道预计距离:" prop="estimatedistance" class="rt-input">
 						<el-input disabled v-model="editForm.estimatedistance+'km'"></el-input>
 					</el-form-item>
-					<el-form-item label="是否禁行:" prop="ban" class="rt-input">
-						<el-input disabled v-model="editForm.ban"></el-input>
-					</el-form-item>
-					<el-form-item label="定金:" prop="deposit" class="rt-input">
-						<el-input disabled v-model="editForm.deposit+'元'"></el-input>
-					</el-form-item>
+					<el-form-item label="总距离:" prop="km" class="rt-input">
+						<el-input disabled v-model="editForm.km+'km'"></el-input>
+					</el-form-item>					
 				</div>
 
 				<div style="display: flex;">
+					<el-form-item label="定金:" prop="deposit" class="rt-input">
+						<el-input disabled v-model="editForm.deposit+'元'"></el-input>
+					</el-form-item>
 					<el-form-item label="到付:" prop="pay" class="rt-input">
 						<el-input disabled v-model="editForm.pay+'元'"></el-input>
 					</el-form-item>
 					<el-form-item label="到车:" prop="car" class="rt-input">
 						<el-input disabled v-model="editForm.car+'元'"></el-input>
 					</el-form-item>
+					<el-form-item label="费用:" prop="cost" class="rt-input">
+						<el-input disabled v-model="editForm.cost+'元'"></el-input>
+					</el-form-item>
+					<el-form-item label="利润:" prop="nearcost" class="rt-input">
+						<el-input disabled v-model="editForm.nearcost+'元'"></el-input>
+					</el-form-item>
+					
+					
+				</div>
+				<div style="display: flex;">
 					<el-form-item label="下单客户:" prop="aclient" class="rt-input">
 						<el-input disabled v-model="editForm.aclient"></el-input>
 					</el-form-item>
@@ -227,7 +241,7 @@
 									<el-input disabled v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="装货时间" width="200">
+							<el-table-column label="卸货时间" width="200">
 								<template slot-scope="scope">
 									<el-date-picker disabled v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"
 									 class="rt-input">
@@ -275,7 +289,7 @@
 					<el-form-item label="司机:" prop="Lidriver" class="rt-input">
 						<el-input disabled v-model="editForm.Lidriver"></el-input>
 					</el-form-item>
-					<el-form-item label="负责调度:" prop="dispatch" class="rt-input">
+					<el-form-item label="负责配管:" prop="dispatch" class="rt-input">
 						<el-input disabled v-model="editForm.dispatch"></el-input>
 					</el-form-item>
 				</div>
@@ -340,9 +354,9 @@
 					<el-button type="primary" slot="reference">司机接单</el-button>
 				</el-popconfirm>
 
-				<el-popconfirm title="订单已完结？" @confirm="orderDone" style="margin-left: 10px;" v-if="showOrderDone">
+				<!-- <el-popconfirm title="订单已完结？" @confirm="orderDone" style="margin-left: 10px;" v-if="showOrderDone">
 					<el-button type="primary" slot="reference">订单完结</el-button>
-				</el-popconfirm>
+				</el-popconfirm> -->
 
 			</span>
 
@@ -370,43 +384,55 @@
 			</span>
 
 			<el-divider v-if="showApproved">请完善以下内容</el-divider>
-			<el-form v-if="showApproved" :model="approvedForm" ref="approvedFormRef" label-width="100px">
+			<el-form v-if="showApproved" :model="approvedForm" ref="approvedFormRef" label-width="120px">
 				<el-form-item v-if="false" label="运单管理ID:" prop="id" class="rt-input">
 					<el-input v-model="approvedForm.id" v-if="false"></el-input>
 				</el-form-item>
-				<el-form-item label="司机已交订单:" prop="depositis" class="rt-input">
-					<el-select v-model="approvedForm.depositis" clearable>
-						<el-option v-for="item in depositisList" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="定金是否已退还:" prop="returnd" class="rt-input">
-					<el-select v-model="approvedForm.returnd" clearable>
-						<el-option v-for="item in returndList" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="运费是否结算:" prop="freight" class="rt-input">
-					<el-select v-model="approvedForm.freight" clearable>
-						<el-option v-for="item in freightList" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="调整后利润:" prop="profits" class="rt-input">
-					<el-input v-model="approvedForm.profits"></el-input>
-				</el-form-item>
-				<el-form-item label="调整原因:" prop="why" class="rt-input">
-					<el-input v-model="approvedForm.why"></el-input>
-				</el-form-item>
-				<el-form-item label="回单是否已结算:" prop="returnis" class="rt-input">
-					<el-select v-model="approvedForm.returnis" clearable>
-						<el-option v-for="item in returnisList" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="回单完结备注:" prop="returnote" class="rt-input">
-					<el-input v-model="approvedForm.returnote"></el-input>
-				</el-form-item>
+				<div style="display: flex;">
+					<el-form-item label="司机已交订单:" prop="depositis" class="rt-input">
+						<el-select v-model="approvedForm.depositis" clearable>
+							<el-option v-for="item in depositisList" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="定金是否已退还:" prop="returnd" class="rt-input">
+						<el-select v-model="approvedForm.returnd" clearable>
+							<el-option v-for="item in returndList" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="运费是否结算:" prop="freight" class="rt-input">
+						<el-select v-model="approvedForm.freight" clearable>
+							<el-option v-for="item in freightList" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div style="display: flex;">
+					<el-form-item label="调整后利润:" prop="profits" class="rt-input">
+						<el-input v-model="approvedForm.profits" style="width: 217px;"></el-input>
+					</el-form-item>
+					<el-form-item label="调整原因:" prop="why" class="rt-input">
+						<el-input v-model="approvedForm.why" style="width: 217px;"></el-input>
+					</el-form-item>
+					<el-form-item label="回单是否已结算:" prop="returnis" class="rt-input">
+						<el-select v-model="approvedForm.returnis" clearable>
+							<el-option v-for="item in returnisList" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				
+				<div style="display: flex;">
+					<el-form-item label="回单完结备注:" prop="returnote" class="rt-input">
+						<el-input v-model="approvedForm.returnote" style="width: 500px;"></el-input>
+					</el-form-item>
+					<el-form-item label="风险备注:" prop="risknote" class="rt-input">
+						<el-input v-model="approvedForm.risknote" style="width: 500px;"></el-input>
+					</el-form-item>
+				</div>
+				
+				
 				<el-form-item label="回单附件:" prop="returnpicture">
 					<el-image v-if="approvedForm.returnpicture" style="width: 150px;" :src="approvedForm.returnpicture"></el-image>
 					<el-upload name="imgFile" :action="updateReturnUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleReturnSuccess"
@@ -414,9 +440,7 @@
 						<el-button size="small" type="primary" plain>上传回单附件</el-button>
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="风险备注:" prop="risknote" class="rt-input">
-					<el-input v-model="approvedForm.risknote"></el-input>
-				</el-form-item>
+				
 				<el-form-item label="风险附件:" prop="riskpicture">
 					<el-image v-if="approvedForm.riskpicture" style="width: 150px;" :src="approvedForm.riskpicture"></el-image>
 					<el-upload name="imgFile" :action="updateRiskUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleRiskSuccess"
@@ -427,7 +451,13 @@
 			</el-form>
 			<span v-if="showApproved" slot="footer" class="dialog-footer">
 				<!-- 			<el-button @click="editDialogVisible = false">关 闭</el-button> -->
-				<el-button type="primary" @click="handleApproved" style="margin-left: 10px;">确 定</el-button>
+				<!-- <el-popconfirm title="订单已完结？" @confirm="orderDone" style="margin-left: 10px;" v-if="showOrderDone">
+					<el-button type="primary" slot="reference">订单完结</el-button>
+				</el-popconfirm> -->
+				<el-button type="primary" @click="handleSave" style="margin-left: 10px;">保存</el-button>
+				<el-popconfirm title="完结后不可修改,确认完结？" style="margin-left: 10px;" @confirm="handleApproved"  v-if="showApproved">
+				<el-button type="primary" slot="reference">订单完结</el-button>
+				</el-popconfirm>
 			</span>
 
 		</el-dialog>
@@ -620,7 +650,7 @@
 				})
 
 				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+					return this.$message.error()
 				}
 				// this.$message.success('获取信息成功')
 				this.pageList = res.result.records
@@ -636,6 +666,8 @@
 						v.stateText = "司机已接单"
 					} else if (v.state == 4) {
 						v.stateText = "司机已拒单"
+					} else if (v.state == 5) {
+						v.stateText = "待完结"
 					}
 				})
 			},
@@ -688,7 +720,7 @@
 				this.editForm.Lidriver = this.editForm.cars.name
 				this.editForm.dispatch = this.editForm.liensess.dispatch
 				this.rejectedForm.id = res.result[0].id
-				this.approvedForm.id = res.result[0].id
+				this.approvedForm = res.result[0]
 				this.driverRejectForm.id = res.result[0].id
 				this.repeatPlistNo = res.result[0].no
 				if (res.result[0].state == 0) {
@@ -699,10 +731,12 @@
 
 					this.showDisDetails = true
 				} else if (res.result[0].state == 3) {
-
-					this.showOrderDone = true
+					this.showApproved = true
+					// this.showOrderDone = true
 				} else if (res.result[0].state == 4) {
 					this.showRefusenote = true
+				} else if (res.result[0].state == 5) {
+					this.showApproved = true
 				}
 				// 对订单号进行加密，用于复制链接
 				const {
@@ -787,6 +821,24 @@
 			orderDone() {
 				this.showOrderDone = false
 				this.showApproved = true
+			},
+			// 司机接单后保存数据
+			handleSave(){
+				this.$refs.approvedFormRef.validate(async valid => {
+					if (!valid) return
+					// 发起修改信息的数据请求
+					const {
+						data: res
+					} = await this.$http.post('distribution/addbaocun', this.approvedForm)
+				
+					if (res.code !== 200) {
+						return this.$message.error(res.message)
+					}
+					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
+					this.editDialogVisible = false
+					this.getPageList()
+					// this.$message.success('更新信息成功')
+				})
 			},
 
 			// 提交审核通过

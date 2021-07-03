@@ -74,7 +74,7 @@
 				</el-table-column>
 				<el-table-column prop="stateText" label="订单状态" width="120px" fixed="right">
 					<template slot-scope="scope">
-						<span :style="{'color':scope.row.stateText=='审核中'?'red':'black'}">{{scope.row.stateText}}</span>
+						<span :style="{'color':scope.row.stateText=='审核中'||scope.row.stateText=='驳回'?'red':'black'}">{{scope.row.stateText}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
@@ -103,7 +103,7 @@
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" ref="addFormRef" label-width="140px">
 				<div style="display: flex;">
-					<el-form-item label="运单编号" prop="no" >
+					<el-form-item label="运单编号" prop="no">
 						<el-input disabled placeholder="自动生成"></el-input>
 					</el-form-item>
 					<el-form-item label="派单类型" prop="waybilltype">
@@ -118,11 +118,15 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="司机对接人" prop="people">
-						<el-input v-model="addForm.people"></el-input>
+					<el-form-item label="当日负责配管" prop="people">
+						<el-select v-model="addForm.people" clearable filterable remote placeholder="当日负责配管" :remote-method="choosePeople"
+						 :loading="peopleLoading">
+							<el-option v-for="item in peopleOptions" :key="item.index" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
 					</el-form-item>
 				</div>
-				
+
 				<div style="display: flex;">
 					<el-form-item label="货物名称" prop="goodsname">
 						<el-input v-model="addForm.goodsname"></el-input>
@@ -136,36 +140,50 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="空车距离" prop="emptydistance">
-						<el-input v-model="addForm.emptydistance"></el-input>
-					</el-form-item>
-				</div>
-				
-				<div style="display: flex;">
-					<el-form-item label="高速预计距离" prop="highspeed">
-						<el-input v-model="addForm.highspeed"></el-input>
-					</el-form-item>
-					<el-form-item label="下道预计距离" prop="estimatedistance">
-						<el-input v-model="addForm.estimatedistance"></el-input>
-					</el-form-item>
 					<el-form-item label="是否禁行" prop="ban">
-						<el-select v-model="addForm.ban" placeholder="请选择" clearable>
+						<el-select clearable v-model="addForm.ban" placeholder="请选择" clearable>
 							<el-option v-for="item in banList" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="定金" prop="deposit">
-						<el-input v-model="addForm.deposit"></el-input>
-					</el-form-item>
 				</div>
-				
+
 				<div style="display: flex;">
+					<el-form-item label="空车距离" prop="emptydistance">
+						<el-input clearable v-model="addForm.emptydistance" placeholder="Km" @change="calculateKm"></el-input>
+					</el-form-item>
+					<el-form-item label="高速预计距离" prop="highspeed">
+						<el-input clearable v-model="addForm.highspeed" placeholder="Km" @change="calculateKm"></el-input>
+					</el-form-item>
+					<el-form-item label="下道预计距离" prop="estimatedistance">
+						<el-input clearable v-model="addForm.estimatedistance" placeholder="Km" @change="calculateKm"></el-input>
+					</el-form-item>
+
+					<el-form-item label="总距离" prop="km">
+						<el-input disabled v-model="addForm.km" placeholder="km"></el-input>
+					</el-form-item>
+
+				</div>
+
+				<div style="display: flex;">
+					<el-form-item label="定金" prop="deposit">
+						<el-input clearable v-model="addForm.deposit" placeholder="元"></el-input>
+					</el-form-item>
 					<el-form-item label="到付" prop="pay">
-						<el-input v-model="addForm.pay"></el-input>
+						<el-input v-model="addForm.pay" placeholder="元"></el-input>
 					</el-form-item>
 					<el-form-item label="到车" prop="car">
-						<el-input v-model="addForm.car"></el-input>
+						<el-input clearable v-model="addForm.car" placeholder="元" @change="calculateNearcost"></el-input>
 					</el-form-item>
+					<el-form-item label="费用" prop="cost">
+						<el-input clearable v-model="addForm.cost" placeholder="元" @change="calculateNearcost"></el-input>
+					</el-form-item>
+					<el-form-item label="利润" prop="nearcost">
+						<el-input disabled v-model="addForm.nearcost" placeholder="元"></el-input>
+					</el-form-item>
+
+				</div>
+				<div style="display: flex;">
 					<el-form-item label="下单客户" prop="aclient">
 						<el-select v-model="addForm.aclient" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteMethod"
 						 :loading="loading" style="width: 100%;" @change="searchUnloadingPoint">
@@ -181,16 +199,16 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				
 				<el-form-item label="运单截图" prop="picture">
 					<el-image v-if="addForm.picture" style="width: 150px;" :src="addForm.picture"></el-image>
-					<el-upload name="imgFile" :action="updatePictureUrl" :headers="myHeaders" :auto-upload="true" :on-success="handlePictureUrlSuccess" :show-file-list="false">
+					<el-upload name="imgFile" :action="updatePictureUrl" :headers="myHeaders" :auto-upload="true" :on-success="handlePictureUrlSuccess"
+					 :show-file-list="false">
 						<el-button size="small" type="primary" plain>上传运单截图</el-button>
 					</el-upload>
 				</el-form-item>
-				
-				
-				
+
+
+
 
 				<el-form-item label="装货信息">
 					<template>
@@ -230,11 +248,11 @@
 									</el-select>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="sgrade" label="市场等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
@@ -293,11 +311,11 @@
 									</el-select>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="sgrade" label="市场等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input"></el-input>
@@ -319,21 +337,21 @@
 				</el-form-item>
 
 				<div style="display: flex;">
-					<el-form-item label="车牌号" prop="searchDriver">
-						<el-select v-model="addForm.lienses" clearable filterable remote placeholder="请输入车牌号" :remote-method="chooseCarLicense"
-						 :loading="carLicenseLoading" @change="handleChooseCarLicense">
-							<el-option v-for="item in carLicenseOptions" :key="item.index" :label="item.label" :value="item.value">
+					<el-form-item label="司机名" prop="searchDriver">
+						<el-select v-model="addForm.driver" clearable filterable remote placeholder="请输入司机名" :remote-method="chooseDriverName"
+						 :loading="driverNameLoading" @change="handleChooseDriverName">
+							<el-option v-for="item in driverNameOptions" :key="item.index" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="司机" prop="lienses">
-						<el-input disabled v-model="addForm.Lidriver"></el-input>
+					<el-form-item label="车牌号" prop="lienses">
+						<el-input disabled v-model="addForm.lienses"></el-input>
 					</el-form-item>
-					<el-form-item label="负责调度" prop="lienses">
+					<el-form-item label="负责配管" prop="dispatch">
 						<el-input disabled v-model="addForm.dispatch"></el-input>
 					</el-form-item>
 				</div>
-				
+
 
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -343,19 +361,19 @@
 		</el-dialog>
 
 
-		<!-- 编辑的对话框 -->
+		<!-- 详情的对话框 -->
 		<el-dialog title="订单详情" :visible.sync="editDialogVisible" width="80%" @close="editDialogClosed">
-			<!-- 编辑的表单 -->
+			<!-- 详情的表单 -->
 			<el-form :model="editForm" ref="editFormRef" label-width="140px">
 
 				<el-form-item v-if="!canClickEdit" label="驳回原因" prop="bohuiyuanyin" class="redItem">
 					<div style="color: red;">{{this.editForm.bohuiyuanyin}}</div>
 				</el-form-item>
-				
+
 				<el-form-item v-if="showRefusenote" label="司机拒单原因" prop="refusenote" class="redItem">
 					<div style="color: red;">{{this.editForm.refusenote}}</div>
 				</el-form-item>
-				
+
 				<div style="display: flex;">
 					<el-form-item label="运单编号" prop="no" class="rt-input">
 						<el-input disabled v-model="editForm.no"></el-input>
@@ -372,11 +390,11 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="司机对接人" prop="people" class="rt-input">
+					<el-form-item label="当日负责配管" prop="people" class="rt-input">
 						<el-input :disabled="canEdit" v-model="editForm.people"></el-input>
 					</el-form-item>
 				</div>
-				
+
 				<div style="display: flex;">
 					<el-form-item label="货物名称" prop="goodsname" class="rt-input">
 						<el-input :disabled="canEdit" v-model="editForm.goodsname"></el-input>
@@ -390,36 +408,50 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="空车距离" prop="emptydistance" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.emptydistance + 'km'"></el-input>
-					</el-form-item>
-				</div>
-				
-				<div style="display: flex;">
-					<el-form-item label="高速预计距离" prop="highspeed" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.highspeed + 'km'"></el-input>
-					</el-form-item>
-					<el-form-item label="下道预计距离" prop="estimatedistance" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.estimatedistance + 'km'"></el-input>
-					</el-form-item>
 					<el-form-item label="是否禁行" prop="ban" class="rt-input">
 						<el-select :disabled="canEdit" v-model="editForm.ban" placeholder="请选择" clearable>
 							<el-option v-for="item in banList" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="定金" prop="deposit" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.deposit + '元'"></el-input>
+					
+				</div>
+
+				<div style="display: flex;">
+					<el-form-item label="空车距离" prop="emptydistance" class="rt-input">
+						<el-input clearable :disabled="canEdit" v-model="editForm.emptydistance " @change="editCalculateKm"></el-input>
 					</el-form-item>
+					<el-form-item label="高速预计距离" prop="highspeed" class="rt-input">
+						<el-input clearable :disabled="canEdit" v-model="editForm.highspeed " @change="editCalculateKm"></el-input>
+					</el-form-item>
+					<el-form-item label="下道预计距离" prop="estimatedistance" class="rt-input" >
+						<el-input clearable :disabled="canEdit" v-model="editForm.estimatedistance " @change="editCalculateKm"></el-input>
+					</el-form-item>
+					<el-form-item label="总距离" prop="km" class="rt-input">
+						<el-input disabled clearable v-model="editForm.km" placeholder="km"></el-input>
+					</el-form-item>
+					
+				</div>
+
+				<div style="display: flex;">
+					<el-form-item label="定金" prop="deposit" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.deposit "></el-input>
+					</el-form-item>
+					<el-form-item label="到付" prop="pay" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.pay "></el-input>
+					</el-form-item>
+					<el-form-item label="到车" prop="car" class="rt-input">
+						<el-input @change="editCalculateNearcost" :disabled="canEdit" v-model="editForm.car"></el-input>
+					</el-form-item>
+					<el-form-item label="费用" prop="cost" class="rt-input">
+						<el-input @change="editCalculateNearcost" :disabled="canEdit" clearable v-model="editForm.cost" placeholder="元" ></el-input>
+					</el-form-item>
+					<el-form-item label="利润" prop="nearcost" class="rt-input">
+						<el-input :disabled="canEdit" disabled v-model="editForm.nearcost" placeholder="元"></el-input>
+					</el-form-item>					
 				</div>
 				
 				<div style="display: flex;">
-					<el-form-item label="到付" prop="pay" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.pay + '元'"></el-input>
-					</el-form-item>
-					<el-form-item label="到车" prop="car" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.car + '元'"></el-input>
-					</el-form-item>
 					<el-form-item label="下单客户" prop="aclient" class="rt-input">
 						<el-select :disabled="canEdit" v-model="editForm.aclient" clearable filterable remote placeholder="请输入公司名称"
 						 :remote-method="remoteMethod" :loading="loading" style="width: 100%;" @change="searchUnloadingPoint">
@@ -435,7 +467,6 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				
 				<el-form-item label="运单截图" prop="picture">
 					<el-image v-if="editForm.picture" style="width: 150px;" :src="editForm.picture"></el-image>
 					<el-upload name="imgFile" :action="updatePictureUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleEditPictureUrlSuccess"
@@ -443,10 +474,10 @@
 						<el-button :disabled="canEdit" size="small" type="primary" plain>上传运单截图</el-button>
 					</el-upload>
 				</el-form-item>
-				
-				
-				
-				
+
+
+
+
 
 				<el-form-item label="装货信息">
 					<template>
@@ -475,7 +506,7 @@
 							</el-table-column>
 							<el-table-column prop="sarea" label="区">
 								<template slot-scope="scope">
-									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input >
+									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
 							<el-table-column prop="saddress" label="详细地址">
@@ -506,14 +537,14 @@
 				<el-form-item label="卸货信息">
 					<template>
 						<el-table :data="editForm.upoints" style="width: 100%">
-							<el-table-column prop="spointphone" label="装货点电话">
+							<el-table-column prop="spointphone" label="卸货点电话">
 								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.dpointphone" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column label="装货时间" width="200px">
+							<el-table-column label="卸货时间" width="200px">
 								<template slot-scope="scope">
-									<el-date-picker :disabled="canEdit" v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间" 
+									<el-date-picker :disabled="canEdit" v-model="scope.row.dtime" type="datetime" placeholder="选择日期时间"
 									 value-format="yyyy-MM-dd HH:mm:ss" class="rt-input">
 									</el-date-picker>
 								</template>
@@ -569,12 +600,12 @@
 					<el-form-item label="司机" prop="lienses" class="rt-input">
 						<el-input disabled v-model="editForm.Lidriver"></el-input>
 					</el-form-item>
-					<el-form-item label="负责调度" prop="lienses" class="rt-input">
+					<el-form-item label="负责配管" prop="lienses" class="rt-input">
 						<el-input disabled v-model="editForm.dispatch"></el-input>
 					</el-form-item>
 				</div>
-				
-				
+
+
 				<div v-if="showDisDetails">
 					<div style="display: flex;">
 						<el-form-item label="司机已交定金" prop="depositis" class="rt-input">
@@ -590,7 +621,7 @@
 							<el-input disabled v-model="editForm.risknote"></el-input>
 						</el-form-item>
 					</div>
-					
+
 					<div style="display: flex;">
 						<el-form-item label="调整后利润" prop="profits" class="rt-input">
 							<el-input disabled v-model="editForm.profits"></el-input>
@@ -605,17 +636,17 @@
 							<el-input disabled v-model="editForm.returnote"></el-input>
 						</el-form-item>
 					</div>
-					
+
 					<div style="display: flex;">
 						<el-form-item label="回单附件" prop="riskpicture" class="rt-input">
-							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>							
+							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
 						</el-form-item>
-						
+
 						<el-form-item label="风险附件" prop="riskpicture" class="rt-input">
-							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>							
+							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
 						</el-form-item>
 					</div>
-					
+
 				</div>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -636,8 +667,8 @@
 		data() {
 			return {
 				// 上传图片需要携带token
-				myHeaders:{
-					satoken:window.sessionStorage.getItem('satoken')
+				myHeaders: {
+					satoken: window.sessionStorage.getItem('satoken')
 				},
 				// 查询数据pictureFileName
 				queryInfo: {
@@ -670,9 +701,12 @@
 					deposit: '',
 					pay: '',
 					car: '',
+					cost: '',
+					km: '',
+					nearcost: '',
 					aclient: '',
 					uclient: '',
-					lienses: '',								
+					lienses: '',
 					Lidriver: '',
 					dispatch: '',
 					apoints: [{
@@ -756,6 +790,15 @@
 				carLicenseOptions: [],
 				allCarLicenseList: [],
 				carLicenseLoading: false,
+				// 创建页面选择司机数据
+				driverNameOptions: [],
+				allDriverNameList: [],
+				driverNameLoading: false,
+				// 创建页面选择当日负责配管数据
+				peopleOptions: [],
+				allPeopleList: [],
+				peopleLoading: false,
+
 
 				// 创建页面发货信息选择省
 				sprovinceOptions: [],
@@ -785,30 +828,32 @@
 				// 修改按钮可否点击
 				canClickEdit: true,
 				// 订单完结，显示配送详情
-				showDisDetails:false,
+				showDisDetails: false,
 				// 显示司机拒单原因：
-				showRefusenote:false,
+				showRefusenote: false,
 
 				updatePictureUrl: "http://81.70.151.121:8080/jeecg-boot/waybill/uploadpicture",
 			}
 		},
 		created() {
 			const role = window.sessionStorage.getItem('role')
-			if(role == '管理员'){
-				
-			}else if(role == '调度主管'){
+			if (role == '管理员') {
+
+			} else if (role == '调度主管') {
 				this.queryInfo.partid = window.sessionStorage.getItem('departmentId') - 0
-			}else if(role == '调度组员'){
+			} else if (role == '调度组员') {
 				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
-			}else{
+			} else {
 				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
 			}
-			
+
 			console.log(this.queryInfo)
 			this.getWaybillList()
 			this.getAllCompanyList()
 			this.findAllCarLicense()
 			this.findAllSprovince()
+			this.findAllDriverName()
+			this.findAllPeople()
 		},
 		methods: {
 			deleteApoints(index, rows) {
@@ -849,8 +894,60 @@
 					dareaOptions: []
 				})
 			},
-
-
+			// 创建页面计算利润
+			async calculateNearcost() {
+				console.log('开始')
+				if (!this.addForm.car || !this.addForm.cost) {
+					this.addForm.nearcost = ''
+					return
+				}
+				console.log('判断')
+				this.addForm.nearcost = this.addForm.car - this.addForm.cost
+			},
+			// 详情页面计算利润
+			async editCalculateNearcost() {
+				console.log('开始')
+				if (!this.editForm.car || !this.editForm.cost) {
+					this.editForm.nearcost = ''
+					return
+				}
+				console.log('判断')
+				this.editForm.nearcost = this.editForm.car - this.editForm.cost
+			},
+			// 创建页面计算总距离
+			async calculateKm() {
+				if (!this.addForm.emptydistance || !this.addForm.highspeed || !this.addForm.estimatedistance) {
+					this.addForm.km = ''
+					return
+				}
+				const kmQueryData = {}
+				kmQueryData.emptydistance = this.addForm.emptydistance
+				kmQueryData.highspeed = this.addForm.highspeed
+				kmQueryData.estimatedistance = this.addForm.estimatedistance
+				const {
+					data: res
+				} = await this.$http.post('waybill/km', kmQueryData)
+				console.log(res)
+				this.addForm.km = res.result.km
+			},
+			// 详情页面计算总距离
+			async editCalculateKm() {
+				console.log('进入')
+				if (!this.editForm.emptydistance || !this.editForm.highspeed || !this.editForm.estimatedistance) {
+					this.editForm.km = ''
+					return
+				}
+				const kmEditQueryData = {}
+				kmEditQueryData.emptydistance = this.editForm.emptydistance
+				kmEditQueryData.highspeed = this.editForm.highspeed
+				kmEditQueryData.estimatedistance = this.editForm.estimatedistance
+				const {
+					data: res
+				} = await this.$http.post('waybill/km', kmEditQueryData)
+				console.log(res)
+				this.editForm.km = res.result.km
+			},
+			
 			// 获取所有客户公司名称
 			async getAllCompanyList() {
 				const {
@@ -902,6 +999,89 @@
 				// 	this.companyOptions = this.companyList
 				// }
 			},
+			// 获取所有司机名字
+			async findAllDriverName() {
+				const {
+					data: res
+				} = await this.$http.get('waybill/findAllDriver')
+				// console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.allDriverNameList = res.result.map(item => {
+					return {
+						value: `${item}`,
+						label: `${item}`
+					};
+				});
+				this.driverNameOptions = this.allDriverNameList
+			},
+			// 创建页面选择司机名方法
+			chooseDriverName(query) {
+				if (query !== '') {
+					this.driverNameLoading = true;
+					setTimeout(() => {
+						this.driverNameLoading = false;
+						this.driverNameOptions = this.allDriverNameList.filter(item => {
+							return item.value.indexOf(query) > -1;
+						});
+					}, 300)
+				} else {
+					this.driverNameOptions = this.allDriverNameList
+				}
+			},
+			// 创建选择司机名后发起请求
+			async handleChooseDriverName(name) {
+				if (name !== '') {
+					const {
+						data: res
+					} = await this.$http.get('/waybill/findDriverByDriver?driver=' + name)
+					// console.log(res)
+					if (res.code !== 200) {
+						return
+					}
+					this.driverNameOptions = this.allDriverNameList
+					this.addForm.lienses = res.result.chepai
+					this.addForm.dispatch = res.result.dispatch
+				} else {
+					this.driverNameOptions = this.allDriverNameList
+					this.addForm.lienses = ''
+					this.addForm.dispatch = ''
+				}
+			},
+
+			// 获取所有负责配管
+			async findAllPeople() {
+				const {
+					data: res
+				} = await this.$http.get('waybill/findAllUser')
+				// console.log(res)
+				if (res.code !== 200) {
+					return
+				}
+				this.allPeopleList = res.result.map(item => {
+					return {
+						value: `${item}`,
+						label: `${item}`
+					};
+				});
+				this.peopleOptions = this.allPeopleList
+			},
+			// 创建页面选择当日配管方法
+			choosePeople(query) {
+				if (query !== '') {
+					this.peopleLoading = true;
+					setTimeout(() => {
+						this.peopleLoading = false;
+						this.peopleOptions = this.allPeopleList.filter(item => {
+							return item.value.indexOf(query) > -1;
+						});
+					}, 300)
+				} else {
+					this.peopleOptions = this.allPeopleList
+				}
+			},
+
 
 			// 获取所有车牌号
 			async findAllCarLicense() {
@@ -920,6 +1100,7 @@
 				});
 				this.carLicenseOptions = this.allCarLicenseList
 			},
+
 			// 创建页面选择车牌号方法
 			chooseCarLicense(query) {
 				if (query !== '') {
@@ -934,6 +1115,7 @@
 					this.carLicenseOptions = this.allCarLicenseList
 				}
 			},
+
 			// 创建选择车牌号后发起请求
 			async handleChooseCarLicense(carLicense) {
 				if (carLicense !== '') {
@@ -953,6 +1135,7 @@
 					this.addForm.dispatch = ''
 				}
 			},
+
 			// 修改选择车牌号后发起请求
 			async editChooseCarLicense(carLicense) {
 				if (carLicense !== '') {
@@ -1185,11 +1368,11 @@
 						v.stateText = "驳回"
 					} else if (v.state == 1) {
 						v.stateText = "审核中"
-					} else if (v.state == 2){
+					} else if (v.state == 2) {
 						v.stateText = "审核完成"
-					} else if (v.state == 3){
+					} else if (v.state == 3) {
 						v.stateText = "司机已接单"
-					} else if (v.state == 4){
+					} else if (v.state == 4) {
 						v.stateText = "司机已拒单"
 					}
 				})
@@ -1272,7 +1455,7 @@
 					car: '',
 					aclient: '',
 					uclient: '',
-					lienses: '',	
+					lienses: '',
 					Lidriver: '',
 					dispatch: '',
 					apoints: [{
@@ -1298,7 +1481,8 @@
 						dhuafen: "",
 						dcityOptions: [],
 						dareaOptions: []
-					}]}
+					}]
+				}
 
 			},
 
@@ -1331,7 +1515,7 @@
 					this.showDisDetails = true
 				} else if (res.result[0].state == 3) {
 					this.canClickEdit = true
-				}else if (res.result[0].state == 4) {
+				} else if (res.result[0].state == 4) {
 					this.canClickEdit = true
 					this.showRefusenote = true
 				}
@@ -1385,9 +1569,9 @@
 		color: #606266 !important;
 
 	}
-	
+
 	/* 要实现驳回原因的label字体变红，需要把scoped去掉，但是去掉，上边禁用字体颜色样式就不起效果 */
 	.redItem .el-form-item__label {
-	     color: red;
-	   }
+		color: red;
+	}
 </style>
