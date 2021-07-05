@@ -106,31 +106,31 @@
 					<div style="color: red;">{{this.editForm.refusenote}}</div>
 				</el-form-item>
 				<div style="display: flex;">
-					<el-form-item label="运单编号:" prop="no" class="rt-input">
+					<el-form-item label="运单编号" prop="no" class="rt-input">
 						<el-input disabled v-model="editForm.no"></el-input>
 					</el-form-item>
-					<el-form-item label="派单类型:" prop="waybilltype" class="rt-input">
+					<el-form-item label="派单类型" prop="waybilltype" class="rt-input">
 						<el-input disabled v-model="editForm.waybilltype"></el-input>
 					</el-form-item>
-					<el-form-item label="订单来源:" prop="source" class="rt-input">
+					<el-form-item label="订单来源" prop="source" class="rt-input">
 						<el-input disabled v-model="editForm.source"></el-input>
 					</el-form-item>
-					<el-form-item label="当日负责配管:" prop="people" class="rt-input">
+					<el-form-item label="当日负责配管" prop="people" class="rt-input">
 						<el-input disabled v-model="editForm.people"></el-input>
 					</el-form-item>
 				</div>
 
 				<div style="display: flex;">
-					<el-form-item label="货物名称:" prop="goodsname" class="rt-input">
+					<el-form-item label="货物名称" prop="goodsname" class="rt-input">
 						<el-input disabled v-model="editForm.goodsname"></el-input>
 					</el-form-item>
-					<el-form-item label="货物重量/方数:" prop="goodsweight" class="rt-input">
+					<el-form-item label="货物重量/方数" prop="goodsweight" class="rt-input">
 						<el-input disabled v-model="editForm.goodsweight"></el-input>
 					</el-form-item>
-					<el-form-item label="是否超高/宽/重:" prop="overweight" class="rt-input">
+					<el-form-item label="是否超高/宽/重" prop="overweight" class="rt-input">
 						<el-input disabled v-model="editForm.overweight"></el-input>
 					</el-form-item>
-					<el-form-item label="是否禁行:" prop="ban" class="rt-input">
+					<el-form-item label="是否禁行" prop="ban" class="rt-input">
 						<el-input disabled v-model="editForm.ban"></el-input>
 					</el-form-item>
 					
@@ -139,49 +139,49 @@
 
 
 				<div style="display: flex;">
-					<el-form-item label="空车距离:" prop="emptydistance" class="rt-input">
+					<el-form-item label="空车距离" prop="emptydistance" class="rt-input">
 						<el-input disabled v-model="editForm.emptydistance+'km'"></el-input>
 					</el-form-item>
-					<el-form-item label="高速预计距离:" prop="highspeed" class="rt-input">
+					<el-form-item label="高速预计距离" prop="highspeed" class="rt-input">
 						<el-input disabled v-model="editForm.highspeed+'km'"></el-input>
 					</el-form-item>
-					<el-form-item label="下道预计距离:" prop="estimatedistance" class="rt-input">
+					<el-form-item label="下道预计距离" prop="estimatedistance" class="rt-input">
 						<el-input disabled v-model="editForm.estimatedistance+'km'"></el-input>
 					</el-form-item>
-					<el-form-item label="总距离:" prop="km" class="rt-input">
+					<el-form-item label="总距离" prop="km" class="rt-input">
 						<el-input disabled v-model="editForm.km+'km'"></el-input>
 					</el-form-item>					
 				</div>
 
 				<div style="display: flex;">
-					<el-form-item label="定金:" prop="deposit" class="rt-input">
+					<el-form-item label="定金" prop="deposit" class="rt-input">
 						<el-input disabled v-model="editForm.deposit+'元'"></el-input>
 					</el-form-item>
-					<el-form-item label="到付:" prop="pay" class="rt-input">
+					<el-form-item label="到付" prop="pay" class="rt-input">
 						<el-input disabled v-model="editForm.pay+'元'"></el-input>
 					</el-form-item>
-					<el-form-item label="到车:" prop="car" class="rt-input">
+					<el-form-item label="到车" prop="car" class="rt-input">
 						<el-input disabled v-model="editForm.car+'元'"></el-input>
 					</el-form-item>
-					<el-form-item label="费用:" prop="cost" class="rt-input">
+					<el-form-item label="费用" prop="cost" class="rt-input">
 						<el-input disabled v-model="editForm.cost+'元'"></el-input>
 					</el-form-item>
-					<el-form-item label="利润:" prop="nearcost" class="rt-input">
+					<el-form-item label="利润" prop="nearcost" class="rt-input">
 						<el-input disabled v-model="editForm.nearcost+'元'"></el-input>
 					</el-form-item>
 					
 					
 				</div>
 				<div style="display: flex;">
-					<el-form-item label="下单客户:" prop="aclient" class="rt-input">
+					<el-form-item label="下单客户" prop="aclient" class="rt-input">
 						<el-input disabled v-model="editForm.aclient"></el-input>
 					</el-form-item>
-					<el-form-item label="收单客户:" prop="uclient" class="rt-input">
+					<el-form-item label="收单客户" prop="uclient" class="rt-input">
 						<el-input disabled v-model="editForm.uclient"></el-input>
 					</el-form-item>
 				</div>
 
-				<el-form-item label="运单截图:" prop="picture">
+				<el-form-item label="运单截图" prop="picture">
 					<el-image v-if="editForm.picture" style="width: 200px;" :src="editForm.picture"></el-image>
 				</el-form-item>
 
@@ -214,11 +214,11 @@
 									<el-input disabled v-model="scope.row.sarea" class="rt-input"></el-input >
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="sgrade" label="等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
@@ -263,11 +263,11 @@
 									<el-input disabled v-model="scope.row.darea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="dgrade" label="等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input"></el-input>
@@ -283,13 +283,14 @@
 				</el-form-item>
 
 				<div style="display: flex;">
-					<el-form-item label="车牌号:" prop="lienses" class="rt-input">
-						<el-input disabled v-model="editForm.lienses"></el-input>
-					</el-form-item>
-					<el-form-item label="司机:" prop="Lidriver" class="rt-input">
+					<el-form-item label="司机" prop="Lidriver" class="rt-input">
 						<el-input disabled v-model="editForm.Lidriver"></el-input>
 					</el-form-item>
-					<el-form-item label="负责配管:" prop="dispatch" class="rt-input">
+					<el-form-item label="车牌号" prop="lienses" class="rt-input">
+						<el-input disabled v-model="editForm.lienses"></el-input>
+					</el-form-item>
+					
+					<el-form-item label="负责配管" prop="dispatch" class="rt-input">
 						<el-input disabled v-model="editForm.dispatch"></el-input>
 					</el-form-item>
 				</div>
@@ -297,39 +298,39 @@
 
 				<div v-if="showDisDetails">
 					<div style="display: flex;">
-						<el-form-item label="司机已交订单:" prop="depositis" class="rt-input">
+						<el-form-item label="司机已交订单" prop="depositis" class="rt-input">
 							<el-input disabled v-model="editForm.depositis"></el-input>
 						</el-form-item>
-						<el-form-item label="定金是否已退还:" prop="returnd" class="rt-input">
+						<el-form-item label="定金是否已退还" prop="returnd" class="rt-input">
 							<el-input disabled v-model="editForm.returnd"></el-input>
 						</el-form-item>
-						<el-form-item label="运费是否结算:" prop="freight" class="rt-input">
+						<el-form-item label="运费是否结算" prop="freight" class="rt-input">
 							<el-input disabled v-model="editForm.freight"></el-input>
 						</el-form-item>
-						<el-form-item label="风险备注:" prop="risknote" class="rt-input">
+						<el-form-item label="风险备注" prop="risknote" class="rt-input">
 							<el-input disabled v-model="editForm.risknote"></el-input>
 						</el-form-item>
 					</div>
 					<div style="display: flex;">
-						<el-form-item label="调整后利润:" prop="profits" class="rt-input">
+						<el-form-item label="调整后利润" prop="profits" class="rt-input">
 							<el-input disabled v-model="editForm.profits"></el-input>
 						</el-form-item>
-						<el-form-item label="调整原因:" prop="why" class="rt-input">
+						<el-form-item label="调整原因" prop="why" class="rt-input">
 							<el-input disabled v-model="editForm.why"></el-input>
 						</el-form-item>
-						<el-form-item label="回单是否已结算:" prop="returnis" class="rt-input">
+						<el-form-item label="回单是否已结算" prop="returnis" class="rt-input">
 							<el-input disabled v-model="editForm.returnis"></el-input>
 						</el-form-item>
-						<el-form-item label="回单完结备注:" prop="returnote" class="rt-input">
+						<el-form-item label="回单完结备注" prop="returnote" class="rt-input">
 							<el-input disabled v-model="editForm.returnote"></el-input>
 						</el-form-item>
 					</div>
 					<div style="display: flex;">
-						<el-form-item label="回单附件:" prop="riskpicture" class="rt-input">
+						<el-form-item label="回单附件" prop="riskpicture" class="rt-input">
 							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
 						</el-form-item>
 
-						<el-form-item label="风险附件:" prop="riskpicture" class="rt-input">
+						<el-form-item label="风险附件" prop="riskpicture" class="rt-input">
 							<el-image style="width: 200px;" :src="editForm.riskpicture"></el-image>
 						</el-form-item>
 					</div>
@@ -363,7 +364,7 @@
 
 			<el-divider v-if="showRejected">请填写驳回原因</el-divider>
 			<el-form v-if="showRejected" :model="rejectedForm" ref="rejectedFormRef" label-width="100px">
-				<el-form-item label="驳回原因:" prop="note" class="rt-input">
+				<el-form-item label="驳回原因" prop="note" class="rt-input">
 					<el-input v-model="rejectedForm.note"></el-input>
 				</el-form-item>
 			</el-form>
@@ -374,7 +375,7 @@
 
 			<el-divider v-if="showDriverReject">请填写司机拒单原因</el-divider>
 			<el-form v-if="showDriverReject" :model="rejectedForm" ref="rejectedFormRef" label-width="100px">
-				<el-form-item label="司机拒单原因:" prop="note" class="rt-input">
+				<el-form-item label="司机拒单原因" prop="note" class="rt-input">
 					<el-input v-model="driverRejectForm.note"></el-input>
 				</el-form-item>
 			</el-form>
@@ -389,19 +390,19 @@
 					<el-input v-model="approvedForm.id" v-if="false"></el-input>
 				</el-form-item>
 				<div style="display: flex;">
-					<el-form-item label="司机已交订单:" prop="depositis" class="rt-input">
+					<el-form-item label="司机已交订单" prop="depositis" class="rt-input">
 						<el-select v-model="approvedForm.depositis" clearable>
 							<el-option v-for="item in depositisList" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="定金是否已退还:" prop="returnd" class="rt-input">
+					<el-form-item label="定金是否已退还" prop="returnd" class="rt-input">
 						<el-select v-model="approvedForm.returnd" clearable>
 							<el-option v-for="item in returndList" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="运费是否结算:" prop="freight" class="rt-input">
+					<el-form-item label="运费是否结算" prop="freight" class="rt-input">
 						<el-select v-model="approvedForm.freight" clearable>
 							<el-option v-for="item in freightList" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
@@ -409,13 +410,13 @@
 					</el-form-item>
 				</div>
 				<div style="display: flex;">
-					<el-form-item label="调整后利润:" prop="profits" class="rt-input">
+					<el-form-item label="调整后利润" prop="profits" class="rt-input">
 						<el-input v-model="approvedForm.profits" style="width: 217px;"></el-input>
 					</el-form-item>
-					<el-form-item label="调整原因:" prop="why" class="rt-input">
+					<el-form-item label="调整原因" prop="why" class="rt-input">
 						<el-input v-model="approvedForm.why" style="width: 217px;"></el-input>
 					</el-form-item>
-					<el-form-item label="回单是否已结算:" prop="returnis" class="rt-input">
+					<el-form-item label="回单是否已结算" prop="returnis" class="rt-input">
 						<el-select v-model="approvedForm.returnis" clearable>
 							<el-option v-for="item in returnisList" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
@@ -424,16 +425,16 @@
 				</div>
 				
 				<div style="display: flex;">
-					<el-form-item label="回单完结备注:" prop="returnote" class="rt-input">
+					<el-form-item label="回单完结备注" prop="returnote" class="rt-input">
 						<el-input v-model="approvedForm.returnote" style="width: 500px;"></el-input>
 					</el-form-item>
-					<el-form-item label="风险备注:" prop="risknote" class="rt-input">
+					<el-form-item label="风险备注" prop="risknote" class="rt-input">
 						<el-input v-model="approvedForm.risknote" style="width: 500px;"></el-input>
 					</el-form-item>
 				</div>
 				
 				
-				<el-form-item label="回单附件:" prop="returnpicture">
+				<el-form-item label="回单附件" prop="returnpicture">
 					<el-image v-if="approvedForm.returnpicture" style="width: 150px;" :src="approvedForm.returnpicture"></el-image>
 					<el-upload name="imgFile" :action="updateReturnUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleReturnSuccess"
 					 :show-file-list="false">
@@ -441,7 +442,7 @@
 					</el-upload>
 				</el-form-item>
 				
-				<el-form-item label="风险附件:" prop="riskpicture">
+				<el-form-item label="风险附件" prop="riskpicture">
 					<el-image v-if="approvedForm.riskpicture" style="width: 150px;" :src="approvedForm.riskpicture"></el-image>
 					<el-upload name="imgFile" :action="updateRiskUrl" :headers="myHeaders" :auto-upload="true" :on-success="handleRiskSuccess"
 					 :show-file-list="false">
@@ -613,11 +614,11 @@
 			// 获取code
 			getBaseInfos() {
 				this.newUrl = this.urlencode(this.oldUrl)
-				console.log(this.newUrl)
+				// console.log(this.newUrl)
 				var url_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + this.appid +
 					"&redirect_uri=" + this.newUrl +
 					"&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect";
-				console.log(url_code)
+				// console.log(url_code)
 				// window.location.href = url_code; //打开这个链接，你的url后面就会跟上code的参数
 
 			},
@@ -650,7 +651,7 @@
 				})
 
 				if (res.code !== 200) {
-					return this.$message.error()
+					return this.$message.error(res.message)
 				}
 				// this.$message.success('获取信息成功')
 				this.pageList = res.result.records
@@ -711,9 +712,9 @@
 				const {
 					data: res
 				} = await this.$http.get('waybill/findListPage?plistNo=' + plistNo)
-				console.log('详情', res)
+				// console.log('详情', res)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.editForm = res.result[0]
 				this.editForm.LilicensePlate = this.editForm.liensess.licensePlate

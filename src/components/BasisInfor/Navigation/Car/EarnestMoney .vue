@@ -173,7 +173,7 @@
 				})
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+					return this.$message.error(res.message)
 				}
 				// this.$message.success('获取信息成功')
 				this.pageList = res.result.records
@@ -217,7 +217,7 @@
 					data: res
 				} = await this.$http.get('base/margin/selecttop?id=' + id)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.rechargeRecordList = res.result
 				this.addRechargeForm.parentid = id
@@ -236,12 +236,12 @@
 					} = await this.$http.post('base/top/add', this.addRechargeForm)
 					// console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.rechargeDialogVisible = false
 					this.getPageList()
-					this.$message.success('成功')
+					this.$message.success(res.message)
 				})
 			},
 
@@ -256,7 +256,7 @@
 					data: res
 				} = await this.$http.get('base/margin/selectdown?id=' + id)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.fineRecordList = res.result
 				this.fineForm.parentid = id
@@ -281,7 +281,7 @@
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.fineDialogVisible = false
 					this.getPageList()
-					this.$message.success('成功')
+					this.$message.success(res.message)
 				})
 			},
 

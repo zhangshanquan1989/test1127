@@ -149,7 +149,7 @@
 				} = await this.$http.get('kmanagement/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('获取信息失败')
 				}
@@ -195,12 +195,12 @@
 
 			// 显示缴费页面
 			async handlePayCostDialog(row) {
-				console.log('显示')
-				console.log('row',row)
+				// console.log('显示')
+				// console.log('row',row)
 				const {
 					data: res
 				} = await this.$http.get('kmanagementRecords/list?licensePlate=' + row.licensePlate)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
@@ -217,7 +217,7 @@
 			
 			// 选择缴费周期变化
 			managementcycleChange(e){
-				console.log(e)
+				// console.log(e)
 				if(!this.payCostForm.asoftime){				
 					if(e == '月付'){
 						this.selectAsoftime = this.addDate(new Date(),1)
@@ -257,13 +257,13 @@
 				    if(day < 10){
 				        day = "0" + day;//日小于10，在前面补充0
 				    }
-						console.log(Dates.getFullYear() + "-" + mon + "-" +day)
+						// console.log(Dates.getFullYear() + "-" + mon + "-" +day)
 				    return Dates.getFullYear() + "-" + mon + "-" +day
 			},
 			
 			// 充值
 			async payCostInfo() {
-				console.log('充值')
+				// console.log('充值')
 				this.payCostForm.managementcycle = this.selectManagementcycle
 				this.payCostForm.asoftime = this.selectAsoftime
 				
@@ -286,7 +286,7 @@
 
 			// 监听充值对话框关闭事件
 			payCostDialogClosed() {
-				console.log('关闭')
+				// console.log('关闭')
 				// this.$refs.payCostFormRef.resetFields()
 				this.payCostForm = {}
 				this.payCostList=[]

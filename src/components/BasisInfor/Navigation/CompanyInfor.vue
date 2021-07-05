@@ -19,7 +19,7 @@
 			<el-table :data="companylist" border stripe style="width: 100%;margin-top: 8px;" :row-style="{height:'60px'}" :cell-style="{padding:'0px'}" :header-cell-style="{background:'#f8f8f9', color:'#000000'}">
 				<el-table-column v-if="false" prop="id" label="id">
 				</el-table-column>
-				<el-table-column prop="name" label="公司名称" width="150px">
+				<el-table-column prop="name" label="公司名称" width="250px">
 				</el-table-column>
 				<el-table-column prop="personname" label="法人姓名" width="150px">
 				</el-table-column>
@@ -39,7 +39,7 @@
 				</el-table-column>
 				<el-table-column prop="address" label="地区" width="150px">
 				</el-table-column>
-				<el-table-column prop="housenumber" label="详细地址" width="150px">
+				<el-table-column prop="housenumber" label="详细地址" width="600px">
 				</el-table-column>
 				<el-table-column label="营业执照" width="150px">
 					<template slot-scope="scope">
@@ -81,42 +81,42 @@
 			</el-pagination>
 
 			<!-- 创建公司的对话框 -->
-			<el-dialog class="dialog" title="创建公司信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+			<el-dialog class="dialog" title="创建公司信息" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
 				<!-- 添加公司的表单 -->
 				<el-form :model="addForm" ref="addFormRef" label-width="120px">
 					<el-form-item label="公司名称:" prop="name">
-						<el-input v-model="addForm.name"></el-input>
+						<el-input v-model="addForm.name" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="法人姓名:" prop="personname">
-						<el-input v-model="addForm.personname"></el-input>
+						<el-input v-model="addForm.personname" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="法人手机号:" prop="phone">
-						<el-input v-model="addForm.phone"></el-input>
+						<el-input v-model="addForm.phone" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="法人身份证号:" prop="card">
-						<el-input v-model="addForm.card"></el-input>
+						<el-input v-model="addForm.card" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="负责人姓名:" prop="head">
-						<el-input v-model="addForm.head"></el-input>
+						<el-input v-model="addForm.head" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="负责人电话:" prop="headphone">
-						<el-input v-model="addForm.headphone"></el-input>
+						<el-input v-model="addForm.headphone" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="行政负责人姓名:" prop="work">
-						<el-input v-model="addForm.work"></el-input>
+						<el-input v-model="addForm.work" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="行政负责人电话:" prop="workphone">
-						<el-input v-model="addForm.workphone"></el-input>
+						<el-input v-model="addForm.workphone" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="开业时间" prop="opentime">
-						<el-date-picker v-model="addForm.opentime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+						<el-date-picker v-model="addForm.opentime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 350px;">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="地区:" prop="address">
-						<el-input v-model="addForm.address"></el-input>
+						<el-input v-model="addForm.address" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="详细地址:" prop="housenumber">
-						<el-input v-model="addForm.housenumber"></el-input>
+						<el-input v-model="addForm.housenumber" style="width: 500px;"></el-input>
 					</el-form-item>
 					<el-form-item label="营业执照:">
 						<el-image v-if="addForm.business" style="width: 150px; " :src="addForm.business"></el-image>
@@ -140,45 +140,45 @@
 			</el-dialog>
 
 			<!-- 编辑公司的对话框 -->
-			<el-dialog title="编辑公司信息" :visible.sync="editDialogVisible" width="50%" @close="editCompanyDialogClosed">
+			<el-dialog title="编辑公司信息" :visible.sync="editDialogVisible" width="35%" @close="editCompanyDialogClosed">
 				<!-- 编辑公司的表单 -->
-				<el-form :model="editCompanyForm" ref="editCompanyFormRef" label-width="100px">
+				<el-form :model="editCompanyForm" ref="editCompanyFormRef" label-width="120px">
 					<el-form-item label="id:">
-						<el-input disabled v-model="editCompanyForm.id"></el-input>
+						<el-input disabled v-model="editCompanyForm.id" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="公司名称:" prop="name">
-						<el-input v-model="editCompanyForm.name"></el-input>
+						<el-input v-model="editCompanyForm.name" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="法人姓名:" prop="personname">
-						<el-input v-model="editCompanyForm.personname"></el-input>
+						<el-input v-model="editCompanyForm.personname" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="法人手机号:" prop="phone">
-						<el-input v-model="editCompanyForm.phone"></el-input>
+						<el-input v-model="editCompanyForm.phone" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="法人身份证号:" prop="card">
-						<el-input v-model="editCompanyForm.card"></el-input>
+						<el-input v-model="editCompanyForm.card" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="负责人姓名:" prop="head">
-						<el-input v-model="editCompanyForm.head"></el-input>
+						<el-input v-model="editCompanyForm.head" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="负责人电话:" prop="headphone">
-						<el-input v-model="editCompanyForm.headphone"></el-input>
+						<el-input v-model="editCompanyForm.headphone" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="行政负责人姓名:" prop="work">
-						<el-input v-model="editCompanyForm.work"></el-input>
+						<el-input v-model="editCompanyForm.work" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="行政负责人电话:" prop="workphone">
-						<el-input v-model="editCompanyForm.workphone"></el-input>
+						<el-input v-model="editCompanyForm.workphone" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="开业时间" prop="opentime">
-						<el-date-picker v-model="editCompanyForm.opentime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+						<el-date-picker v-model="editCompanyForm.opentime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 350px;">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="地区:" prop="address">
-						<el-input v-model="editCompanyForm.address"></el-input>
+						<el-input v-model="editCompanyForm.address" style="width: 350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="详细地址:" prop="housenumber">
-						<el-input v-model="editCompanyForm.housenumber"></el-input>
+						<el-input v-model="editCompanyForm.housenumber" style="width: 500px;"></el-input>
 					</el-form-item>
 					<el-form-item label="营业执照:">
 						<el-image v-if="editCompanyForm.business" style="width: 150px; " :src="editCompanyForm.business"></el-image>

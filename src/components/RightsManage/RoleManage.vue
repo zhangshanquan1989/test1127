@@ -104,7 +104,7 @@
 				} = await this.$http.get('krole/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
@@ -130,7 +130,7 @@
 					const {
 						data: res
 					} = await this.$http.post('krole/add', this.addForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -150,7 +150,7 @@
 				const {
 					data: res
 				} = await this.$http.get('kpermissions/listall')
-				console.log('权限',res)
+				// console.log('权限',res)
 				this.roleData = res.result
 			},
 			
@@ -158,7 +158,7 @@
 			async showRoleDialog(id){
 				this.roleAddData.roleid = id
 				const {data:res} = await this.$http.get('k_role_permissions/roleall?id='+id)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
@@ -176,13 +176,13 @@
 				    }else{
 				        this.roleAddData.permissionsid.splice(this.roleAddData.permissionsid.indexOf(id), 1); 
 				    }
-						console.log(this.roleAddData.permissionsid)
+						// console.log(this.roleAddData.permissionsid)
 			},
 			
 			// 确认编辑
 			async handleRoleChoose(){
 				const {data:res} = await this.$http.post('k_role_permissions/add',this.roleAddData)
-				console.log(res)
+				// console.log(res)
 				this.roleDialogVisible = false
 			},
 			

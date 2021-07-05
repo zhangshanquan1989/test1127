@@ -124,7 +124,7 @@
 			},
 			// 点击登录按钮 tPmAuthority
 			login() {
-				console.log(this.$refs)
+				// console.log(this.$refs)
 				this.$refs.loginFormRef.validate(async valid => {
 					if (!valid) return;
 					// console.log(this.loginForm)

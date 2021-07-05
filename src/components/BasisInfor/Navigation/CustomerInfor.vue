@@ -80,71 +80,71 @@
 		</el-col>
 
 		<!-- 创建的对话框 -->
-		<el-dialog title="创建客户信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+		<el-dialog title="创建客户信息" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
-			<el-form :model="addForm" ref="addFormRef" label-width="100px">
+			<el-form :model="addForm" ref="addFormRef" label-width="120px">
 				<el-form-item label="客户名称:" prop="company">
-					<el-input v-model="addForm.company"></el-input>
+					<el-input v-model="addForm.company" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="客户类型:" prop="type">
-					<el-select v-model="addForm.type" placeholder="全部" clearable>
+					<el-select v-model="addForm.type" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="客户来源:" prop="source">
-					<el-select v-model="addForm.source" placeholder="全部" clearable>
+					<el-select v-model="addForm.source" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in sourceList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="联系人姓名:" prop="name">
-					<el-input v-model="addForm.name"></el-input>
+					<el-input v-model="addForm.name" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="手机号:" prop="phone">
-					<el-input v-model="addForm.phone"></el-input>
+					<el-input v-model="addForm.phone" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="职位:" prop="position">
-					<el-input v-model="addForm.position"></el-input>
+					<el-input v-model="addForm.position" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="公司地址:" prop="address">
-					<el-input v-model="addForm.address"></el-input>
+					<el-input v-model="addForm.address" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="单公里运价:" prop="price">
-					<el-input v-model="addForm.price"></el-input>
+					<el-input v-model="addForm.price" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="客户合作状态:" prop="stauts">
-					<el-select v-model="addForm.stauts" placeholder="全部" clearable>
+					<el-select v-model="addForm.stauts" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in stautsList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="发货区域:" prop="area">
-					<el-input v-model="addForm.area"></el-input>
+					<el-input v-model="addForm.area" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="备注:" prop="note">
-					<el-input v-model="addForm.note"></el-input>
+					<el-input v-model="addForm.note" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="需要车型:" prop="cartypeArray">
-					<el-select v-model="addForm.cartypeArray" placeholder="全部" clearable multiple @change="multiple">
+					<el-select v-model="addForm.cartypeArray" placeholder="全部" clearable multiple @change="multiple" style="width: 350px;">
 						<el-option v-for="item in cartypeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="客户等级:" prop="grade">
-					<el-select v-model="addForm.grade" placeholder="全部" clearable >
+					<el-select v-model="addForm.grade" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in gradeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="用车需求:" prop="need">
-					<el-select v-model="addForm.need" placeholder="全部" clearable>
+					<el-select v-model="addForm.need" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in needList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="调度负责人:" prop="schedul">
-					<el-input v-model="addForm.schedul"></el-input>
+					<el-input v-model="addForm.schedul" style="width: 350px;"></el-input>
 				</el-form-item>
 			</el-form>
 			<!-- 操作区域 -->
@@ -155,71 +155,71 @@
 		</el-dialog>
 		
 		<!-- 编辑的对话框 -->
-		<el-dialog title="编辑客户信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
+		<el-dialog title="编辑客户信息" :visible.sync="editDialogVisible" width="35%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
-			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+			<el-form :model="editForm" ref="editFormRef" label-width="120px">
 				<el-form-item label="客户名称:" prop="company">
-					<el-input v-model="editForm.company"></el-input>
+					<el-input v-model="editForm.company" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="客户类型:" prop="type">
-					<el-select v-model="editForm.type" placeholder="全部" clearable>
+					<el-select v-model="editForm.type" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="客户来源:" prop="source">
-					<el-select v-model="editForm.source" placeholder="全部" clearable>
+					<el-select v-model="editForm.source" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in sourceList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="联系人姓名:" prop="name">
-					<el-input v-model="editForm.name"></el-input>
+					<el-input v-model="editForm.name" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="手机号:" prop="phone">
-					<el-input v-model="editForm.phone"></el-input>
+					<el-input v-model="editForm.phone" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="职位:" prop="position">
-					<el-input v-model="editForm.position"></el-input>
+					<el-input v-model="editForm.position" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="公司地址:" prop="address">
-					<el-input v-model="editForm.address"></el-input>
+					<el-input v-model="editForm.address" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="单公里运价:" prop="price">
-					<el-input v-model="editForm.price"></el-input>
+					<el-input v-model="editForm.price" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="客户合作状态:" prop="stauts">
-					<el-select v-model="editForm.stauts" placeholder="全部" clearable>
+					<el-select v-model="editForm.stauts" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in stautsList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="发货区域:" prop="area">
-					<el-input v-model="editForm.area"></el-input>
+					<el-input v-model="editForm.area" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="备注:" prop="note">
-					<el-input v-model="editForm.note"></el-input>
+					<el-input v-model="editForm.note" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="需要车型:" prop="cartypeArray">
-					<el-select v-model="editForm.cartypeArray" placeholder="全部" clearable multiple @change="multiple">
+					<el-select v-model="editForm.cartypeArray" placeholder="全部" clearable multiple @change="multiple" style="width: 350px;">
 						<el-option v-for="item in cartypeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>					
 				</el-form-item>
 				<el-form-item label="客户等级:" prop="grade">
-					<el-select v-model="editForm.grade" placeholder="全部" clearable >
+					<el-select v-model="editForm.grade" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in gradeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="用车需求:" prop="need">
-					<el-select v-model="editForm.need" placeholder="全部" clearable>
+					<el-select v-model="editForm.need" placeholder="全部" clearable style="width: 350px;">
 						<el-option v-for="item in needList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="调度负责人:" prop="schedul">
-					<el-input v-model="editForm.schedul"></el-input>
+					<el-input v-model="editForm.schedul" style="width: 350px;"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">

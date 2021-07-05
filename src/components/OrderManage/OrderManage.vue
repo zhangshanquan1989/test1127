@@ -220,11 +220,11 @@
 									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="sgrade" label="等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
@@ -275,11 +275,11 @@
 									<el-input :disabled="canEdit" v-model="scope.row.darea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="dgrade" label="等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input"></el-input>
@@ -301,12 +301,13 @@
 				</el-form-item>
 
 				<div style="display: flex;">
-					<el-form-item label="车牌号" prop="searchDriver" class="rt-input">
-						<el-input :disabled="canEdit" v-model="editForm.lienses"></el-input>
-					</el-form-item>
 					<el-form-item label="司机" prop="lienses" class="rt-input">
 						<el-input disabled v-model="editForm.Lidriver"></el-input>
 					</el-form-item>
+					<el-form-item label="车牌号" prop="searchDriver" class="rt-input">
+						<el-input :disabled="canEdit" v-model="editForm.lienses"></el-input>
+					</el-form-item>
+					
 					<el-form-item label="负责配管" prop="lienses" class="rt-input">
 						<el-input disabled v-model="editForm.dispatch"></el-input>
 					</el-form-item>
@@ -474,7 +475,7 @@
 		methods: {
 			// 多选框变化
 			handleSelectionChange(e) {
-				console.log(e)
+				// console.log(e)
 				this.no=[]
 				e.forEach(v=>{
 				this.no.push(v.no)
@@ -484,7 +485,7 @@
 				// 		this.no.push(v.no)
 				// 	}					
 				// })
-				console.log(this.no)
+				// console.log(this.no)
 			},
 			// 导出
 			async handleExport(){
@@ -500,7 +501,7 @@
 				} = await this.$http.get('waybill/listyundan', {
 					params: this.queryInfo
 				})
-				console.log('list', res)
+				// console.log('list', res)
 				this.List = res.rows
 				this.total = res.total
 				this.List.forEach(v => {
@@ -525,7 +526,7 @@
 
 			// 点击查询按钮
 			handleQueryBtn() {
-				console.log(this.selectTime)
+				// console.log(this.selectTime)
 				this.queryInfo.startime = this.selectTime[0]
 				this.queryInfo.endtime = this.selectTime[1]
 				this.getList()
@@ -556,15 +557,15 @@
 			// 详情对话框操作
 			// 展示详情的对话框
 			async showEditDialog(plistNo) {
-				console.log(plistNo)
+				// console.log(plistNo)
 				this.canClickEdit = true
 				this.showDisDetails = false
 				const {
 					data: res
 				} = await this.$http.get('waybill/findListPage?plistNo=' + plistNo)
-				console.log('详情', res)
+				// console.log('详情', res)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.editForm = res.result[0]
 				this.editForm.LilicensePlate = this.editForm.liensess.licensePlate

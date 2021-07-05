@@ -81,7 +81,7 @@
 			}
 		},
 		created() {
-			console.log("url--info", this.$route.path);
+			// console.log("url--info", this.$route.path);
 			// // 订单号加密
 			// let encodeData = window.btoa("0000045")
 			// console.log('encodeData' + encodeData)
@@ -95,14 +95,14 @@
 				let noList = this.$route.path.split("/")
 				// console.log(noList)
 				let no = noList[noList.length - 1]
-				console.log('no',no)
+				// console.log('no',no)
 				// console.log(this.$route.params)
 				// let id = this.$route.params.id;
 				// console.log('id'+id)				
 				const {
 					data: res
 				} = await this.$http.get('waybill/lianjie?plistNo=' + no)
-				console.log(res)
+				// console.log(res)
 				this.phoneInfo = res.result
 			},
 		}
@@ -130,7 +130,7 @@
 		font-size:0.9375rem;
 
 		div {
-			width: 100%;
+			width: 90%;
 			height: 1.25rem;
 			margin-left: 1.25rem;
 			margin-top: 1.25rem;

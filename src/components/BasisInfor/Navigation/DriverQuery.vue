@@ -23,7 +23,7 @@
 				</el-table-column>
 				<el-table-column prop="phoneno" label="手机号码" width="150px">
 				</el-table-column>
-				<el-table-column prop="company" label="所属分公司" width="200px">
+				<el-table-column prop="company" label="所属分公司" width="250px">
 				</el-table-column>
 				<el-table-column prop="joinDate" label="加入日期" width="150px">
 				</el-table-column>
@@ -58,9 +58,9 @@
 					</el-table-column>
 				<el-table-column prop="createuser" label="创建人" width="150px">
 				</el-table-column>
-				<el-table-column prop="ctTime" label="创建时间" width="150px">
+				<el-table-column prop="ctTime" label="创建时间" width="180px">
 				</el-table-column>
-				<el-table-column prop="utTime" label="最近更新时间" width="150px">
+				<el-table-column prop="utTime" label="最近更新时间" width="180px">
 				</el-table-column>
 				<el-table-column label="操作" width="200px" fixed="right">
 					<template slot-scope="scope">
@@ -83,32 +83,30 @@
 		</el-col>
 
 		<!-- 创建的对话框 -->
-		<el-dialog title="创建司机信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+		<el-dialog title="创建司机信息" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
-			<el-form :model="addForm" ref="addFormRef" label-width="100px">
+			<el-form :model="addForm" ref="addFormRef" label-width="120px">
 				<el-form-item label="司机姓名:" prop="name">
-					<el-input v-model="addForm.name"></el-input>
+					<el-input v-model="addForm.name" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="手机号码:" prop="phoneno">
-					<el-input v-model="addForm.phoneno"></el-input>
+					<el-input v-model="addForm.phoneno" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司" prop="company">
-					<el-select v-model="addForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
-					 :loading="companyLoading" style="width: 200px;">
+					<el-select v-model="addForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"	 :loading="companyLoading" style="width: 300px;">
 						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="加入日期" prop="joinDate">
-					<el-date-picker v-model="addForm.joinDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="addForm.joinDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 300px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="地区" prop="region">
-					<el-input v-model="addForm.region"></el-input>
+					<el-input v-model="addForm.region" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="对应车辆" prop="licensePlate">
-					<el-select v-model="addForm.licensePlate" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"
-					 :loading="plateNumberLoading" style="width: 200px;" @change="queryPlateNumberChange">
+					<el-select v-model="addForm.licensePlate" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"	 :loading="plateNumberLoading" style="width: 300px;" @change="queryPlateNumberChange">
 						<el-option v-for="item in plateNumberOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -128,8 +126,7 @@
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证有效期" prop="drivingLicenseTime">
-					<el-date-picker v-model="addForm.drivingLicenseTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					<el-date-picker v-model="addForm.drivingLicenseTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 300px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
@@ -140,8 +137,7 @@
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="上岗证有效期" prop="drivingLicenseTime">
-					<el-date-picker v-model="addForm.worklicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					<el-date-picker v-model="addForm.worklicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"	 value-format="yyyy-MM-dd" style="width: 300px;">
 					</el-date-picker>
 				</el-form-item>
 			</el-form>
@@ -153,32 +149,30 @@
 		</el-dialog>
 		
 		<!-- 编辑的对话框 -->
-		<el-dialog title="编辑司机信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
+		<el-dialog title="编辑司机信息" :visible.sync="editDialogVisible" width="35%" @close="editDialogClosed">
 			<!-- 编辑的表单 -->
-			<el-form :model="editForm" ref="editFormRef" label-width="100px">
+			<el-form :model="editForm" ref="editFormRef" label-width="120px">
 				<el-form-item label="司机姓名:" prop="name">
-					<el-input v-model="editForm.name"></el-input>
+					<el-input v-model="editForm.name" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="手机号码:" prop="phoneno">
-					<el-input v-model="editForm.phoneno"></el-input>
+					<el-input v-model="editForm.phoneno" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司" prop="company">
-					<el-select v-model="editForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
-					 :loading="companyLoading" style="width: 200px;">
+					<el-select v-model="editForm.company" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"	 :loading="companyLoading" style="width: 300px;">
 						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="加入日期" prop="joinDate">
-					<el-date-picker v-model="editForm.joinDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.joinDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 300px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="地区" prop="region">
-					<el-input v-model="editForm.region"></el-input>
+					<el-input v-model="editForm.region" style="width: 300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="对应车辆" prop="licensePlate">
-					<el-select v-model="editForm.licensePlate" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod"
-					 :loading="plateNumberLoading" style="width: 200px;" @change="queryPlateNumberChange">
+					<el-select v-model="editForm.licensePlate" clearable filterable remote placeholder="请输入车牌号" :remote-method="remotePlateNumberMethod" :loading="plateNumberLoading" style="width: 300px;" @change="queryPlateNumberChange">
 						<el-option v-for="item in plateNumberOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -198,7 +192,7 @@
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="驾驶证有效期" prop="drivingLicenseTime">
-					<el-date-picker v-model="editForm.drivingLicenseTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.drivingLicenseTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 300px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="上岗证" prop="workLicense">
@@ -209,7 +203,7 @@
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="上岗证有效期" prop="drivingLicenseTime">
-					<el-date-picker v-model="editForm.worklicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.worklicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 300px;">
 					</el-date-picker>
 				</el-form-item>
 			</el-form>
@@ -380,9 +374,8 @@
 				} = await this.$http.get('kDriver/list', {
 					params: this.queryInfo
 				})
-				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+					return this.$message.error(res.message)
 				}
 				// this.$message.success('获取信息成功')
 				this.driverList = res.result.records
@@ -449,12 +442,12 @@
 					} = await this.$http.post('kDriver/add', this.addForm)
 					// console.log(res)
 					if (res.code !== 200) {
-						return this.$message.error('添加信息失败')
+						return this.$message.error(res.message)
 					}
 					// 添加成功，关闭对话框，刷新数据列表，提示添加成功
 					this.addDialogVisible = false
 					this.getDriverList()
-					this.$message.success('添加信息成功')
+					this.$message.success(res.message)
 				})
 			},
 
@@ -471,7 +464,7 @@
 				} = await this.$http.get('kDriver/list?id=' + id)
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.editForm = res.result.records[0]
 				// this.editContractData.push(res.result.driverStartContractPeriod)
@@ -511,12 +504,12 @@
 					} = await this.$http.post('kDriver/edit', this.editForm)
 
 					if (res.code !== 200) {
-						return this.$message.error('更新信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
 					this.getDriverList()
-					this.$message.success('更新信息成功')
+					this.$message.success(res.message)
 				})
 			},
 
@@ -527,11 +520,11 @@
 				} = await this.$http.get('kDriver/deleteById?id=' + id)
 
 				if (res.code !== 200) {
-					return this.$message.error('删除失败')
+					return this.$message.error(res.message)
 				}
 				// 删除成功，刷新数据列表，提示删除成功
 				this.getDriverList()
-				this.$message.success('删除成功')
+				this.$message.success(res.message)
 			},
 		}
 	}

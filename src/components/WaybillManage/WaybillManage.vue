@@ -74,7 +74,7 @@
 				</el-table-column>
 				<el-table-column prop="stateText" label="订单状态" width="120px" fixed="right">
 					<template slot-scope="scope">
-						<span :style="{'color':scope.row.stateText=='审核中'||scope.row.stateText=='驳回'?'red':'black'}">{{scope.row.stateText}}</span>
+						<span :style="{'color':scope.row.stateText=='审核中'||scope.row.stateText=='已驳回'?'red':'black'}">{{scope.row.stateText}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="120px" fixed="right">
@@ -509,11 +509,11 @@
 									<el-input :disabled="canEdit" v-model="scope.row.sarea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.saddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="sgrade" label="等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.sgrade" class="rt-input"></el-input>
@@ -564,11 +564,11 @@
 									<el-input :disabled="canEdit" v-model="scope.row.darea" class="rt-input"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="saddress" label="详细地址">
+							<!-- <el-table-column prop="saddress" label="详细地址">
 								<template slot-scope="scope">
 									<el-input :disabled="canEdit" v-model="scope.row.daddress" class="rt-input"></el-input>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column prop="dgrade" label="等级">
 								<template slot-scope="scope">
 									<el-input disabled v-model="scope.row.dgrade" class="rt-input"></el-input>
@@ -590,6 +590,9 @@
 				</el-form-item>
 
 				<div style="display: flex;">
+					<el-form-item label="司机" prop="lienses" class="rt-input">
+						<el-input disabled v-model="editForm.Lidriver"></el-input>
+					</el-form-item>
 					<el-form-item label="车牌号" prop="searchDriver" class="rt-input">
 						<el-select :disabled="canEdit" v-model="editForm.lienses" clearable filterable remote placeholder="请输入车牌号"
 						 :remote-method="chooseCarLicense" :loading="carLicenseLoading" @change="editChooseCarLicense">
@@ -597,9 +600,7 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="司机" prop="lienses" class="rt-input">
-						<el-input disabled v-model="editForm.Lidriver"></el-input>
-					</el-form-item>
+					
 					<el-form-item label="负责配管" prop="lienses" class="rt-input">
 						<el-input disabled v-model="editForm.dispatch"></el-input>
 					</el-form-item>
@@ -847,7 +848,7 @@
 				this.queryInfo.userid = window.sessionStorage.getItem('userID') - 0
 			}
 
-			console.log(this.queryInfo)
+			// console.log(this.queryInfo)
 			this.getWaybillList()
 			this.getAllCompanyList()
 			this.findAllCarLicense()
@@ -861,8 +862,8 @@
 				rows.splice(index, 1);
 			},
 			addApoints(apoints, event) {
-				console.log(apoints)
-				console.log(event)
+				// console.log(apoints)
+				// console.log(event)
 				apoints.push({
 					spointphone: "",
 					stime: "",
@@ -896,22 +897,22 @@
 			},
 			// 创建页面计算利润
 			async calculateNearcost() {
-				console.log('开始')
+				// console.log('开始')
 				if (!this.addForm.car || !this.addForm.cost) {
 					this.addForm.nearcost = ''
 					return
 				}
-				console.log('判断')
+				// console.log('判断')
 				this.addForm.nearcost = this.addForm.car - this.addForm.cost
 			},
 			// 详情页面计算利润
 			async editCalculateNearcost() {
-				console.log('开始')
+				// console.log('开始')
 				if (!this.editForm.car || !this.editForm.cost) {
 					this.editForm.nearcost = ''
 					return
 				}
-				console.log('判断')
+				// console.log('判断')
 				this.editForm.nearcost = this.editForm.car - this.editForm.cost
 			},
 			// 创建页面计算总距离
@@ -927,12 +928,12 @@
 				const {
 					data: res
 				} = await this.$http.post('waybill/km', kmQueryData)
-				console.log(res)
+				// console.log(res)
 				this.addForm.km = res.result.km
 			},
 			// 详情页面计算总距离
 			async editCalculateKm() {
-				console.log('进入')
+				// console.log('进入')
 				if (!this.editForm.emptydistance || !this.editForm.highspeed || !this.editForm.estimatedistance) {
 					this.editForm.km = ''
 					return
@@ -944,7 +945,7 @@
 				const {
 					data: res
 				} = await this.$http.post('waybill/km', kmEditQueryData)
-				console.log(res)
+				// console.log(res)
 				this.editForm.km = res.result.km
 			},
 			
@@ -955,7 +956,7 @@
 				} = await this.$http.get('waybill/findAllCompanyName')
 				// console.log(res)
 				if (res.code !== 200) {
-					return
+					return this.$message.error(res.message)
 				}
 				this.states = res.result
 				this.companyList = this.states.map(item => {
@@ -1006,7 +1007,7 @@
 				} = await this.$http.get('waybill/findAllDriver')
 				// console.log(res)
 				if (res.code !== 200) {
-					return
+					return this.$message.error(res.message)
 				}
 				this.allDriverNameList = res.result.map(item => {
 					return {
@@ -1038,7 +1039,7 @@
 					} = await this.$http.get('/waybill/findDriverByDriver?driver=' + name)
 					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.driverNameOptions = this.allDriverNameList
 					this.addForm.lienses = res.result.chepai
@@ -1057,7 +1058,7 @@
 				} = await this.$http.get('waybill/findAllUser')
 				// console.log(res)
 				if (res.code !== 200) {
-					return
+					return this.$message.error(res.message)
 				}
 				this.allPeopleList = res.result.map(item => {
 					return {
@@ -1090,7 +1091,7 @@
 				} = await this.$http.get('waybill/findAllLicense')
 				// console.log(res)
 				if (res.code !== 200) {
-					return
+					return this.$message.error(res.message)
 				}
 				this.allCarLicenseList = res.result.map(item => {
 					return {
@@ -1124,7 +1125,7 @@
 					} = await this.$http.get('waybill/findDriverByLicense?license=' + carLicense)
 					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.carLicenseOptions = this.allCarLicenseList
 					this.addForm.Lidriver = res.result.driver
@@ -1144,7 +1145,7 @@
 					} = await this.$http.get('waybill/findDriverByLicense?license=' + carLicense)
 					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.carLicenseOptions = this.allCarLicenseList
 					this.editForm.Lidriver = res.result.driver
@@ -1166,9 +1167,9 @@
 				const {
 					data: res
 				} = await this.$http.get('waybill/findAllprovince')
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
-					return
+					return this.$message.error(res.message)
 				}
 				this.allSprovinceList = res.result.map(item => {
 					return {
@@ -1186,9 +1187,9 @@
 					const {
 						data: res
 					} = await this.$http.get('waybill/findcityByprovince?province=' + province)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.allScityList = res.result.map(item => {
 						return {
@@ -1215,9 +1216,9 @@
 					const {
 						data: res
 					} = await this.$http.get('waybill/findareaBycity?city=' + city)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.allSareaList = res.result.map(item => {
 						return {
@@ -1248,9 +1249,9 @@
 					} = await this.$http.get('waybill/findhuanfenandchengben', {
 						params: params
 					})
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.addForm.apoints[index].shuafen = res.result[0].huafen
 					this.addForm.apoints[index].schengben = res.result[0].chengben
@@ -1269,9 +1270,9 @@
 					const {
 						data: res
 					} = await this.$http.get('waybill/findcityByprovince?province=' + province)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.allDcityList = res.result.map(item => {
 						return {
@@ -1298,9 +1299,9 @@
 					const {
 						data: res
 					} = await this.$http.get('waybill/findareaBycity?city=' + city)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.allDareaList = res.result.map(item => {
 						return {
@@ -1331,9 +1332,9 @@
 					} = await this.$http.get('waybill/findhuanfenandchengben', {
 						params: params
 					})
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.addForm.upoints[index].dhuafen = res.result[0].huafen
 					this.addForm.upoints[index].dchengben = res.result[0].chengben
@@ -1356,7 +1357,7 @@
 				} = await this.$http.get('waybill/list', {
 					params: this.queryInfo
 				})
-				console.log('list', res)
+				// console.log('list', res)
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
@@ -1365,7 +1366,7 @@
 				this.total = res.result.total
 				this.wybillList.forEach(v => {
 					if (v.state == 0) {
-						v.stateText = "驳回"
+						v.stateText = "已驳回"
 					} else if (v.state == 1) {
 						v.stateText = "审核中"
 					} else if (v.state == 2) {
@@ -1374,7 +1375,10 @@
 						v.stateText = "司机已接单"
 					} else if (v.state == 4) {
 						v.stateText = "司机已拒单"
+					}else if (v.state == 5) {
+						v.stateText = "待完结"
 					}
+					
 				})
 			},
 
@@ -1412,7 +1416,7 @@
 
 			// 创建图片上传成功的回调
 			handlePictureUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.addForm.picture = response.result.pictureFileName
 			},
 
@@ -1425,7 +1429,7 @@
 					const {
 						data: res
 					} = await this.$http.post('waybill/addwaybill', this.addForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -1489,13 +1493,13 @@
 			// 详情对话框操作
 			// 展示详情的对话框
 			async showEditDialog(plistNo) {
-				console.log(plistNo)
+				// console.log(plistNo)
 				this.canClickEdit = true
 				this.showDisDetails = false
 				const {
 					data: res
 				} = await this.$http.get('waybill/findListPage?plistNo=' + plistNo)
-				console.log('详情', res)
+				// console.log('详情', res)
 				if (res.code !== 200) {
 					return this.$message.error(res.message)
 				}
@@ -1526,7 +1530,7 @@
 
 			// 修改图片上传成功的回调
 			handleEditPictureUrlSuccess(response, file, fileList) {
-				console.log(response)
+				// console.log(response)
 				this.editForm.picture = response.result.pictureFileName
 			},
 
@@ -1548,7 +1552,7 @@
 					const {
 						data: res
 					} = await this.$http.put('waybill/edit', this.editForm)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}

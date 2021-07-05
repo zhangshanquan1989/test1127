@@ -180,7 +180,7 @@
 				})
         // console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('获取信息失败')
+					return this.$message.error(res.message)
 				}
 
 				this.regionlist = res.result.records
@@ -258,7 +258,7 @@
 				} = await this.$http.get('base/tBaArea/findArea?id=' + id)
 				// console.log(res)
 				if (res.code !== 200) {
-					return this.$message.error('查询信息失败')
+					return this.$message.error(res.message)
 				}
 				this.editForm = res.result
 				// 显示对话框
@@ -281,12 +281,12 @@
 					} = await this.$http.post('base/tBaArea/edit', this.editForm)
 
 					if (res.code !== 200) {
-						return this.$message.error('更新信息失败')
+						return this.$message.error(res.message)
 					}
 					// 更新成功，关闭对话框，刷新数据列表，提示修改成功
 					this.editDialogVisible = false
 					this.getRegionList()
-					this.$message.success('更新信息成功')
+					this.$message.success(res.message)
 				})
 			},
 			

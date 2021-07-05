@@ -167,12 +167,12 @@
 				} = await this.$http.get('kuser/user', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return
 				}
 				this.dataList = res.result.records
-				console.log(this.dataList)
+				// console.log(this.dataList)
 			},
 			// pageSize 改变的事件
 			handleSizeChange(newSize) {
@@ -190,7 +190,7 @@
 			async showRoleDialog(userid) {
 				this.roleAddData.userid = userid
 				const {data:res} = await this.$http.get('krole/querrole?id='+userid)
-				console.log(res)
+				// console.log(res)
 				// 新版，仅需传递给后端一个角色id值
 				if(res.result.length!==0){
 					this.roleAddData.roleid = res.result[0].id
@@ -220,12 +220,12 @@
 				const {
 					data: res
 				} = await this.$http.get('krole/list?pageSize=100&pageNo=1')
-				console.log('角色',res)
+				// console.log('角色',res)
 				this.roleData = res.result.records
 			},
 
 			groupchange(e) {
-				console.log('g', e)
+				// console.log('g', e)
 			},
 			// 选择的角色变化
 			// 首版，复选框，传递给后端多个角色的id，已废弃
@@ -240,7 +240,7 @@
 			// 添加角色
 			async handleRoleChoose(){
 				const {data:res} = await this.$http.post('k_user_role/add',this.roleAddData)
-				console.log(res)
+				// console.log(res)
 				this.roleDialogVisible = false
 			},
 			
@@ -253,7 +253,7 @@
 			// 获取用户所属的部门小组
 			async getUserOrganization(userId){
 				const {data:res} = await this.$http.get('k_organization_user/Teamall?id='+userId)
-				console.log(res)
+				// console.log(res)
 				this.userDepartData = res.result
 			},
 			
@@ -280,7 +280,7 @@
 			// 确认添加
 			async handleAddDepartChoose(){
 				const {data:res} = await this.$http.post('k_organization_user/add',this.userAddDepartData)
-				console.log(res)
+				// console.log(res)
 				this.departAddDialogVisible = false
 			},
 			
@@ -288,13 +288,13 @@
 			async deleteOneData(id) {
 				this.deleteOrganizationData.organizationid = id
 				const {data:res} = await this.$http.post('k_organization_user/delete',this.deleteOrganizationData)
-				console.log(res)
+				// console.log(res)
 				this.getUserOrganization(this.nowUserId)
 			},
 
 				// 选择部门 
 				async addDepartNameChange(departId){
-					console.log(departId)
+					// console.log(departId)
 					this.userAddDepartData.organizationid = departId
 					// console.log(index)
 					this.userAddDepartData.addGroup = ''
@@ -302,9 +302,9 @@
 						const {
 							data: res
 						} = await this.$http.get('k_organization/Team?id=' + departId)
-						console.log(res)
+						// console.log(res)
 						if (res.code !== 200) {
-							return
+							return this.$message.error(res.message)
 						}						
 						this.allGroupOptions = res.result.map(item => {
 							return {
@@ -326,9 +326,9 @@
 					const {
 						data: res
 					} = await this.$http.get('k_organization/Departments?company=' + companyName)
-					console.log(res)
+					// console.log(res)
 					if (res.code !== 200) {
-						return
+						return this.$message.error(res.message)
 					}
 					this.allDepartOptions = res.result.map(item => {
 						return {

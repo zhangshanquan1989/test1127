@@ -74,7 +74,7 @@
 				const {
 					data: res1
 				} = await this.$http.get('kCarinformation/GetCarCurrentStatusBycarMark?s=' + this.carJointList)
-				console.log('res1', res1.result)
+				// console.log('res1', res1.result)
 				this.fullscreenLoading = false;
 				if (res1.code !== 200) {
 					return this.$message.error(res1.message)

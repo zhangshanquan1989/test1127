@@ -101,7 +101,7 @@
 				const {
 					data: res
 				} = await this.$http.get('k_organization/Department')
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return
 				}
@@ -117,7 +117,7 @@
 					const {
 						data: res
 					} = await this.$http.post('k_organization/add', this.addDepartForm)
-					console.log(res)
+					// console.log(res)
 					this.addDepartDialogVisible = false
 					this.getDataList();
 				})
@@ -142,7 +142,7 @@
 					const {
 						data: res
 					} = await this.$http.post('k_organization/add', this.addGroupForm)
-					console.log(res)
+					// console.log(res)
 					this.addGroupDialogVisible = false
 					this.getDataList();
 					})
@@ -154,7 +154,7 @@
 				const {
 					data: res
 				} = await this.$http.get('k_organization/Departments?company=' + companyName)
-				console.log(res)
+				// console.log(res)
 				if (res.code !== 200) {
 					return
 				}
@@ -169,7 +169,7 @@
 					};
 
 				});
-				console.log(this.allDepartList)
+				// console.log(this.allDepartList)
 				// this.companyOptions = this.companyList
 			},
 
@@ -182,14 +182,14 @@
 			},
 			
 			change(){
-				console.log(this.addGroupForm.pid)
+				// console.log(this.addGroupForm.pid)
 			},
 			// 删除
 			async removeById(id){
 				const {
 					data: res
 				} = await this.$http.get('k_organization/delete?id=' + id)
-				console.log(res)
+				// console.log(res)
 				this.getDataList();
 			},
 			

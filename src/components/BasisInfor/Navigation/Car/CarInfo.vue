@@ -110,33 +110,33 @@
 		</el-col>
 
 		<!-- 创建的对话框 -->
-		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+		<el-dialog title="创建车辆信息" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
 			<!-- 创建的表单 -->
 			<el-form :model="addForm" ref="addFormRef" label-width="120px">
 				<el-form-item label="车牌号:" prop="licensePlate">
-					<el-input v-model="addForm.licensePlate"></el-input>
+					<el-input v-model="addForm.licensePlate" style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="车辆状态:" prop="carstate">
-					<el-select v-model="addForm.carstate" placeholder="全部" clearable>
+					<el-select v-model="addForm.carstate" placeholder="全部" clearable  style="width: 350px;">
 						<el-option v-for="item in carstateList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="车架号:" prop="frame">
-					<el-input v-model="addForm.frame"></el-input>
+					<el-input v-model="addForm.frame"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="发动机号:" prop="engine">
-					<el-input v-model="addForm.engine"></el-input>
+					<el-input v-model="addForm.engine"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="车主姓名:" prop="name">
-					<el-input v-model="addForm.name"></el-input>
+					<el-input v-model="addForm.name"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="车主手机号:" prop="phoneno">
-					<el-input v-model="addForm.phoneno"></el-input>
+					<el-input v-model="addForm.phoneno"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司:" prop="companyl">
 					<el-select v-model="addForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod"
-					 :loading="companyLoading" style="width: 200px;">
+					 :loading="companyLoading"  style="width: 350px;">
 						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -150,11 +150,11 @@
 				</el-form-item>
 				<el-form-item label="行驶证有效期:" prop="vehiclelicensedate">
 					<el-date-picker v-model="addForm.vehiclelicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					 value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="年检有效期:" prop="checkDate">
-					<el-date-picker v-model="addForm.checkDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="addForm.checkDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="保险单据:" prop="insurance">
@@ -166,7 +166,7 @@
 				</el-form-item>
 				<el-form-item label="保险到期时间:" prop="insuranceDate">
 					<el-date-picker v-model="addForm.insuranceDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					 value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="车辆营运证:" prop="caroperating">
@@ -178,7 +178,7 @@
 				</el-form-item>
 				<el-form-item label="营运证到期时间:" prop="operatingdate">
 					<el-date-picker v-model="addForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					 value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 			</el-form>
@@ -192,31 +192,31 @@
 
 
 		<!-- 编辑的对话框 -->
-		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="55%" @close="editDialogClosed">
+		<el-dialog title="编辑车辆信息" :visible.sync="editDialogVisible" width="35%" @close="editDialogClosed">
 			<el-form :model="editForm" ref="editFormRef" label-width="120px">
 				<el-form-item label="车牌号:" prop="licensePlate">
-					<el-input v-model="editForm.licensePlate"></el-input>
+					<el-input v-model="editForm.licensePlate"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="车辆状态:" prop="carstate">
-					<el-select v-model="editForm.carstate" placeholder="全部" clearable>
+					<el-select v-model="editForm.carstate" placeholder="全部" clearable  style="width: 350px;">
 						<el-option v-for="item in carstateList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="车架号:" prop="frame">
-					<el-input v-model="editForm.frame"></el-input>
+					<el-input v-model="editForm.frame"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="发动机号:" prop="engine">
-					<el-input v-model="editForm.engine"></el-input>
+					<el-input v-model="editForm.engine"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="车主姓名:" prop="name">
-					<el-input v-model="editForm.name"></el-input>
+					<el-input v-model="editForm.name"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="车主手机号:" prop="phoneno">
-					<el-input v-model="editForm.phoneno"></el-input>
+					<el-input v-model="editForm.phoneno"  style="width: 350px;"></el-input>
 				</el-form-item>
 				<el-form-item label="所属分公司:" prop="companyl">
-					<el-select v-model="editForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod" :loading="companyLoading" style="width: 300px;">
+					<el-select v-model="editForm.companyl" clearable filterable remote placeholder="请输入公司名称" :remote-method="remoteCompanyMethod" :loading="companyLoading"  style="width: 350px;">
 						<el-option v-for="item in companyOptions" :key="item.index" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -231,11 +231,11 @@
 				</el-form-item>
 				<el-form-item label="行驶证有效期:" prop="vehiclelicensedate">
 					<el-date-picker v-model="editForm.vehiclelicensedate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					 value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="年检有效期:" prop="checkDate">
-					<el-date-picker v-model="editForm.checkDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+					<el-date-picker v-model="editForm.checkDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="保险单据:" prop="insurance">
@@ -247,7 +247,7 @@
 				</el-form-item>
 				<el-form-item label="保险到期时间:" prop="insuranceDate">
 					<el-date-picker v-model="editForm.insuranceDate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					 value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="车辆营运证:" prop="caroperating">
@@ -259,7 +259,7 @@
 				</el-form-item>
 				<el-form-item label="营运证到期时间:" prop="operatingdate">
 					<el-date-picker v-model="editForm.operatingdate" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日"
-					 value-format="yyyy-MM-dd">
+					 value-format="yyyy-MM-dd"  style="width: 350px;">
 					</el-date-picker>
 				</el-form-item>
 			</el-form>
@@ -592,7 +592,7 @@
 				} = await this.$http.get('kCarinformation/list', {
 					params: this.queryInfo
 				})
-				console.log(res)
+				// console.log(res)
 				if (!res.result.records) {
 					return this.$message.error(res.message)
 				}
@@ -658,15 +658,15 @@
 			// },
 			// 创建图片上传成功的回调
 			handleVehicleLicenseUrlSuccess(response, file, fileList) {
-				console.log(response)
+				
 				this.addForm.vehicleLicense = response.result.vehicleLicenseFileName
 			},
 			handleInsuranceUrlSuccess(response, file, fileList) {
-				console.log(response)
+				
 				this.addForm.insurance = response.result.insuranceFileName
 			},
 			handleCaroperatingUrlSuccess(response, file, fileList) {
-				console.log(response)
+				
 				this.addForm.caroperating = response.result.caroperatingFileName
 			},
 			handlePayFeeUrlSuccess(response, file, fileList) {
@@ -686,7 +686,7 @@
 					const {
 						data: res
 					} = await this.$http.post('kCarinformation/add', this.addForm)
-					console.log(res)
+					
 					if (res.code !== 200) {
 						return this.$message.error(res.message)
 					}
@@ -710,15 +710,15 @@
 
 			// 创建图片上传成功的回调
 			handleEditVehicleLicenseUrlSuccess(response, file, fileList) {
-				console.log(response)
+				
 				this.editForm.vehicleLicense = response.result.vehicleLicenseFileName
 			},
 			handleEditInsuranceUrlSuccess(response, file, fileList) {
-				console.log(response)
+		
 				this.editForm.insurance = response.result.insuranceFileName
 			},
 			handleEditCaroperatingUrlSuccess(response, file, fileList) {
-				console.log(response)
+		
 				this.editForm.caroperating = response.result.caroperatingFileName
 			},
 			handleEditPayFeeUrlSuccess(response, file, fileList) {
@@ -730,7 +730,7 @@
 				const {
 					data: res
 				} = await this.$http.get('kCarinformation/list?id=' + id)
-				console.log(res)
+			
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
@@ -786,7 +786,7 @@
 				const {
 					data: res
 				} = await this.$http.get('killegal/list?carNumber=' + carNumber)
-				console.log(res)
+				
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
@@ -805,7 +805,7 @@
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
-				console.log(res)
+				
 				if(res.result.anyType.GPSPoint){
 					const carInfo = res.result.anyType.GPSPoint
 					const {last_lon} = res.result.anyType.GPSPoint
@@ -840,7 +840,7 @@
 				this.fullscreenLoading = true;
 				this.historyQueryInfo.begintime = this.selectTime[0]
 				this.historyQueryInfo.endtime = this.selectTime[1]
-				console.log(this.historyQueryInfo.selectTime)
+				// console.log(this.historyQueryInfo.selectTime)
 				const {data:res} = await this.$http.get('kCarinformation/GetHistoryTrackBycarMark',{params:this.historyQueryInfo})
 				this.fullscreenLoading = false;
 				
@@ -855,7 +855,7 @@
 							speedG: `${item.speedG}`,
 						}
 					})
-					console.log(this.lineArr)
+					// console.log(this.lineArr)
 					this.firstArr = [this.lineArr[0].last_lon,this.lineArr[0].last_lat]
 					setTimeout(() => {
 						this.initMap();
@@ -874,7 +874,7 @@
 				if (res.code !== 200) {
 					return this.$message.error('查询信息失败')
 				}
-				console.log(res)
+				// console.log(res)
 				if(res.result.anyType.GPSPoint){				
 					const {last_lon} = res.result.anyType.GPSPoint
 					const {last_lat} = res.result.anyType.GPSPoint
@@ -975,7 +975,7 @@
 			// 	this.map.setFitView(); //合适的视口
 			// },
 			initializePaths(paths, map1) {
-				console.log(map1)
+				// console.log(map1)
 				var line;
 				var pathLngLatArray = new Array();
 				if (paths) {
