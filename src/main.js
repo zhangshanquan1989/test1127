@@ -4,7 +4,7 @@ import router from './router'
 import './plugins/element.js'
 //导入全局样式
 import './assets/css/global.css'
-// 导入复制文本
+// 导入复制文本fuzhifs
 import Clipboard from 'clipboard'; 
 
 // 引入echarts
