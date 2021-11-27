@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import PhonePage from '../components/PhonePage.vue'
-
+// 加个备注
 import Assembly from '../components/Assembly/Assembly.vue'
 import BasisInfor from '../components/BasisInfor/BasisInfor.vue'
 import DataFactory from '../components/DataFactory/DataFactory.vue'
